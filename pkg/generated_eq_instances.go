@@ -24,6 +24,10 @@ func (a Uint64) Equal(b Uint64) bool {
 	return a == b
 }
 
+func (a Uintptr) Equal(b Uintptr) bool {
+	return a == b
+}
+
 func (a Int) Equal(b Int) bool {
 	return a == b
 }

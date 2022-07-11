@@ -64,6 +64,7 @@ var (
 		{"uint16", true, true},
 		{"uint32", true, true},
 		{"uint64", true, true},
+		{"uintptr", true, true},
 		{"int", true, true},
 		{"int8", true, true},
 		{"int16", true, true},

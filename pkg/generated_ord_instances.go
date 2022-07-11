@@ -50,6 +50,16 @@ func (a Uint64) Compare(b Uint64) Ordering {
 	}
 }
 
+func (a Uintptr) Compare(b Uintptr) Ordering {
+	if a < b {
+		return OrderingLessThan
+	} else if a == b {
+		return OrderingEqual
+	} else {
+		return OrderingGreaterThan
+	}
+}
+
 func (a Int) Compare(b Int) Ordering {
 	if a < b {
 		return OrderingLessThan

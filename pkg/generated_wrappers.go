@@ -12,6 +12,8 @@ type Uint32 uint32
 
 type Uint64 uint64
 
+type Uintptr uintptr
+
 type Int int
 
 type Int8 int8
