@@ -77,6 +77,29 @@ func (xs SliceOrd[A]) Compare(ys SliceOrd[A]) Ordering {
 	}
 }
 
+// TODO how to sort complex numbers?  Python doesn't seem to support this?
+//   maybe it's not a good idea?
+//func (a Complex64) Compare(b Complex64) Ordering {
+//	real(a)
+//	if a < b {
+//		return OrderingLessThan
+//	} else if a == b {
+//		return OrderingEqual
+//	} else {
+//		return OrderingGreaterThan
+//	}
+//}
+//
+//func (a Complex128) Compare(b Complex128) Ordering {
+//	if a < b {
+//		return OrderingLessThan
+//	} else if a == b {
+//		return OrderingEqual
+//	} else {
+//		return OrderingGreaterThan
+//	}
+//}
+
 func (xs SliceOrd[A]) Sort() SliceOrd[A] {
 	return MergeSort(xs)
 }
