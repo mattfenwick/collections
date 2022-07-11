@@ -30,14 +30,6 @@ func Id[A any](x A) A {
 	return x
 }
 
-func Replicate[A any](count int, item A) []A {
-	out := make([]A, count)
-	for i := 0; i < count; i++ {
-		out[i] = item
-	}
-	return out
-}
-
 func Apply[A, B any](f F1[A, B], x A) B {
 	return f(x)
 }
