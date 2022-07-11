@@ -7,6 +7,6 @@ fmt:
 vet:
 	go vet ./cmd/... ./pkg/...
 
-example:
-	go run cmd/types-generator/main.go > pkg/example/generated-types.go
+instances:
+	go run cmd/generator/main.go
 	@make fmt
