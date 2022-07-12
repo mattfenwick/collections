@@ -6,7 +6,14 @@ type Eq[T any] interface {
 	Equal(T) bool
 }
 
+func NotEqual[T Eq[T]](a T, b T) bool {
+	return !a.Equal(b)
+}
+
 func (xs SliceEq[A]) Equal(ys SliceEq[A]) bool {
+	// unfortunately, can't do:
+	//   return slices.Equal(xs, ys)
+	//   because: A does not implement comparable
 	if len(xs) != len(ys) {
 		return false
 	}
@@ -19,6 +26,9 @@ func (xs SliceEq[A]) Equal(ys SliceEq[A]) bool {
 }
 
 func (xs MapEq[A, B]) Equal(ys MapEq[A, B]) bool {
+	// unfortunately, can't do:
+	//   return maps.Equal(xs, ys)
+	//   because: B does not implement comparable
 	if len(xs) != len(ys) {
 		return false
 	}
@@ -27,13 +37,7 @@ func (xs MapEq[A, B]) Equal(ys MapEq[A, B]) bool {
 		if !ok {
 			return false
 		}
-		if vx.Equal(vy) {
-			return false
-		}
-	}
-	// I don't think this loop is actually necessary ... ?  TODO
-	for k := range ys {
-		if _, ok := xs[k]; !ok {
+		if !vx.Equal(vy) {
 			return false
 		}
 	}
