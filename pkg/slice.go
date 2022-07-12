@@ -122,6 +122,27 @@ func UnfoldrSlice[A, B any](f F1[B, *Maybe[*Pair[A, B]]], b B) []A {
 	return out
 }
 
+func GroupSlice[A EqOrComparable[A]](xs []A) map[A][]A {
+	out := map[A][]A{}
+	for _, x := range xs {
+		slice := out[x]
+		out[x] = append(slice, x)
+	}
+	return out
+}
+
+func PartitionSlice[A any](predicate F1[A, bool], xs []A) ([]A, []A) {
+	var yes, no []A
+	for _, x := range xs {
+		if predicate(x) {
+			yes = append(yes, x)
+		} else {
+			no = append(no, x)
+		}
+	}
+	return yes, no
+}
+
 // foldl
 // foldr
 // scanl
