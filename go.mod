@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/sirupsen/logrus v1.8.1
+	golang.org/x/exp v0.0.0-20220706164943-b4a6d9510983
 	golang.org/x/text v0.3.7
 )
 

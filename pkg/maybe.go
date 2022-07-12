@@ -42,3 +42,10 @@ func BindMaybe[A, B any](m *Maybe[A], f F1[A, *Maybe[B]]) *Maybe[B] {
 	}
 	return f(*m.Value)
 }
+
+func (m *Maybe[A]) Default(defaultValue A) A {
+	if m.Value != nil {
+		return *m.Value
+	}
+	return defaultValue
+}
