@@ -36,9 +36,9 @@ func Merge[A any](xs []A, ys []A, f func(A, A) Ordering) []A {
 	var out []A
 	for {
 		if len(xs) == x {
-			return append(out, ys...)
+			return append(out, ys[y:]...)
 		} else if len(ys) == y {
-			return append(out, xs...)
+			return append(out, xs[x:]...)
 		}
 		if f(xs[x], ys[y]) == OrderingLessThan {
 			out = append(out, xs[x])
