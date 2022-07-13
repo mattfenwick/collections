@@ -56,6 +56,6 @@ func EqExample() {
 	//		return OrderingGreaterThan
 	//	}
 	//})
-	sorted := MergeSort(ints)
+	sorted := Sort(ints)
 	fmt.Printf("ints: %+v\nsorted: %+v\n", ints, sorted)
 }

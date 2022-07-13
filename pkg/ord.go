@@ -1,5 +1,7 @@
 package pkg
 
+import "golang.org/x/exp/constraints"
+
 type Ordering string
 
 const (
@@ -11,6 +13,21 @@ const (
 type Ord[T any] interface {
 	Eq[T]
 	Compare(T) Ordering
+}
+
+func Compare[A Ord[A]](y A, z A) Ordering {
+	return y.Compare(z)
+}
+
+func Comparing[A Ord[A], B any](f F1[B, A], x B, y B) Ordering {
+	return f(x).Compare(f(y))
+}
+
+// ComparingP is a partial application of Comparing, fixing the first argument
+func ComparingP[A Ord[A], B any](f F1[B, A]) F2[B, B, Ordering] {
+	return func(x B, y B) Ordering {
+		return f(x).Compare(f(y))
+	}
 }
 
 func LessThan[T Ord[T]](a T, b T) bool {
@@ -77,6 +94,16 @@ func (xs SliceOrd[A]) Compare(ys SliceOrd[A]) Ordering {
 	}
 }
 
+func OrderedCompare[A constraints.Ordered](a A, b A) Ordering {
+	if a < b {
+		return OrderingLessThan
+	} else if a == b {
+		return OrderingEqual
+	} else {
+		return OrderingGreaterThan
+	}
+}
+
 // TODO how to sort complex numbers?  Python doesn't seem to support this?
 //   maybe it's not a good idea?
 //func (a Complex64) Compare(b Complex64) Ordering {
@@ -99,36 +126,3 @@ func (xs SliceOrd[A]) Compare(ys SliceOrd[A]) Ordering {
 //		return OrderingGreaterThan
 //	}
 //}
-
-func (xs SliceOrd[A]) Sort() SliceOrd[A] {
-	return MergeSort(xs)
-}
-
-func MergeSort[A Ord[A]](xs []A) []A {
-	return MergeSortWithComparator(xs, func(y A, z A) Ordering { return y.Compare(z) })
-}
-
-// MergeSortWithComparator needs to be rewritten iteratively TODO
-func MergeSortWithComparator[A any](xs []A, f func(A, A) Ordering) []A {
-	switch len(xs) {
-	case 0, 1:
-		return xs
-	default:
-		middle := len(xs) / 2
-		return Merge(MergeSortWithComparator(xs[:middle], f), MergeSortWithComparator(xs[middle:], f), f)
-	}
-}
-
-// Merge needs to be rewritten iteratively TODO
-func Merge[A any](xs []A, ys []A, f func(A, A) Ordering) []A {
-	if len(xs) == 0 {
-		return ys
-	} else if len(ys) == 0 {
-		return xs
-	}
-	if f(xs[0], ys[0]) == OrderingLessThan {
-		return append([]A{xs[0]}, Merge(xs[1:], ys, f)...)
-	} else {
-		return append([]A{ys[0]}, Merge(xs, ys[1:], f)...)
-	}
-}

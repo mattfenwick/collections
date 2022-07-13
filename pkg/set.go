@@ -6,8 +6,12 @@ type Set[T EqOrComparable[T]] struct {
 	Elems map[T]bool
 }
 
-func NewSet[T EqOrComparable[T]]() *Set[T] {
-	return &Set[T]{Elems: map[T]bool{}}
+func NewSet[T EqOrComparable[T]](elems []T) *Set[T] {
+	s := &Set[T]{Elems: map[T]bool{}}
+	for _, e := range elems {
+		s.Add(e)
+	}
+	return s
 }
 
 func (s *Set[T]) Add(a T) {
