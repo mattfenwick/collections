@@ -25,6 +25,10 @@ func (xs SliceEq[A]) Equal(ys SliceEq[A]) bool {
 	return true
 }
 
+func (xs SliceOrd[A]) Equal(ys SliceOrd[A]) bool {
+	return SliceEq[A](xs).Equal(SliceEq[A](ys))
+}
+
 func (xs MapEq[A, B]) Equal(ys MapEq[A, B]) bool {
 	// unfortunately, can't do:
 	//   return maps.Equal(xs, ys)
