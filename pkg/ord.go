@@ -1,7 +1,5 @@
 package pkg
 
-import "golang.org/x/exp/constraints"
-
 type Ordering string
 
 const (
@@ -91,16 +89,6 @@ func (xs SliceOrd[A]) Compare(ys SliceOrd[A]) Ordering {
 			return comp
 		}
 		i++
-	}
-}
-
-func OrderedCompare[A constraints.Ordered](a A, b A) Ordering {
-	if a < b {
-		return OrderingLessThan
-	} else if a == b {
-		return OrderingEqual
-	} else {
-		return OrderingGreaterThan
 	}
 }
 
