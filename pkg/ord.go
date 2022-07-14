@@ -13,17 +13,17 @@ type Ord[T any] interface {
 	Compare(T) Ordering
 }
 
-func Compare[A Ord[A]](y A, z A) Ordering {
-	return y.Compare(z)
+func Compare[A Ord[A]](x A, y A) Ordering {
+	return x.Compare(y)
 }
 
-func Comparing[A Ord[A], B any](f F1[B, A], x B, y B) Ordering {
+func Comparing[A any, B Ord[B]](f F1[A, B], x A, y A) Ordering {
 	return f(x).Compare(f(y))
 }
 
 // ComparingP is a partial application of Comparing, fixing the first argument
-func ComparingP[A Ord[A], B any](f F1[B, A]) F2[B, B, Ordering] {
-	return func(x B, y B) Ordering {
+func ComparingP[A any, B Ord[B]](f F1[A, B]) F2[A, A, Ordering] {
+	return func(x A, y A) Ordering {
 		return f(x).Compare(f(y))
 	}
 }

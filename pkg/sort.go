@@ -12,11 +12,12 @@ func SortBy[A any](xs []A, f F2[A, A, Ordering]) []A {
 	return MergeSortWithComparator(xs, f)
 }
 
-// SortOn has a TODO: it needs to be efficiently implemented
+// SortOn is based on a Haskell function and the decorate/sort/undecorate pattern:
 //   example: https://hackage.haskell.org/package/base-4.16.2.0/docs/src/Data.OldList.html#sortOn
-//   to avoid calling f multiple times
 func SortOn[A any, B Ord[B]](xs []A, f F1[A, B]) []A {
-	return MergeSortWithComparator(xs, ComparingP(f))
+	pairs := MapSlice(func(a A) *Pair[A, B] { return NewPair(a, f(a)) }, xs)
+	sorted := MergeSortWithComparator(pairs, ComparingP(Second[A, B]))
+	return MapSlice(First[A, B], sorted)
 }
 
 // MergeSortWithComparator needs to be rewritten iteratively TODO

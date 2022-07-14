@@ -5,6 +5,21 @@ import (
 	"github.com/onsi/gomega"
 )
 
+func absoluteValue(i Int) Int {
+	if i < 0 {
+		return i * -1
+	}
+	return i
+}
+
+func intKey(i Int) PairOrd[Int, Bool] {
+	var isPositive Bool = false
+	if i > 0 {
+		isPositive = true
+	}
+	return PairOrd[Int, Bool](*NewPair[Int, Bool](absoluteValue(i), isPositive))
+}
+
 func RunSortTests() {
 	Describe("Sort", func() {
 		It("Empty", func() {
@@ -18,6 +33,17 @@ func RunSortTests() {
 		})
 		It("Duplicate elements", func() {
 			gomega.Expect(Sort([]Int{2, 1, 2, 5, 2, 0, 2})).To(gomega.Equal([]Int{0, 1, 2, 2, 2, 2, 5}))
+		})
+	})
+	Describe("SortOn", func() {
+		ints := []Int{1, 18, -34, 79, 97, 36, 42, -18, -3, -1, -18}
+		It("key of self", func() {
+			sorted := SortOn(ints, Id[Int])
+			gomega.Expect(sorted).To(gomega.Equal([]Int{-34, -18, -18, -3, -1, 1, 18, 36, 42, 79, 97}))
+		})
+		It("key of Pair", func() {
+			sorted := SortOn(ints, intKey)
+			gomega.Expect(sorted).To(gomega.Equal([]Int{-1, 1, -3, -18, -18, 18, -34, 36, 42, 79, 97}))
 		})
 	})
 }
