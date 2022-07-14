@@ -6,6 +6,10 @@ type Eq[T any] interface {
 	Equal(T) bool
 }
 
+func Equal[T Eq[T]](a T, b T) bool {
+	return a.Equal(b)
+}
+
 func NotEqual[T Eq[T]](a T, b T) bool {
 	return !a.Equal(b)
 }

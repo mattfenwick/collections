@@ -78,10 +78,11 @@ func (a Bool) Compare(b Bool) Ordering {
 func (xs SliceOrd[A]) Compare(ys SliceOrd[A]) Ordering {
 	i := 0
 	for {
-		if i == len(xs) {
+		if i == len(xs) && i == len(ys) {
+			return OrderingEqual
+		} else if i == len(xs) {
 			return OrderingLessThan
-		}
-		if i == len(ys) {
+		} else if i == len(ys) {
 			return OrderingGreaterThan
 		}
 		comp := xs[i].Compare(ys[i])
