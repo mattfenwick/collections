@@ -12,12 +12,17 @@ func absoluteValue(i Int) Int {
 	return i
 }
 
-func intKey(i Int) PairOrd[Int, Bool] {
+func absoluteValueThenSignKey(i Int) PairOrd[Int, Bool] {
 	var isPositive Bool = false
 	if i > 0 {
 		isPositive = true
 	}
 	return PairOrd[Int, Bool](*NewPair[Int, Bool](absoluteValue(i), isPositive))
+}
+
+func signThenAbsoluteValueKey(i Int) PairOrd[Bool, Int] {
+	pair := absoluteValueThenSignKey(i)
+	return PairOrd[Bool, Int](*NewPair[Bool, Int](pair.Snd, pair.Fst))
 }
 
 func RunSortTests() {
@@ -41,9 +46,28 @@ func RunSortTests() {
 			sorted := SortOn(ints, Id[Int])
 			gomega.Expect(sorted).To(gomega.Equal([]Int{-34, -18, -18, -3, -1, 1, 18, 36, 42, 79, 97}))
 		})
-		It("key of Pair", func() {
-			sorted := SortOn(ints, intKey)
+		It("key of Pair -- abs, then sign", func() {
+			sorted := SortOn(ints, absoluteValueThenSignKey)
 			gomega.Expect(sorted).To(gomega.Equal([]Int{-1, 1, -3, -18, -18, 18, -34, 36, 42, 79, 97}))
+		})
+		It("key of Pair -- sign, then abc", func() {
+			sorted := SortOn(ints, signThenAbsoluteValueKey)
+			gomega.Expect(sorted).To(gomega.Equal([]Int{-1, -3, -18, -18, -34, 1, 18, 36, 42, 79, 97}))
+		})
+	})
+	Describe("SortOnBy", func() {
+		ints := []Int{1, 18, -34, 79, 97, 36, 42, -18, -3, -1, -18}
+		It("key of self", func() {
+			sorted := SortOnBy(ints, Id[Int], Compare[Int])
+			gomega.Expect(sorted).To(gomega.Equal([]Int{-34, -18, -18, -3, -1, 1, 18, 36, 42, 79, 97}))
+		})
+		It("key of Pair -- abs, then sign", func() {
+			sorted := SortOnBy(ints, absoluteValueThenSignKey, Compare[PairOrd[Int, Bool]])
+			gomega.Expect(sorted).To(gomega.Equal([]Int{-1, 1, -3, -18, -18, 18, -34, 36, 42, 79, 97}))
+		})
+		It("key of Pair -- sign, then abc", func() {
+			sorted := SortOnBy(ints, signThenAbsoluteValueKey, Compare[PairOrd[Bool, Int]])
+			gomega.Expect(sorted).To(gomega.Equal([]Int{-1, -3, -18, -18, -34, 1, 18, 36, 42, 79, 97}))
 		})
 	})
 }

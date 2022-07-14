@@ -20,6 +20,18 @@ func SortOn[A any, B Ord[B]](xs []A, f F1[A, B]) []A {
 	return MapSlice(First[A, B], sorted)
 }
 
+// SortOnBy combines the functionality of `SortOn` and `SortBy`:
+//   - on: a custom projection
+//   - by: a custom comparison
+// Allowing separation of projection and comparison functions.
+func SortOnBy[A any, B any](xs []A, f F1[A, B], g F2[B, B, Ordering]) []A {
+	pairs := MapSlice(func(a A) *Pair[A, B] { return NewPair(a, f(a)) }, xs)
+	sorted := MergeSortWithComparator(pairs, func(p1 *Pair[A, B], p2 *Pair[A, B]) Ordering {
+		return g(p1.Snd, p2.Snd)
+	})
+	return MapSlice(First[A, B], sorted)
+}
+
 // MergeSortWithComparator needs to be rewritten iteratively TODO
 func MergeSortWithComparator[A any](xs []A, f func(A, A) Ordering) []A {
 	switch len(xs) {
