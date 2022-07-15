@@ -239,5 +239,14 @@ func Scanr[A, B any](combine pkg.F2[A, B, B], base B, xs []A) []B {
 
 // Scanr1 is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:scanr1
 func Scanr1[A any](combine pkg.F2[A, A, A], xs []A) []A {
-	panic("TODO")
+	if len(xs) == 0 {
+		return xs
+	}
+	state := xs[len(xs)-1]
+	out := []A{state}
+	for i := len(xs) - 2; i >= 0; i-- {
+		state = combine(xs[i], state)
+		out = Cons(state, out)
+	}
+	return out
 }

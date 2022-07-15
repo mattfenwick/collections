@@ -115,8 +115,42 @@ func RunSliceTests() {
 					{5, 3, 3},
 				}))
 		})
-		//It("Scanr1", func() {
-		//	gomega.Expect(Sort([]Int{2, 1, 2, 5, 2, 0, 2})).To(gomega.Equal([]Int{0, 1, 2, 2, 2, 2, 5}))
-		//})
+		It("Scanr1", func() {
+			gomega.Expect(
+				Scanr1(
+					pkg.Plus[int],
+					Range(1, 5, 1))).
+				To(gomega.Equal([]int{10, 9, 7, 4}))
+
+			gomega.Expect(
+				Scanr1(
+					pkg.Plus[int],
+					[]int{})).
+				To(gomega.Equal([]int{}))
+
+			gomega.Expect(
+				Scanr1(
+					pkg.Plus[int],
+					[]int{42})).
+				To(gomega.Equal([]int{42}))
+
+			gomega.Expect(
+				Scanr1(
+					pkg.Minus[int],
+					Range(1, 5, 1))).
+				To(gomega.Equal([]int{-2, 3, -1, 4}))
+
+			gomega.Expect(
+				Scanr1(
+					pkg.And,
+					[]bool{true, false, true, true})).
+				To(gomega.Equal([]bool{false, false, true, true}))
+
+			gomega.Expect(
+				Scanr1(
+					pkg.Or,
+					[]bool{false, true, false, false})).
+				To(gomega.Equal([]bool{true, true, false, false}))
+		})
 	})
 }
