@@ -1,4 +1,4 @@
-package pkg
+package base
 
 type Pair[A, B any] struct {
 	Fst A

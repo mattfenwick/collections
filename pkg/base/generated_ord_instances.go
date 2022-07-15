@@ -1,4 +1,4 @@
-package pkg
+package base
 
 func (a Uint) Compare(b Uint) Ordering {
 	if a < b {

@@ -1,4 +1,4 @@
-package pkg
+package base
 
 type Bool bool
 

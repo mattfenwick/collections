@@ -1,4 +1,4 @@
-package pkg
+package base
 
 import (
 	. "github.com/onsi/ginkgo/v2"

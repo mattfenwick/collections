@@ -1,8 +1,8 @@
-package pkg
+package slices
 
-func (xs SliceOrd[A]) Sort() SliceOrd[A] {
-	return Sort(xs)
-}
+import (
+	. "github.com/mattfenwick/collections/pkg/base"
+)
 
 // Sort orders elements by their natural Ord instance.
 func Sort[A Ord[A]](xs []A) []A {
@@ -28,11 +28,11 @@ func SortOn[A any, B Ord[B]](xs []A, projection F1[A, B]) []A {
 // SortOnBy combines the functionality of `SortOn` and `SortBy`,
 //   thereby separating projection and comparison functions
 func SortOnBy[A any, B any](xs []A, projection F1[A, B], compare F2[B, B, Ordering]) []A {
-	pairs := MapSlice(func(a A) *Pair[A, B] { return NewPair(a, projection(a)) }, xs)
+	pairs := Map(func(a A) *Pair[A, B] { return NewPair(a, projection(a)) }, xs)
 	sorted := MergeSortWithComparator(pairs, func(p1 *Pair[A, B], p2 *Pair[A, B]) Ordering {
 		return compare(p1.Snd, p2.Snd)
 	})
-	return MapSlice(First[A, B], sorted)
+	return Map(First[A, B], sorted)
 }
 
 // MergeSortWithComparator needs to be rewritten iteratively TODO

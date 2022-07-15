@@ -1,6 +1,7 @@
 package pkg
 
 import "golang.org/x/exp/maps"
+import . "github.com/mattfenwick/collections/pkg/base"
 
 type Set[T EqOrComparable[T]] struct {
 	Elems map[T]bool

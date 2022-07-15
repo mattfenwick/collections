@@ -1,4 +1,4 @@
-package pkg
+package builtins
 
 import (
 	"golang.org/x/exp/constraints"
@@ -90,8 +90,27 @@ func Dereference[A any](a *A) A {
 	return *a
 }
 
-// TODO see https://go.dev/ref/spec#Operators_and_punctuation for a full list of operators
-//   don't do the ones that:
-//     aren't functional, for example: '+=' or '++'
-//     aren't for expressions, e.g.: '...' or ':='
-//   *do* do: & | ^ << >> &^
+func BitwiseAnd[T constraints.Integer](a T, b T) T {
+	return a & a
+}
+
+func BitwiseOr[T constraints.Integer](a T, b T) T {
+	return a | a
+}
+
+func BitwiseXor[T constraints.Integer](a T, b T) T {
+	return a ^ a
+}
+
+// BitwiseAndNot wraps the `&^` operator
+func BitwiseAndNot[T constraints.Integer](a T, b T) T {
+	return a &^ a
+}
+
+func LeftShift[T constraints.Integer](bits T, numberOfBits uint) T {
+	return bits << numberOfBits
+}
+
+func RightShift[T constraints.Integer](bits T, numberOfBits uint) T {
+	return bits >> numberOfBits
+}

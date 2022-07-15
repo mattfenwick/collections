@@ -1,4 +1,4 @@
-package pkg
+package base
 
 type SliceEq[A Eq[A]] []A
 type SliceOrd[A Ord[A]] []A

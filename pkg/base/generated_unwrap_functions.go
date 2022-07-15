@@ -1,4 +1,4 @@
-package pkg
+package base
 
 func UnwrapBool(a Bool) bool {
 	return bool(a)

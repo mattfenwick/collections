@@ -1,5 +1,7 @@
 package pkg
 
+import . "github.com/mattfenwick/collections/pkg/base"
+
 type Maybe[A any] struct {
 	Value *A
 }

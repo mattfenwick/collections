@@ -1,4 +1,4 @@
-package pkg
+package base
 
 // this example is from: https://go.googlesource.com/proposal/+/refs/heads/master/design/43651-type-parameters.md#using-types-that-refer-to-themselves-in-constraints
 

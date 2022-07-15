@@ -1,4 +1,4 @@
-package pkg
+package base
 
 import (
 	. "github.com/onsi/ginkgo/v2"
@@ -9,7 +9,8 @@ import (
 func TestMatcher(t *testing.T) {
 	gomega.RegisterFailHandler(Fail)
 
-	// TODO ?
+	RunEqTests()
+	RunOrdTests()
 
 	RunSpecs(t, "builtins suite")
 }

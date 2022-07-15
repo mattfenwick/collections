@@ -1,6 +1,8 @@
-package pkg
+package slices
 
 import (
+	. "github.com/mattfenwick/collections/pkg/base"
+	"github.com/mattfenwick/collections/pkg/functions"
 	. "github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
 )
@@ -43,7 +45,7 @@ func RunSortTests() {
 	Describe("SortOn", func() {
 		ints := []Int{1, 18, -34, 79, 97, 36, 42, -18, -3, -1, -18}
 		It("key of self", func() {
-			sorted := SortOn(ints, Id[Int])
+			sorted := SortOn(ints, functions.Id[Int])
 			gomega.Expect(sorted).To(gomega.Equal([]Int{-34, -18, -18, -3, -1, 1, 18, 36, 42, 79, 97}))
 		})
 		It("key of Pair -- abs, then sign", func() {
@@ -58,7 +60,7 @@ func RunSortTests() {
 	Describe("SortOnBy", func() {
 		ints := []Int{1, 18, -34, 79, 97, 36, 42, -18, -3, -1, -18}
 		It("key of self", func() {
-			sorted := SortOnBy(ints, Id[Int], Compare[Int])
+			sorted := SortOnBy(ints, functions.Id[Int], Compare[Int])
 			gomega.Expect(sorted).To(gomega.Equal([]Int{-34, -18, -18, -3, -1, 1, 18, 36, 42, 79, 97}))
 		})
 		It("key of Pair -- abs, then sign", func() {

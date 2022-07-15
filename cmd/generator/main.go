@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	DoOrDie(ModelToText("pkg", "pkg"))
+	DoOrDie(ModelToText("pkg/base", "base"))
 }
 
 func DoOrDie(err error) {

@@ -3,7 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	. "github.com/mattfenwick/collections/pkg"
+	"github.com/mattfenwick/collections/pkg/base"
+	"github.com/mattfenwick/collections/pkg/slices"
 	"github.com/sirupsen/logrus"
 	"reflect"
 	"strconv"
@@ -274,19 +275,19 @@ func DoOrDie(err error) {
 
 func EqExample() {
 	//auints := []uint{1,2,3,4,5}
-	a := []Uint{1, 2, 3, 4, 5}
-	b := []Uint{0, 2, 4, 6, 8}
+	a := []base.Uint{1, 2, 3, 4, 5}
+	b := []base.Uint{0, 2, 4, 6, 8}
 	for _, x := range b {
-		fmt.Printf("looking for %d: result %d\n", x, Index(a, x))
+		fmt.Printf("looking for %d: result %d\n", x, base.Index(a, x))
 	}
 
 	fmt.Printf("Eq? %+v, %+v, %+v, %+v\n",
-		SliceEq[Uint](a).Equal(a),
-		SliceEq[Uint](a).Equal(b),
-		SliceEq[Uint](b).Equal(a),
-		SliceEq[Uint](b).Equal(b))
+		base.SliceEq[base.Uint](a).Equal(a),
+		base.SliceEq[base.Uint](a).Equal(b),
+		base.SliceEq[base.Uint](b).Equal(a),
+		base.SliceEq[base.Uint](b).Equal(b))
 
-	ints := []Int{18, 27, 3, 39, -8, 37, 5, 12}
+	ints := []base.Int{18, 27, 3, 39, -8, 37, 5, 12}
 	//sorted := MergeSortWithComparator(ints, func(a int, b int) Ordering {
 	//	if a < b {
 	//		return OrderingLessThan
@@ -296,6 +297,6 @@ func EqExample() {
 	//		return OrderingGreaterThan
 	//	}
 	//})
-	sorted := Sort(ints)
+	sorted := slices.Sort(ints)
 	fmt.Printf("ints: %+v\nsorted: %+v\n", ints, sorted)
 }

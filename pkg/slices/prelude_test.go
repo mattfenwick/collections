@@ -2,30 +2,33 @@ package slices
 
 import (
 	"github.com/mattfenwick/collections/pkg"
+	"github.com/mattfenwick/collections/pkg/base"
+	"github.com/mattfenwick/collections/pkg/builtins"
+	"github.com/mattfenwick/collections/pkg/functions"
 	. "github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
 )
 
-func RunSliceTests() {
+func RunPreludeTests() {
 	Describe("Scans", func() {
 		It("Scanl", func() {
 			gomega.Expect(
 				Scanl(
-					pkg.Plus[int],
+					builtins.Plus[int],
 					0,
 					Range(1, 5, 1))).
 				To(gomega.Equal([]int{0, 1, 3, 6, 10}))
 
 			gomega.Expect(
 				Scanl(
-					pkg.Plus[int],
+					builtins.Plus[int],
 					42,
 					[]int{})).
 				To(gomega.Equal([]int{42}))
 
 			gomega.Expect(
 				Scanl(
-					pkg.Minus[int],
+					builtins.Minus[int],
 					100,
 					Range(1, 5, 1))).
 				To(gomega.Equal([]int{100, 99, 97, 94, 90}))
@@ -46,58 +49,58 @@ func RunSliceTests() {
 		It("Scanl1", func() {
 			gomega.Expect(
 				Scanl1(
-					pkg.Plus[int],
+					builtins.Plus[int],
 					Range(1, 5, 1))).
 				To(gomega.Equal([]int{1, 3, 6, 10}))
 
 			gomega.Expect(
 				Scanl1(
-					pkg.Plus[int],
+					builtins.Plus[int],
 					[]int{})).
 				To(gomega.Equal([]int{}))
 
 			gomega.Expect(
 				Scanl1(
-					pkg.Plus[int],
+					builtins.Plus[int],
 					[]int{42})).
 				To(gomega.Equal([]int{42}))
 
 			gomega.Expect(
 				Scanl1(
-					pkg.Minus[int],
+					builtins.Minus[int],
 					Range(1, 5, 1))).
 				To(gomega.Equal([]int{1, -1, -4, -8}))
 
 			gomega.Expect(
 				Scanl1(
-					pkg.And,
+					builtins.And,
 					[]bool{true, false, true, false})).
 				To(gomega.Equal([]bool{true, false, false, false}))
 
 			gomega.Expect(
 				Scanl1(
-					pkg.Or,
+					builtins.Or,
 					[]bool{false, true, false, true})).
 				To(gomega.Equal([]bool{false, true, true, true}))
 		})
 		It("Scanr", func() {
 			gomega.Expect(
 				Scanr(
-					pkg.Plus[int],
+					builtins.Plus[int],
 					0,
 					Range(1, 5, 1))).
 				To(gomega.Equal([]int{10, 9, 7, 4, 0}))
 
 			gomega.Expect(
 				Scanr(
-					pkg.Plus[int],
+					builtins.Plus[int],
 					42,
 					[]int{})).
 				To(gomega.Equal([]int{42}))
 
 			gomega.Expect(
 				Scanr(
-					pkg.Minus[int],
+					builtins.Minus[int],
 					100,
 					Range(1, 5, 1))).
 				To(gomega.Equal([]int{98, -97, 99, -96, 100}))
@@ -118,37 +121,37 @@ func RunSliceTests() {
 		It("Scanr1", func() {
 			gomega.Expect(
 				Scanr1(
-					pkg.Plus[int],
+					builtins.Plus[int],
 					Range(1, 5, 1))).
 				To(gomega.Equal([]int{10, 9, 7, 4}))
 
 			gomega.Expect(
 				Scanr1(
-					pkg.Plus[int],
+					builtins.Plus[int],
 					[]int{})).
 				To(gomega.Equal([]int{}))
 
 			gomega.Expect(
 				Scanr1(
-					pkg.Plus[int],
+					builtins.Plus[int],
 					[]int{42})).
 				To(gomega.Equal([]int{42}))
 
 			gomega.Expect(
 				Scanr1(
-					pkg.Minus[int],
+					builtins.Minus[int],
 					Range(1, 5, 1))).
 				To(gomega.Equal([]int{-2, 3, -1, 4}))
 
 			gomega.Expect(
 				Scanr1(
-					pkg.And,
+					builtins.And,
 					[]bool{true, false, true, true})).
 				To(gomega.Equal([]bool{false, false, true, true}))
 
 			gomega.Expect(
 				Scanr1(
-					pkg.Or,
+					builtins.Or,
 					[]bool{false, true, false, false})).
 				To(gomega.Equal([]bool{true, true, false, false}))
 		})
@@ -160,19 +163,19 @@ func RunSliceTests() {
 
 	Describe("Infinite lists", func() {
 		It("Iterate", func() {
-			gomega.Expect(Iterate(5, pkg.Not, true)).To(gomega.Equal([]bool{true, false, true, false, true}))
-			gomega.Expect(Iterate(5, pkg.Partial2(pkg.Plus[int])(3), 42)).To(gomega.Equal([]int{42, 45, 48, 51, 54}))
+			gomega.Expect(Iterate(5, builtins.Not, true)).To(gomega.Equal([]bool{true, false, true, false, true}))
+			gomega.Expect(Iterate(5, functions.Partial2(builtins.Plus[int])(3), 42)).To(gomega.Equal([]int{42, 45, 48, 51, 54}))
 		})
 	})
 
 	Describe("Unfolding", func() {
 		It("Unfoldr", func() {
 			gomega.Expect(
-				Unfoldr(func(next int) *pkg.Maybe[*pkg.Pair[int, int]] {
+				Unfoldr(func(next int) *pkg.Maybe[*base.Pair[int, int]] {
 					if next == 0 {
-						return pkg.Nothing[*pkg.Pair[int, int]]()
+						return pkg.Nothing[*base.Pair[int, int]]()
 					}
-					return pkg.Just(pkg.NewPair(next, next-1))
+					return pkg.Just(base.NewPair(next, next-1))
 				}, 10)).
 				To(gomega.Equal([]int{10, 9, 8, 7, 6, 5, 4, 3, 2, 1}))
 		})

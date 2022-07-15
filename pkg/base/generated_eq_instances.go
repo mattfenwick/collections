@@ -1,4 +1,4 @@
-package pkg
+package base
 
 func (a Bool) Equal(b Bool) bool {
 	return a == b
