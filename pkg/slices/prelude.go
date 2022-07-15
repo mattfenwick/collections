@@ -2,7 +2,7 @@ package slices
 
 import (
 	"github.com/mattfenwick/collections/pkg"
-	"github.com/mattfenwick/collections/pkg/base"
+	. "github.com/mattfenwick/collections/pkg/base"
 	"github.com/mattfenwick/collections/pkg/builtins"
 	"github.com/mattfenwick/collections/pkg/functions"
 )
@@ -35,11 +35,11 @@ func Append[A any](xs []A, ys []A) []A {
 //}
 
 // Uncons is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:uncons
-func Uncons[A any](xs []A) *pkg.Maybe[*base.Pair[A, []A]] {
+func Uncons[A any](xs []A) *pkg.Maybe[*Pair[A, []A]] {
 	if len(xs) == 0 {
-		return pkg.Nothing[*base.Pair[A, []A]]()
+		return pkg.Nothing[*Pair[A, []A]]()
 	}
-	return pkg.Just[*base.Pair[A, []A]](base.NewPair(xs[0], xs[1:]))
+	return pkg.Just[*Pair[A, []A]](NewPair(xs[0], xs[1:]))
 }
 
 // Singleton is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:singleton
@@ -58,7 +58,7 @@ func Length[A any](xs []A) int {
 }
 
 // Map is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:map
-func Map[A, B any](f base.F1[A, B], xs []A) []B {
+func Map[A, B any](f F1[A, B], xs []A) []B {
 	out := make([]B, len(xs))
 	for i, x := range xs {
 		out[i] = f(x)
@@ -102,7 +102,7 @@ func Intercalate[A any](sep []A, xss [][]A) []A {
 
 // Foldl is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:foldl
 //   foldl f z [x1, x2, ..., xn] == (...((z `f` x1) `f` x2) `f`...) `f` xn
-func Foldl[A, B any](combine base.F2[B, A, B], base B, xs []A) B {
+func Foldl[A, B any](combine F2[B, A, B], base B, xs []A) B {
 	out := base
 	for _, x := range xs {
 		out = combine(out, x)
@@ -118,7 +118,7 @@ func Foldl[A, B any](combine base.F2[B, A, B], base B, xs []A) B {
 
 // Foldr is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:foldr
 //   foldr f z [x1, x2, ..., xn] == x1 `f` (x2 `f` ... (xn `f` z)...)
-func Foldr[A, B any](combine base.F2[A, B, B], base B, xs []A) B {
+func Foldr[A, B any](combine F2[A, B, B], base B, xs []A) B {
 	out := base
 	for i := len(xs) - 1; i >= 0; i-- {
 		out = combine(xs[i], out)
@@ -138,7 +138,7 @@ func Concat[A any](xss [][]A) []A {
 }
 
 // ConcatMap is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:concatMap
-func ConcatMap[A any, B any](f base.F1[A, []B], xs []A) []B {
+func ConcatMap[A any, B any](f F1[A, []B], xs []A) []B {
 	return Concat(Map(f, xs))
 }
 
@@ -153,12 +153,12 @@ func Or(xs []bool) bool {
 }
 
 // Any is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:any
-func Any[A any](f base.F1[A, bool], xs []A) bool {
+func Any[A any](f F1[A, bool], xs []A) bool {
 	return Foldl(builtins.Or, false, Map(f, xs))
 }
 
 // All is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:all
-func All[A any](f base.F1[A, bool], xs []A) bool {
+func All[A any](f F1[A, bool], xs []A) bool {
 	return Foldl(builtins.And, true, Map(f, xs))
 }
 
@@ -174,13 +174,13 @@ func Product[A builtins.Number](xs []A) A {
 
 // Maximum is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:maximum
 //   since Haskell's maximum blows up on empty lists, this has been modified for safety
-func Maximum[A base.Ord[A]](xs []A) *pkg.Maybe[A] {
+func Maximum[A Ord[A]](xs []A) *pkg.Maybe[A] {
 	if len(xs) == 0 {
 		return pkg.Nothing[A]()
 	}
 	max := xs[0]
 	for _, x := range xs[1:] {
-		if base.GreaterThan(x, max) {
+		if GreaterThan(x, max) {
 			max = x
 		}
 	}
@@ -189,13 +189,13 @@ func Maximum[A base.Ord[A]](xs []A) *pkg.Maybe[A] {
 
 // Minimum is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:minimum
 //   since Haskell's minimum blows up on empty lists, this has been modified for safety
-func Minimum[A base.Ord[A]](xs []A) *pkg.Maybe[A] {
+func Minimum[A Ord[A]](xs []A) *pkg.Maybe[A] {
 	if len(xs) == 0 {
 		return pkg.Nothing[A]()
 	}
 	min := xs[0]
 	for _, x := range xs[1:] {
-		if base.LessThan(x, min) {
+		if LessThan(x, min) {
 			min = x
 		}
 	}
@@ -203,7 +203,7 @@ func Minimum[A base.Ord[A]](xs []A) *pkg.Maybe[A] {
 }
 
 // Scanl is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:scanl
-func Scanl[A, B any](combine base.F2[B, A, B], base B, xs []A) []B {
+func Scanl[A, B any](combine F2[B, A, B], base B, xs []A) []B {
 	out := []B{base}
 	state := base
 	for _, x := range xs {
@@ -218,7 +218,7 @@ func Scanl[A, B any](combine base.F2[B, A, B], base B, xs []A) []B {
 //   variant in golang
 
 // Scanl1 is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:scanl1
-func Scanl1[A any](combine base.F2[A, A, A], xs []A) []A {
+func Scanl1[A any](combine F2[A, A, A], xs []A) []A {
 	if len(xs) == 0 {
 		return xs
 	}
@@ -232,7 +232,7 @@ func Scanl1[A any](combine base.F2[A, A, A], xs []A) []A {
 }
 
 // Scanr is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:scanr
-func Scanr[A, B any](combine base.F2[A, B, B], base B, xs []A) []B {
+func Scanr[A, B any](combine F2[A, B, B], base B, xs []A) []B {
 	state := base
 	out := []B{base}
 	for i := len(xs) - 1; i >= 0; i-- {
@@ -243,7 +243,7 @@ func Scanr[A, B any](combine base.F2[A, B, B], base B, xs []A) []B {
 }
 
 // Scanr1 is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:scanr1
-func Scanr1[A any](combine base.F2[A, A, A], xs []A) []A {
+func Scanr1[A any](combine F2[A, A, A], xs []A) []A {
 	if len(xs) == 0 {
 		return xs
 	}
@@ -256,15 +256,33 @@ func Scanr1[A any](combine base.F2[A, A, A], xs []A) []A {
 	return out
 }
 
-// TODO
 // MapAccumL is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:mapAccumL
+//   forall t s a b. Traversable t => (s -> a -> (s, b)) -> s -> t a -> (s, t b)
+func MapAccumL[A, B, S any](accum F2[S, A, *Pair[S, B]], s S, xs []A) *Pair[S, []B] {
+	return Foldl(
+		func(p *Pair[S, []B], a A) *Pair[S, []B] {
+			p2 := accum(p.Fst, a)
+			return NewPair[S, []B](p2.Fst, Append(p.Snd, []B{p2.Snd}))
+		},
+		NewPair[S, []B](s, nil),
+		xs)
+}
 
-// TODO
 // MapAccumR is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:mapAccumR
+//   forall t s a b. Traversable t => (s -> a -> (s, b)) -> s -> t a -> (s, t b)
+func MapAccumR[A, B, S any](accum F2[S, A, *Pair[S, B]], s S, xs []A) *Pair[S, []B] {
+	return Foldr(
+		func(a A, p *Pair[S, []B]) *Pair[S, []B] {
+			p2 := accum(p.Fst, a)
+			return NewPair[S, []B](p2.Fst, Cons(p2.Snd, p.Snd))
+		},
+		NewPair[S, []B](s, nil),
+		xs)
+}
 
 // Iterate is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:iterate
 //   it uses a count to avoid an infinite slice
-func Iterate[A any](count int, f base.F1[A, A], start A) []A {
+func Iterate[A any](count int, f F1[A, A], start A) []A {
 	if count == 0 {
 		return nil
 	}
@@ -292,7 +310,7 @@ func Replicate[A any](count int, a A) []A {
 //   (infinite list)
 
 // Unfoldr is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:unfoldr
-func Unfoldr[A, B any](f base.F1[B, *pkg.Maybe[*base.Pair[A, B]]], b B) []A {
+func Unfoldr[A, B any](f F1[B, *pkg.Maybe[*Pair[A, B]]], b B) []A {
 	var out []A
 	nextB := b
 	for {
@@ -304,4 +322,20 @@ func Unfoldr[A, B any](f base.F1[B, *pkg.Maybe[*base.Pair[A, B]]], b B) []A {
 		nextB = (*next.Value).Snd
 	}
 	return out
+}
+
+// Take is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:take
+func Take[A any](count int, xs []A) []A {
+	if count > len(xs) {
+		return xs
+	}
+	return xs[:count]
+}
+
+// Drop is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:drop
+func Drop[A any](count int, xs []A) []A {
+	if count > len(xs) {
+		return nil
+	}
+	return xs[count:]
 }

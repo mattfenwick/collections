@@ -158,7 +158,30 @@ func RunPreludeTests() {
 	})
 
 	Describe("Accumulating maps", func() {
-		// TODO
+		It("MapAccumL", func() {
+			gomega.Expect(MapAccumL(
+				func(a int, b int) *base.Pair[int, int] {
+					return base.NewPair[int, int](a+b, a)
+				},
+				0,
+				Range[int](1, 11, 1),
+			)).To(gomega.Equal(base.NewPair[int, []int](55, []int{0, 1, 3, 6, 10, 15, 21, 28, 36, 45})))
+
+			gomega.Expect(MapAccumL(
+				func(b []int, a int) *base.Pair[[]int, []int] {
+					return base.NewPair[[]int, []int](Append(b, []int{a}), b)
+				},
+				[]int{0},
+				Range[int](1, 5, 1),
+			)).To(gomega.Equal(base.NewPair[[]int, [][]int](Range(0, 5, 1), [][]int{
+				Range(0, 1, 1),
+				Range(0, 2, 1),
+				Range(0, 3, 1),
+				Range(0, 4, 1),
+			})))
+		})
+		It("MapAccumR", func() {
+		})
 	})
 
 	Describe("Infinite lists", func() {
