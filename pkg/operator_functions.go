@@ -31,3 +31,19 @@ func And(a bool, b bool) bool {
 func Or(a bool, b bool) bool {
 	return a || b
 }
+
+func Not(a bool) bool {
+	return !a
+}
+
+func Slice[A any](start uint, stop uint, xs []A) []A {
+	return xs[start:stop]
+}
+
+func SliceFrom[A any](start uint, xs []A) []A {
+	return xs[start:]
+}
+
+func SliceTo[A any](stop uint, xs []A) []A {
+	return xs[:stop]
+}

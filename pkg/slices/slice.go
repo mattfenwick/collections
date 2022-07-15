@@ -250,3 +250,53 @@ func Scanr1[A any](combine pkg.F2[A, A, A], xs []A) []A {
 	}
 	return out
 }
+
+// TODO
+// MapAccumL is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:mapAccumL
+
+// TODO
+// MapAccumR is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:mapAccumR
+
+// Iterate is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:iterate
+//   it uses a count to avoid an infinite slice
+func Iterate[A any](count int, f pkg.F1[A, A], start A) []A {
+	if count == 0 {
+		return nil
+	}
+	state := start
+	out := []A{state}
+	for i := 1; i < count; i++ {
+		state = f(state)
+		out = append(out, state)
+	}
+	return out
+}
+
+// iterate' is not necessary: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:iterate-39-
+//   (strict version of iterate)
+
+// replicate can not be implemented in slices: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:repeat
+//   (infinite list)
+
+// Replicate is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:replicate
+func Replicate[A any](count int, a A) []A {
+	return Iterate(count, pkg.Id[A], a)
+}
+
+// cycle can not be implemented in slices: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:cycle
+//   (infinite list)
+
+// Unfoldr is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:unfoldr
+func Unfoldr[A, B any](f pkg.F1[B, *pkg.Maybe[*pkg.Pair[A, B]]], b B) []A {
+	var out []A
+	nextB := b
+	for {
+		next := f(nextB)
+		if next.Value == nil {
+			break
+		}
+		out = append(out, (*next.Value).Fst)
+		nextB = (*next.Value).Snd
+	}
+	return out
+}

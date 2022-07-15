@@ -19,7 +19,3 @@ func Range[A pkg.Number](start A, stop A, step A) []A {
 	}
 	return out
 }
-
-func Slice[A any](xs []A) []A {
-	panic("TODO -- xs[start:stop] or someting")
-}

@@ -7,7 +7,7 @@ import (
 )
 
 func RunSliceTests() {
-	Describe("Scan", func() {
+	Describe("Scans", func() {
 		It("Scanl", func() {
 			gomega.Expect(
 				Scanl(
@@ -151,6 +151,30 @@ func RunSliceTests() {
 					pkg.Or,
 					[]bool{false, true, false, false})).
 				To(gomega.Equal([]bool{true, true, false, false}))
+		})
+	})
+
+	Describe("Accumulating maps", func() {
+		// TODO
+	})
+
+	Describe("Infinite lists", func() {
+		It("Iterate", func() {
+			gomega.Expect(Iterate(5, pkg.Not, true)).To(gomega.Equal([]bool{true, false, true, false, true}))
+			gomega.Expect(Iterate(5, pkg.Partial2(pkg.Plus[int])(3), 42)).To(gomega.Equal([]int{42, 45, 48, 51, 54}))
+		})
+	})
+
+	Describe("Unfolding", func() {
+		It("Unfoldr", func() {
+			gomega.Expect(
+				Unfoldr(func(next int) *pkg.Maybe[*pkg.Pair[int, int]] {
+					if next == 0 {
+						return pkg.Nothing[*pkg.Pair[int, int]]()
+					}
+					return pkg.Just(pkg.NewPair(next, next-1))
+				}, 10)).
+				To(gomega.Equal([]int{10, 9, 8, 7, 6, 5, 4, 3, 2, 1}))
 		})
 	})
 }
