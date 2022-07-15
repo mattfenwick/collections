@@ -111,7 +111,7 @@ func Foldl[A, B any](combine pkg.F2[B, A, B], base B, xs []A) B {
 
 // TODO foldl1' https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:foldl1-39-
 
-// foldr is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:foldr
+// Foldr is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:foldr
 //   foldr f z [x1, x2, ..., xn] == x1 `f` (x2 `f` ... (xn `f` z)...)
 func Foldr[A, B any](combine pkg.F2[A, B, B], base B, xs []A) B {
 	out := base
@@ -149,12 +149,12 @@ func Or(xs []bool) bool {
 
 // Any is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:any
 func Any[A any](f pkg.F1[A, bool], xs []A) bool {
-	return Foldl(pkg.And, true, Map(f, xs))
+	return Foldl(pkg.Or, false, Map(f, xs))
 }
 
 // All is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:all
 func All[A any](f pkg.F1[A, bool], xs []A) bool {
-	return Foldl(pkg.Or, false, Map(f, xs))
+	return Foldl(pkg.And, true, Map(f, xs))
 }
 
 // Sum is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:sum
@@ -275,7 +275,7 @@ func Iterate[A any](count int, f pkg.F1[A, A], start A) []A {
 // iterate' is not necessary: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:iterate-39-
 //   (strict version of iterate)
 
-// replicate can not be implemented in slices: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:repeat
+// repeat can not be implemented in slices: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:repeat
 //   (infinite list)
 
 // Replicate is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:replicate
