@@ -45,30 +45,30 @@ func RunSortTests() {
 	Describe("SortOn", func() {
 		ints := []Int{1, 18, -34, 79, 97, 36, 42, -18, -3, -1, -18}
 		It("key of self", func() {
-			sorted := SortOn(ints, functions.Id[Int])
+			sorted := SortOn(functions.Id[Int], ints)
 			gomega.Expect(sorted).To(gomega.Equal([]Int{-34, -18, -18, -3, -1, 1, 18, 36, 42, 79, 97}))
 		})
 		It("key of Pair -- abs, then sign", func() {
-			sorted := SortOn(ints, absoluteValueThenSignKey)
+			sorted := SortOn(absoluteValueThenSignKey, ints)
 			gomega.Expect(sorted).To(gomega.Equal([]Int{-1, 1, -3, -18, -18, 18, -34, 36, 42, 79, 97}))
 		})
 		It("key of Pair -- sign, then abc", func() {
-			sorted := SortOn(ints, signThenAbsoluteValueKey)
+			sorted := SortOn(signThenAbsoluteValueKey, ints)
 			gomega.Expect(sorted).To(gomega.Equal([]Int{-1, -3, -18, -18, -34, 1, 18, 36, 42, 79, 97}))
 		})
 	})
 	Describe("SortOnBy", func() {
 		ints := []Int{1, 18, -34, 79, 97, 36, 42, -18, -3, -1, -18}
 		It("key of self", func() {
-			sorted := SortOnBy(ints, functions.Id[Int], Compare[Int])
+			sorted := SortOnBy(functions.Id[Int], Compare[Int], ints)
 			gomega.Expect(sorted).To(gomega.Equal([]Int{-34, -18, -18, -3, -1, 1, 18, 36, 42, 79, 97}))
 		})
 		It("key of Pair -- abs, then sign", func() {
-			sorted := SortOnBy(ints, absoluteValueThenSignKey, Compare[PairOrd[Int, Bool]])
+			sorted := SortOnBy(absoluteValueThenSignKey, Compare[PairOrd[Int, Bool]], ints)
 			gomega.Expect(sorted).To(gomega.Equal([]Int{-1, 1, -3, -18, -18, 18, -34, 36, 42, 79, 97}))
 		})
 		It("key of Pair -- sign, then abc", func() {
-			sorted := SortOnBy(ints, signThenAbsoluteValueKey, Compare[PairOrd[Bool, Int]])
+			sorted := SortOnBy(signThenAbsoluteValueKey, Compare[PairOrd[Bool, Int]], ints)
 			gomega.Expect(sorted).To(gomega.Equal([]Int{-1, -3, -18, -18, -34, 1, 18, 36, 42, 79, 97}))
 		})
 	})

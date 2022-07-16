@@ -4,47 +4,26 @@ import (
 	. "github.com/mattfenwick/collections/pkg/base"
 )
 
-// Sort orders elements by their natural Ord instance.
-func Sort[A Ord[A]](xs []A) []A {
-	return MergeSortWithComparator(xs, Compare[A])
-}
-
-// SortBy allows sorting based on a custom comparison operator;
-//   therefore it does not require input elements to have an Ord instance.
-//   See https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:sortBy
-func SortBy[A any](xs []A, compare F2[A, A, Ordering]) []A {
-	//return SortOnBy(xs, Id[A], f)
-	return MergeSortWithComparator(xs, compare)
-}
-
-// SortOn is based on a Haskell function and the decorate/sort/undecorate pattern.
-//   It allows a projection of each element to be used to determine the order.
-//   The projection must have an Ord instance.
-//   https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:sortOn
-func SortOn[A any, B Ord[B]](xs []A, projection F1[A, B]) []A {
-	return SortOnBy(xs, projection, Compare[B])
-}
-
 // SortOnBy combines the functionality of `SortOn` and `SortBy`,
 //   thereby separating projection and comparison functions
-func SortOnBy[A any, B any](xs []A, projection F1[A, B], compare F2[B, B, Ordering]) []A {
+func SortOnBy[A any, B any](projection F1[A, B], compare F2[B, B, Ordering], xs []A) []A {
 	pairs := Map(func(a A) *Pair[A, B] { return NewPair(a, projection(a)) }, xs)
-	sorted := MergeSortWithComparator(pairs, func(p1 *Pair[A, B], p2 *Pair[A, B]) Ordering {
+	sorted := MergeSortWithComparator(func(p1 *Pair[A, B], p2 *Pair[A, B]) Ordering {
 		return compare(p1.Snd, p2.Snd)
-	})
+	}, pairs)
 	return Map(First[A, B], sorted)
 }
 
 // MergeSortWithComparator needs to be rewritten iteratively TODO
-func MergeSortWithComparator[A any](xs []A, compare func(A, A) Ordering) []A {
+func MergeSortWithComparator[A any](compare func(A, A) Ordering, xs []A) []A {
 	switch len(xs) {
 	case 0, 1:
 		return xs
 	default:
 		middle := len(xs) / 2
 		return Merge(
-			MergeSortWithComparator(xs[:middle], compare),
-			MergeSortWithComparator(xs[middle:], compare),
+			MergeSortWithComparator(compare, xs[:middle]),
+			MergeSortWithComparator(compare, xs[middle:]),
 			compare)
 	}
 }

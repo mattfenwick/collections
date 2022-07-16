@@ -114,3 +114,8 @@ func LeftShift[T constraints.Integer](bits T, numberOfBits uint) T {
 func RightShift[T constraints.Integer](bits T, numberOfBits uint) T {
 	return bits >> numberOfBits
 }
+
+// Index wraps the [] operator
+func Index[A any](i int, xs []A) A {
+	return xs[i]
+}

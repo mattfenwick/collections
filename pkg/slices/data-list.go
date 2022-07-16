@@ -339,3 +339,178 @@ func Drop[A any](count int, xs []A) []A {
 	}
 	return xs[count:]
 }
+
+// SplitAt is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:splitAt
+func SplitAt[A any](count int, xs []A) *Pair[[]A, []A] {
+	return NewPair(Take(count, xs), Drop(count, xs))
+}
+
+// TakeWhile is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:takeWhile
+func TakeWhile[A any](pred F1[A, bool], xs []A) []A {
+	var out []A
+	for _, x := range xs {
+		if !pred(x) {
+			break
+		}
+		out = append(out, x)
+	}
+	return out
+}
+
+// DropWhile is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:dropWhile
+func DropWhile[A any](pred F1[A, bool], xs []A) []A {
+	for i, x := range xs {
+		if !pred(x) {
+			return append([]A{}, xs[i:]...)
+		}
+	}
+	return nil
+}
+
+// TODO
+// DropWhileEnd is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:dropWhileEnd
+
+// Span is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:span
+func Span[A any](pred F1[A, bool], xs []A) *Pair[[]A, []A] {
+	return NewPair(TakeWhile(pred, xs), DropWhile(pred, xs))
+}
+
+// Break is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:break
+func Break[A any](pred F1[A, bool], xs []A) *Pair[[]A, []A] {
+	// TODO are these type annotations all necessary?
+	var f F1[A, bool] = functions.Compose(builtins.Not, pred)
+	var g F1[F1[A, bool], F1[[]A, *Pair[[]A, []A]]] = functions.Partial2(Span[A])
+	var h F1[[]A, *Pair[[]A, []A]] = g(f)
+	return h(xs)
+}
+
+// TODO
+// StripPrefix is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:stripPrefix
+
+// TODO
+// Group is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:group
+
+// TODO
+// Inits is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:inits
+
+// TODO
+// Tails is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:tails
+
+// TODO Predicates: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#g:12
+
+// TODO searching by equality
+
+// Find is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:find
+func Find[A any](pred F1[A, bool], xs []A) *pkg.Maybe[A] {
+	for _, x := range xs {
+		if pred(x) {
+			return pkg.Just(x)
+		}
+	}
+	return pkg.Nothing[A]()
+}
+
+// Filter is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:filter
+func Filter[A any](f F1[A, bool], xs []A) []A {
+	var out []A
+	for _, x := range xs {
+		if f(x) {
+			out = append(out, x)
+		}
+	}
+	return out
+}
+
+// Partition is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:partition
+func Partition[A any](predicate F1[A, bool], xs []A) *Pair[[]A, []A] {
+	var yes, no []A
+	for _, x := range xs {
+		if predicate(x) {
+			yes = append(yes, x)
+		} else {
+			no = append(no, x)
+		}
+	}
+	return NewPair(yes, no)
+}
+
+// TODO indexing lists: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#g:16
+
+// Zip is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:zip
+func Zip[A, B any](xs []A, ys []B) []*Pair[A, B] {
+	return ZipWith(NewPair[A, B], xs, ys)
+}
+
+// TODO Zip3
+// TODO Zip4
+// TODO Zip5
+// TODO Zip6
+// TODO Zip7
+
+// ZipWith is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:zipWith
+func ZipWith[A, B, C any](f F2[A, B, C], xs []A, ys []B) []C {
+	var out []C
+	for i, x := range xs {
+		if i >= len(ys) {
+			break
+		}
+		out = append(out, f(x, ys[i]))
+	}
+	return out
+}
+
+// TODO ZipWith3
+// TODO ZipWith4
+// TODO ZipWith5
+// TODO ZipWith6
+// TODO ZipWith7
+
+// Unzip is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:unzip
+func Unzip[A, B any](xs []*Pair[A, B]) *Pair[[]A, []B] {
+	var as []A
+	var bs []B
+	for _, x := range xs {
+		as = append(as, x.Fst)
+		bs = append(bs, x.Snd)
+	}
+	return NewPair(as, bs)
+}
+
+// TODO Unzip3
+// TODO Unzip4
+// TODO Unzip5
+// TODO Unzip6
+// TODO Unzip7
+
+// TODO functions on strings: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#g:19
+
+// TODO set operations: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#g:20
+
+// Sort is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:sort
+//   It orders elements by their natural Ord instance.
+func Sort[A Ord[A]](xs []A) []A {
+	return MergeSortWithComparator(Compare[A], xs)
+}
+
+// SortOn is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:sortOn
+//   It uses the decorate/sort/undecorate pattern.
+//   It allows a projection of each element to be used to determine the order.
+//   The projection must have an Ord instance.
+func SortOn[A any, B Ord[B]](projection F1[A, B], xs []A) []A {
+	return SortOnBy(projection, Compare[B], xs)
+}
+
+// Insert is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:insert
+func Insert[A Ord[A]](a A, xs []A) []A {
+	panic("TODO")
+}
+
+// TODO the by operations: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#g:23
+
+// SortBy is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:sortBy
+//   It allows sorting based on a custom comparison operator;
+//   therefore it does not require input elements to have an Ord instance.
+func SortBy[A any](xs []A, compare F2[A, A, Ordering]) []A {
+	//return SortOnBy(xs, Id[A], f)
+	return MergeSortWithComparator(compare, xs)
+}

@@ -181,6 +181,26 @@ func RunPreludeTests() {
 			})))
 		})
 		It("MapAccumR", func() {
+			gomega.Expect(MapAccumR(
+				func(a int, b int) *base.Pair[int, int] {
+					return base.NewPair[int, int](a+b, a)
+				},
+				0,
+				Range[int](1, 11, 1),
+			)).To(gomega.Equal(base.NewPair[int, []int](55, []int{54, 52, 49, 45, 40, 34, 27, 19, 10, 0})))
+
+			gomega.Expect(MapAccumR(
+				func(b []int, a int) *base.Pair[[]int, []int] {
+					return base.NewPair[[]int, []int](Append(b, []int{a}), b)
+				},
+				[]int{0},
+				Range[int](1, 5, 1),
+			)).To(gomega.Equal(base.NewPair[[]int, [][]int]([]int{0, 4, 3, 2, 1}, [][]int{
+				{0, 4, 3, 2},
+				{0, 4, 3},
+				{0, 4},
+				{0},
+			})))
 		})
 	})
 
@@ -201,6 +221,28 @@ func RunPreludeTests() {
 					return pkg.Just(base.NewPair(next, next-1))
 				}, 10)).
 				To(gomega.Equal([]int{10, 9, 8, 7, 6, 5, 4, 3, 2, 1}))
+		})
+	})
+
+	Describe("Sublists", func() {
+		lt3 := functions.Partial2(functions.Flip(builtins.LT[int]))(3)
+		pair := func(xs []int, ys []int) *base.Pair[[]int, []int] {
+			return base.NewPair(xs, ys)
+		}
+		It("TakeWhile", func() {
+			gomega.Expect(TakeWhile(lt3, []int{1, 2, 3, 4, 1, 2, 3, 4})).To(gomega.Equal([]int{1, 2}))
+			gomega.Expect(TakeWhile(lt3, []int{-18, 2, 0, 1})).To(gomega.Equal([]int{-18, 2, 0, 1}))
+			gomega.Expect(TakeWhile(lt3, []int{8, 1, 4})).To(gomega.BeNil())
+		})
+		It("DropWhile", func() {
+			gomega.Expect(DropWhile(lt3, []int{1, 2, 3, 4, 1, 2, 3, 4})).To(gomega.Equal([]int{3, 4, 1, 2, 3, 4}))
+			gomega.Expect(DropWhile(lt3, []int{-18, 2, 0, 1})).To(gomega.BeNil())
+			gomega.Expect(DropWhile(lt3, []int{8, 1, 4})).To(gomega.Equal([]int{8, 1, 4}))
+		})
+		It("Span", func() {
+			gomega.Expect(Span(lt3, []int{1, 2, 3, 4, 1, 2, 3, 4})).To(gomega.Equal(pair([]int{1, 2}, []int{3, 4, 1, 2, 3, 4})))
+			gomega.Expect(Span(lt3, []int{-18, 2, 0, 1})).To(gomega.Equal(pair([]int{-18, 2, 0, 1}, nil)))
+			gomega.Expect(Span(lt3, []int{8, 1, 4})).To(gomega.Equal(pair(nil, []int{8, 1, 4})))
 		})
 	})
 }
