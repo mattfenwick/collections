@@ -94,11 +94,13 @@ func Intercalate[A any](sep []A, xss [][]A) []A {
 }
 
 // TODO transpose
-//   see https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:transpose
+// Transpose is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:transpose
 
-// TODO https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:subsequences
+// TODO
+// Subsequences if from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:subsequences
 
-// TODO https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:permutations
+// TODO
+// Permutations is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:permutations
 
 // Foldl is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:foldl
 //   foldl f z [x1, x2, ..., xn] == (...((z `f` x1) `f` x2) `f`...) `f` xn
@@ -387,8 +389,10 @@ func Break[A any](pred F1[A, bool], xs []A) *Pair[[]A, []A] {
 // TODO
 // StripPrefix is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:stripPrefix
 
-// TODO
 // Group is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:group
+func Group[A Eq[A]](xs []A) [][]A {
+	return GroupBy(Equal[A], xs)
+}
 
 // TODO
 // Inits is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:inits
@@ -398,7 +402,7 @@ func Break[A any](pred F1[A, bool], xs []A) *Pair[[]A, []A] {
 
 // TODO Predicates: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#g:12
 
-// TODO searching by equality
+// TODO searching by equality https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#g:14
 
 // Find is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:find
 func Find[A any](pred F1[A, bool], xs []A) *pkg.Maybe[A] {
@@ -507,6 +511,36 @@ func Insert[A Ord[A]](a A, xs []A) []A {
 
 // TODO the by operations: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#g:23
 
+// TODO
+// NubBy is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:nubBy
+
+// TODO
+// DeleteBy is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:deleteBy
+
+// TODO
+// DeleteFirstsBy is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:deleteFirstsBy
+
+// TODO
+// UnionBy is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:unionBy
+
+// TODO
+// IntersectBy is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:intersectBy
+
+// GroupBy is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:groupBy
+func GroupBy[A any](g F2[A, A, bool], xs []A) [][]A {
+	rest := xs
+	var out [][]A
+	for {
+		if len(rest) == 0 {
+			break
+		}
+		pair := Span[A](functions.Partial2(g)(rest[0]), rest[1:])
+		out = append(out, Cons(rest[0], pair.Fst))
+		rest = pair.Snd
+	}
+	return out
+}
+
 // SortBy is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:sortBy
 //   It allows sorting based on a custom comparison operator;
 //   therefore it does not require input elements to have an Ord instance.
@@ -514,3 +548,15 @@ func SortBy[A any](xs []A, compare F2[A, A, Ordering]) []A {
 	//return SortOnBy(xs, Id[A], f)
 	return MergeSortWithComparator(compare, xs)
 }
+
+// TODO
+// InsertBy is from https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:insertBy
+
+// TODO
+// MaximumBy is from https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:maximumBy
+
+// TODO
+// MinimumBy is from https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:minimumBy
+
+// The generic operations https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#g:26
+//   seem unnecessary

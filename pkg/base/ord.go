@@ -1,5 +1,7 @@
 package base
 
+// see https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-Ord.html#v:comparing for ideas
+
 type Ordering string
 
 const (

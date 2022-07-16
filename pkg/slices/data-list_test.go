@@ -224,6 +224,8 @@ func RunPreludeTests() {
 		})
 	})
 
+	eq3 := functions.Partial2(builtins.EQ[int])(3)
+
 	Describe("Sublists", func() {
 		lt3 := functions.Partial2(functions.Flip(builtins.LT[int]))(3)
 		pair := func(xs []int, ys []int) *base.Pair[[]int, []int] {
@@ -233,16 +235,39 @@ func RunPreludeTests() {
 			gomega.Expect(TakeWhile(lt3, []int{1, 2, 3, 4, 1, 2, 3, 4})).To(gomega.Equal([]int{1, 2}))
 			gomega.Expect(TakeWhile(lt3, []int{-18, 2, 0, 1})).To(gomega.Equal([]int{-18, 2, 0, 1}))
 			gomega.Expect(TakeWhile(lt3, []int{8, 1, 4})).To(gomega.BeNil())
+			gomega.Expect(TakeWhile(eq3, []int{3, 2, 4, 3, 1})).To(gomega.Equal([]int{3}))
 		})
 		It("DropWhile", func() {
 			gomega.Expect(DropWhile(lt3, []int{1, 2, 3, 4, 1, 2, 3, 4})).To(gomega.Equal([]int{3, 4, 1, 2, 3, 4}))
 			gomega.Expect(DropWhile(lt3, []int{-18, 2, 0, 1})).To(gomega.BeNil())
 			gomega.Expect(DropWhile(lt3, []int{8, 1, 4})).To(gomega.Equal([]int{8, 1, 4}))
+			gomega.Expect(DropWhile(eq3, []int{3, 2, 4, 3, 1})).To(gomega.Equal([]int{2, 4, 3, 1}))
 		})
 		It("Span", func() {
 			gomega.Expect(Span(lt3, []int{1, 2, 3, 4, 1, 2, 3, 4})).To(gomega.Equal(pair([]int{1, 2}, []int{3, 4, 1, 2, 3, 4})))
 			gomega.Expect(Span(lt3, []int{-18, 2, 0, 1})).To(gomega.Equal(pair([]int{-18, 2, 0, 1}, nil)))
 			gomega.Expect(Span(lt3, []int{8, 1, 4})).To(gomega.Equal(pair(nil, []int{8, 1, 4})))
+			gomega.Expect(Span[int](eq3, []int{3, 2, 4, 3, 1})).To(gomega.Equal(pair([]int{3}, []int{2, 4, 3, 1})))
+		})
+	})
+
+	Describe("the by operations", func() {
+		It("GroupBy", func() {
+			gomega.Expect(GroupBy(builtins.EQ[int], []int{})).To(gomega.BeNil())
+			gomega.Expect(GroupBy(builtins.EQ[int], []int{1})).To(gomega.Equal([][]int{{1}}))
+			gomega.Expect(GroupBy(builtins.EQ[int], []int{1, 1, 1})).To(gomega.Equal([][]int{{1, 1, 1}}))
+			gomega.Expect(GroupBy(builtins.EQ[int], []int{1, 2, 1})).To(gomega.Equal([][]int{{1}, {2}, {1}}))
+			gomega.Expect(GroupBy(builtins.EQ[int], []int{2, 1, 1})).To(gomega.Equal([][]int{{2}, {1, 1}}))
+			gomega.Expect(GroupBy(builtins.EQ[int], []int{7, 4, 2, 2, 4, 2, 2, 4, 9, 9, 4})).To(gomega.Equal([][]int{
+				{7},
+				{4},
+				{2, 2},
+				{4},
+				{2, 2},
+				{4},
+				{9, 9},
+				{4},
+			}))
 		})
 	})
 }
