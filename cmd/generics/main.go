@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/mattfenwick/collections/pkg/base"
+	"github.com/mattfenwick/collections/pkg/builtins"
 	"github.com/mattfenwick/collections/pkg/slices"
 	"github.com/sirupsen/logrus"
 	"reflect"
@@ -39,6 +40,28 @@ func main() {
 		doubled, reflect.TypeOf(doubled),
 		doubledChanges, reflect.TypeOf(doubledChanges),
 		reflect.TypeOf(xs))
+
+	SortExample()
+}
+
+func SortExample() {
+	fmt.Printf("sort a comparable: %+v\n", slices.SortBy(builtins.Compare[int], []int{4, 79, 13, -8, 22, 4, 8, 7}))
+	fmt.Printf("sort an Ord: %+v\n", slices.SortBy(base.Compare[base.Int], []base.Int{4, 79, 13, -8, 22, 4, 8, 7}))
+	fmt.Printf("sort by a custom compare: %+v\n", slices.SortOn(base.WrapInt, []int{4, 79, 13, -8, 22, 4, 8, 7}))
+
+	//   Prelude> [1,2,3] < [3,4,5]
+	//   True
+	//   Prelude> [1,2,3] < [3,4]
+	//   True
+	//   Prelude> [1,2,3] < []
+	//   False
+	fmt.Printf("sort a bunch of slices: %+v\n",
+		slices.SortBy(slices.CompareSliceP(builtins.Compare[int]), [][]int{
+			{3, 4, 5},
+			{3, 4},
+			{1, 2, 3},
+			{},
+		}))
 }
 
 type Stuff interface {
@@ -282,10 +305,10 @@ func EqExample() {
 	}
 
 	fmt.Printf("Eq? %+v, %+v, %+v, %+v\n",
-		base.SliceEq[base.Uint](a).Equal(a),
-		base.SliceEq[base.Uint](a).Equal(b),
-		base.SliceEq[base.Uint](b).Equal(a),
-		base.SliceEq[base.Uint](b).Equal(b))
+		slices.SliceEq[base.Uint](a).Equal(a),
+		slices.SliceEq[base.Uint](a).Equal(b),
+		slices.SliceEq[base.Uint](b).Equal(a),
+		slices.SliceEq[base.Uint](b).Equal(b))
 
 	ints := []base.Int{18, 27, 3, 39, -8, 37, 5, 12}
 	//sorted := MergeSortWithComparator(ints, func(a int, b int) Ordering {

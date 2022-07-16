@@ -1,6 +1,8 @@
 package functions
 
-import . "github.com/mattfenwick/collections/pkg/base"
+import (
+	. "github.com/mattfenwick/collections/pkg/base"
+)
 
 func Compose[A, B, C any](f F1[B, C], g F1[A, B]) F1[A, C] {
 	return func(x A) C {
@@ -56,4 +58,8 @@ func Flip[A, B, C any](f F2[A, B, C]) F2[B, A, C] {
 	return func(b B, a A) C {
 		return f(a, b)
 	}
+}
+
+func On[A, B, C any](combine F2[B, B, C], project F1[A, B], x A, y A) C {
+	return combine(project(x), project(y))
 }

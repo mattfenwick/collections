@@ -2,8 +2,13 @@ package builtins
 
 import (
 	"github.com/mattfenwick/collections/pkg/base"
+	"github.com/mattfenwick/collections/pkg/functions"
 	"golang.org/x/exp/constraints"
 )
+
+func Equal[T comparable](a T, b T) bool {
+	return EQ(a, b)
+}
 
 func Compare[A constraints.Ordered](a A, b A) base.Ordering {
 	if a < b {
@@ -15,15 +20,8 @@ func Compare[A constraints.Ordered](a A, b A) base.Ordering {
 	}
 }
 
-func Comparing[A constraints.Ordered, B any](f base.F1[B, A], x B, y B) base.Ordering {
-	return Compare(f(x), f(y))
-}
-
-// ComparingP is a partial application of Comparing, fixing the first argument
-func ComparingP[A constraints.Ordered, B any](f base.F1[B, A]) base.F2[B, B, base.Ordering] {
-	return func(x B, y B) base.Ordering {
-		return Comparing(f, x, y)
-	}
+func Comparing[A any, B constraints.Ordered](f base.F1[A, B], x A, y A) base.Ordering {
+	return functions.On(Compare[B], f, x, y)
 }
 
 // TODO are these necessary?
@@ -31,6 +29,6 @@ func ComparingP[A constraints.Ordered, B any](f base.F1[B, A]) base.F2[B, B, bas
 //	return slices.SortBy(xs, Compare[A])
 //}
 //
-//func SortOn[A any, B constraints.Ordered](xs []A, f base.F1[A, B]) []A {
-//	return slices.MergeSortWithComparator(xs, ComparingP(f))
+//func SortOn[A any, B constraints.Ordered](f base.F1[A, B], xs []A) []A {
+//	return slices.SortOnBy(f, Compare[B], xs)
 //}

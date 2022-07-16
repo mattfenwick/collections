@@ -22,15 +22,6 @@ func RunEqTests() {
 			gomega.Expect(Equal[Bool](false, false)).To(gomega.Equal(true))
 			gomega.Expect(Equal[Bool](true, true)).To(gomega.Equal(true))
 		})
-		It("SliceEq", func() {
-			gomega.Expect(Equal[SliceEq[Int]]([]Int{}, []Int{})).To(gomega.Equal(true))
-			gomega.Expect(Equal[SliceEq[Int]]([]Int{}, []Int{18, 37})).To(gomega.Equal(false))
-			gomega.Expect(Equal[SliceEq[Int]]([]Int{25, 39}, []Int{})).To(gomega.Equal(false))
-			gomega.Expect(Equal[SliceEq[Int]]([]Int{14, 32, 65, 8}, []Int{14, 32, 65, 8})).To(gomega.Equal(true))
-		})
-		It("SliceOrd", func() {
-			gomega.Expect(Equal[SliceOrd[Int]]([]Int{}, []Int{})).To(gomega.Equal(true))
-		})
 		It("Pair", func() {
 			p1 := makePair[Int, Bool](13, true)
 			p2 := makePair[Int, Bool](14, true)

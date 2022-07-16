@@ -14,25 +14,6 @@ func NotEqual[T Eq[T]](a T, b T) bool {
 	return !a.Equal(b)
 }
 
-func (xs SliceEq[A]) Equal(ys SliceEq[A]) bool {
-	// unfortunately, can't do:
-	//   return slices.Equal(xs, ys)
-	//   because: A does not implement comparable
-	if len(xs) != len(ys) {
-		return false
-	}
-	for i := range xs {
-		if !xs[i].Equal(ys[i]) {
-			return false
-		}
-	}
-	return true
-}
-
-func (xs SliceOrd[A]) Equal(ys SliceOrd[A]) bool {
-	return SliceEq[A](xs).Equal(SliceEq[A](ys))
-}
-
 func (xs MapEq[A, B]) Equal(ys MapEq[A, B]) bool {
 	// unfortunately, can't do:
 	//   return maps.Equal(xs, ys)

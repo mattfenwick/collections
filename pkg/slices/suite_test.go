@@ -9,8 +9,9 @@ import (
 func TestMatcher(t *testing.T) {
 	gomega.RegisterFailHandler(Fail)
 
-	RunPreludeTests()
+	RunDataListTests()
 	RunSortTests()
+	RunCompareTests()
 
 	RunSpecs(t, "builtins suite")
 }

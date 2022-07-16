@@ -70,31 +70,6 @@ func (a Bool) Compare(b Bool) Ordering {
 	return OrderingGreaterThan
 }
 
-// Compare should work like in Haskell.  Examples from Haskell:
-//   Prelude> [1,2,3] < [3,4,5]
-//   True
-//   Prelude> [1,2,3] < [3,4]
-//   True
-//   Prelude> [1,2,3] < []
-//   False
-func (xs SliceOrd[A]) Compare(ys SliceOrd[A]) Ordering {
-	i := 0
-	for {
-		if i == len(xs) && i == len(ys) {
-			return OrderingEqual
-		} else if i == len(xs) {
-			return OrderingLessThan
-		} else if i == len(ys) {
-			return OrderingGreaterThan
-		}
-		comp := xs[i].Compare(ys[i])
-		if comp != OrderingEqual {
-			return comp
-		}
-		i++
-	}
-}
-
 // TODO how to sort complex numbers?  Python doesn't seem to support this?
 //   maybe it's not a good idea?
 //func (a Complex64) Compare(b Complex64) Ordering {

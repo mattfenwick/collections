@@ -38,25 +38,5 @@ func RunOrdTests() {
 			gomega.Expect(p3.Compare(p2)).To(gomega.BeEquivalentTo(OrderingLessThan))
 			gomega.Expect(p3.Compare(p3)).To(gomega.BeEquivalentTo(OrderingEqual))
 		})
-
-		It("SliceOrd", func() {
-			gomega.Expect(Compare[SliceOrd[Int]]([]Int{}, []Int{})).To(gomega.BeEquivalentTo(OrderingEqual))
-
-			gomega.Expect(Compare[SliceOrd[Int]]([]Int{4}, []Int{})).To(gomega.BeEquivalentTo(OrderingGreaterThan))
-			gomega.Expect(Compare[SliceOrd[Int]]([]Int{}, []Int{4})).To(gomega.BeEquivalentTo(OrderingLessThan))
-			gomega.Expect(Compare[SliceOrd[Int]]([]Int{4}, []Int{4})).To(gomega.BeEquivalentTo(OrderingEqual))
-
-			gomega.Expect(Compare[SliceOrd[Int]]([]Int{4, 7}, []Int{4, 8})).To(gomega.BeEquivalentTo(OrderingLessThan))
-			gomega.Expect(Compare[SliceOrd[Int]]([]Int{4, 7}, []Int{4, 6})).To(gomega.BeEquivalentTo(OrderingGreaterThan))
-			gomega.Expect(Compare[SliceOrd[Int]]([]Int{4, 7}, []Int{4, 7})).To(gomega.BeEquivalentTo(OrderingEqual))
-
-			gomega.Expect(Compare[SliceOrd[Int]]([]Int{1, 2, 3}, []Int{3, 4, 5})).To(gomega.BeEquivalentTo(OrderingLessThan))
-			gomega.Expect(Compare[SliceOrd[Int]]([]Int{1, 2, 3}, []Int{3})).To(gomega.BeEquivalentTo(OrderingLessThan))
-			gomega.Expect(Compare[SliceOrd[Int]]([]Int{1, 2, 3}, []Int{})).To(gomega.BeEquivalentTo(OrderingGreaterThan))
-
-			gomega.Expect(Compare[SliceOrd[Int]]([]Int{3, 4, 5}, []Int{1, 2, 3})).To(gomega.BeEquivalentTo(OrderingGreaterThan))
-			gomega.Expect(Compare[SliceOrd[Int]]([]Int{3}, []Int{1, 2, 3})).To(gomega.BeEquivalentTo(OrderingGreaterThan))
-			gomega.Expect(Compare[SliceOrd[Int]]([]Int{}, []Int{1, 2, 3})).To(gomega.BeEquivalentTo(OrderingLessThan))
-		})
 	})
 }

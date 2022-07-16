@@ -9,7 +9,7 @@ import (
 	"github.com/onsi/gomega"
 )
 
-func RunPreludeTests() {
+func RunDataListTests() {
 	Describe("Special folds", func() {
 		It("Maximum", func() {
 			gomega.Expect(Maximum[base.Int]([]base.Int{})).To(gomega.Equal(pkg.Nothing[base.Int]()))
