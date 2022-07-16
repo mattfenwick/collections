@@ -9,9 +9,9 @@ import (
 func RunCompareTests() {
 	Describe("Compare", func() {
 		It("Compares strings", func() {
-			gomega.Expect(Compare[string]("abc", "def")).To(gomega.BeEquivalentTo(base.OrderingLessThan))
-			gomega.Expect(Compare[string]("abc", "abc")).To(gomega.BeEquivalentTo(base.OrderingEqual))
-			gomega.Expect(Compare[string]("def", "abc")).To(gomega.BeEquivalentTo(base.OrderingGreaterThan))
+			gomega.Expect(CompareOrdered[string]("abc", "def")).To(gomega.BeEquivalentTo(base.OrderingLessThan))
+			gomega.Expect(CompareOrdered[string]("abc", "abc")).To(gomega.BeEquivalentTo(base.OrderingEqual))
+			gomega.Expect(CompareOrdered[string]("def", "abc")).To(gomega.BeEquivalentTo(base.OrderingGreaterThan))
 		})
 	})
 }

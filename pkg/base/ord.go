@@ -1,5 +1,7 @@
 package base
 
+import "fmt"
+
 // see https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-Ord.html#v:comparing for ideas
 
 type Ordering string
@@ -10,6 +12,21 @@ const (
 	OrderingGreaterThan = "OrderingGreaterThan"
 )
 
+func (a Ordering) Equal(b Ordering) bool {
+	return a == b
+}
+
+func (a Ordering) Compare(b Ordering) Ordering {
+	if a < b {
+		return OrderingLessThan
+	} else if a == b {
+		return OrderingEqual
+	}
+	return OrderingGreaterThan
+}
+
+type Comparator[A any] func(A, A) Ordering
+
 type Ord[T any] interface {
 	Eq[T]
 	Compare(T) Ordering
@@ -17,6 +34,19 @@ type Ord[T any] interface {
 
 func Compare[A Ord[A]](x A, y A) Ordering {
 	return x.Compare(y)
+}
+
+func FlipOrdering(a Ordering) Ordering {
+	switch a {
+	case OrderingLessThan:
+		return OrderingGreaterThan
+	case OrderingEqual:
+		return OrderingEqual
+	case OrderingGreaterThan:
+		return OrderingLessThan
+	default:
+		panic(fmt.Sprintf("invalid Ordering value: %s", a))
+	}
 }
 
 func LessThan[T Ord[T]](a T, b T) bool {

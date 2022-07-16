@@ -6,7 +6,7 @@ import (
 
 // SortOnBy combines the functionality of `SortOn` and `SortBy`,
 //   thereby separating projection and comparison functions
-func SortOnBy[A any, B any](projection F1[A, B], compare F2[B, B, Ordering], xs []A) []A {
+func SortOnBy[A any, B any](projection F1[A, B], compare Comparator[B], xs []A) []A {
 	pairs := Map(func(a A) *Pair[A, B] { return NewPair(a, projection(a)) }, xs)
 	sorted := MergeSortWithComparator(func(p1 *Pair[A, B], p2 *Pair[A, B]) Ordering {
 		return compare(p1.Snd, p2.Snd)
@@ -15,7 +15,7 @@ func SortOnBy[A any, B any](projection F1[A, B], compare F2[B, B, Ordering], xs 
 }
 
 // MergeSortWithComparator needs to be rewritten iteratively TODO
-func MergeSortWithComparator[A any](compare func(A, A) Ordering, xs []A) []A {
+func MergeSortWithComparator[A any](compare Comparator[A], xs []A) []A {
 	switch len(xs) {
 	case 0, 1:
 		return xs
@@ -29,20 +29,26 @@ func MergeSortWithComparator[A any](compare func(A, A) Ordering, xs []A) []A {
 }
 
 // Merge ...
-func Merge[A any](xs []A, ys []A, compare func(A, A) Ordering) []A {
+func Merge[A any](xs []A, ys []A, compare Comparator[A]) []A {
 	x, y := 0, 0
-	var out []A
-	for {
+	out := make([]A, len(xs)+len(ys))
+	for i := 0; ; i++ {
 		if len(xs) == x {
-			return append(out, ys[y:]...)
+			for ; y < len(ys); i, y = i+1, y+1 {
+				out[i] = ys[y]
+			}
+			return out
 		} else if len(ys) == y {
-			return append(out, xs[x:]...)
+			for ; x < len(xs); i, x = i+1, x+1 {
+				out[i] = xs[x]
+			}
+			return out
 		}
 		if compare(xs[x], ys[y]) == OrderingLessThan {
-			out = append(out, xs[x])
+			out[i] = xs[x]
 			x++
 		} else {
-			out = append(out, ys[y])
+			out[i] = ys[y]
 			y++
 		}
 	}

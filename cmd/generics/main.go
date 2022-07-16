@@ -45,12 +45,12 @@ func main() {
 }
 
 func SortExample() {
-	fmt.Printf("sort a comparable: %+v\n", slices.SortBy(builtins.Compare[int], []int{4, 79, 13, -8, 22, 4, 8, 7}))
+	fmt.Printf("sort a comparable: %+v\n", slices.SortBy(builtins.CompareOrdered[int], []int{4, 79, 13, -8, 22, 4, 8, 7}))
 	fmt.Printf("sort an Ord: %+v\n", slices.SortBy(base.Compare[base.Int], []base.Int{4, 79, 13, -8, 22, 4, 8, 7}))
 	fmt.Printf("sort by a custom compare: %+v\n", slices.SortOn(base.WrapInt, []int{4, 79, 13, -8, 22, 4, 8, 7}))
 
 	fmt.Printf("sort a bunch of slices: %+v\n",
-		slices.SortBy(slices.CompareSlice(builtins.Compare[int]), [][]int{
+		slices.SortBy(slices.CompareSlice(builtins.CompareOrdered[int]), [][]int{
 			{3, 4, 5},
 			{3, 4},
 			{1, 2, 3},

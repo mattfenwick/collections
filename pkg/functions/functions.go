@@ -60,6 +60,16 @@ func Flip[A, B, C any](f F2[A, B, C]) F2[B, A, C] {
 	}
 }
 
-func On[A, B, C any](combine F2[B, B, C], project F1[A, B], x A, y A) C {
+func OnHelper[A, B, C any](combine func(B, B) C, project func(A) B, x A, y A) C {
 	return combine(project(x), project(y))
+}
+
+func On[A, B, C any](combine func(B, B) C, project func(A) B) func(A, A) C {
+	return func(x A, y A) C {
+		return OnHelper(combine, project, x, y)
+	}
+}
+
+func CompareOn[A, B Ord[B]](p func(A) B, x A, y A) Ordering {
+	return On(Compare[B], p)(x, y)
 }

@@ -526,7 +526,7 @@ func GroupBy[A any](g F2[A, A, bool], xs []A) [][]A {
 // SortBy is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:sortBy
 //   It allows sorting based on a custom comparison operator;
 //   therefore it does not require input elements to have an Ord instance.
-func SortBy[A any](compare F2[A, A, Ordering], xs []A) []A {
+func SortBy[A any](compare Comparator[A], xs []A) []A {
 	//return SortOnBy(xs, Id[A], f)
 	return MergeSortWithComparator(compare, xs)
 }
@@ -535,7 +535,7 @@ func SortBy[A any](compare F2[A, A, Ordering], xs []A) []A {
 // InsertBy is from https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:insertBy
 
 // MaximumBy is from https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:maximumBy
-func MaximumBy[A any](f F2[A, A, Ordering], xs []A) *pkg.Maybe[A] {
+func MaximumBy[A any](f Comparator[A], xs []A) *pkg.Maybe[A] {
 	if len(xs) == 0 {
 		return pkg.Nothing[A]()
 	}
@@ -549,7 +549,7 @@ func MaximumBy[A any](f F2[A, A, Ordering], xs []A) *pkg.Maybe[A] {
 }
 
 // MinimumBy is from https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:minimumBy
-func MinimumBy[A any](f F2[A, A, Ordering], xs []A) *pkg.Maybe[A] {
+func MinimumBy[A any](f Comparator[A], xs []A) *pkg.Maybe[A] {
 	if len(xs) == 0 {
 		return pkg.Nothing[A]()
 	}
