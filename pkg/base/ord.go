@@ -19,17 +19,6 @@ func Compare[A Ord[A]](x A, y A) Ordering {
 	return x.Compare(y)
 }
 
-func Comparing[A any, B Ord[B]](f F1[A, B], x A, y A) Ordering {
-	return f(x).Compare(f(y))
-}
-
-// ComparingP is a partial application of Comparing, fixing the first argument
-func ComparingP[A any, B Ord[B]](f F1[A, B]) F2[A, A, Ordering] {
-	return func(x A, y A) Ordering {
-		return f(x).Compare(f(y))
-	}
-}
-
 func LessThan[T Ord[T]](a T, b T) bool {
 	return a.Compare(b) == OrderingLessThan
 }

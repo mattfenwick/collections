@@ -38,6 +38,7 @@ func (xs MapEq[A, B]) Equal(ys MapEq[A, B]) bool {
 //	return a == b
 //}
 
+// TODO this should be in the slices package
 func Index[T Eq[T]](s []T, e T) int {
 	for i, v := range s {
 		if e.Equal(v) {

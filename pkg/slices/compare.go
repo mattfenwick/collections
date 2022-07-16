@@ -4,7 +4,7 @@ import (
 	. "github.com/mattfenwick/collections/pkg/base"
 )
 
-func EqualSlice[A any](compare F2[A, A, bool], xs []A, ys []A) bool {
+func EqualSliceHelper[A any](compare F2[A, A, bool], xs []A, ys []A) bool {
 	// unfortunately, can't do:
 	//   return slices.Equal(xs, ys)
 	//   because: A does not implement comparable
@@ -19,14 +19,20 @@ func EqualSlice[A any](compare F2[A, A, bool], xs []A, ys []A) bool {
 	return true
 }
 
-// CompareSlice should work like in Haskell.  Examples from Haskell:
+func EqualSlice[A any](compare F2[A, A, bool]) F2[[]A, []A, bool] {
+	return func(xs []A, ys []A) bool {
+		return EqualSliceHelper(compare, xs, ys)
+	}
+}
+
+// CompareSliceHelper should work as in Haskell.  Examples from Haskell:
 //   Prelude> [1,2,3] < [3,4,5]
 //   True
 //   Prelude> [1,2,3] < [3,4]
 //   True
 //   Prelude> [1,2,3] < []
 //   False
-func CompareSlice[A any](compare F2[A, A, Ordering], xs []A, ys []A) Ordering {
+func CompareSliceHelper[A any](compare F2[A, A, Ordering], xs []A, ys []A) Ordering {
 	i := 0
 	for {
 		if i == len(xs) && i == len(ys) {
@@ -43,8 +49,8 @@ func CompareSlice[A any](compare F2[A, A, Ordering], xs []A, ys []A) Ordering {
 		i++
 	}
 }
-func CompareSliceP[A any](compare F2[A, A, Ordering]) F2[[]A, []A, Ordering] {
+func CompareSlice[A any](compare F2[A, A, Ordering]) F2[[]A, []A, Ordering] {
 	return func(xs []A, ys []A) Ordering {
-		return CompareSlice(compare, xs, ys)
+		return CompareSliceHelper(compare, xs, ys)
 	}
 }

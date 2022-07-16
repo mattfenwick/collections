@@ -20,6 +20,7 @@ func Compare[A constraints.Ordered](a A, b A) base.Ordering {
 	}
 }
 
+// TODO this should probably be deleted, it mixes the wrong things
 func Comparing[A any, B constraints.Ordered](f base.F1[A, B], x A, y A) base.Ordering {
 	return functions.On(Compare[B], f, x, y)
 }
