@@ -177,31 +177,13 @@ func Product[A builtins.Number](xs []A) A {
 // Maximum is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:maximum
 //   since Haskell's maximum blows up on empty lists, this has been modified for safety
 func Maximum[A Ord[A]](xs []A) *pkg.Maybe[A] {
-	if len(xs) == 0 {
-		return pkg.Nothing[A]()
-	}
-	max := xs[0]
-	for _, x := range xs[1:] {
-		if GreaterThan(x, max) {
-			max = x
-		}
-	}
-	return pkg.Just(max)
+	return MaximumBy[A](Compare[A], xs)
 }
 
 // Minimum is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:minimum
 //   since Haskell's minimum blows up on empty lists, this has been modified for safety
 func Minimum[A Ord[A]](xs []A) *pkg.Maybe[A] {
-	if len(xs) == 0 {
-		return pkg.Nothing[A]()
-	}
-	min := xs[0]
-	for _, x := range xs[1:] {
-		if LessThan(x, min) {
-			min = x
-		}
-	}
-	return pkg.Just(min)
+	return MinimumBy[A](Compare[A], xs)
 }
 
 // Scanl is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:scanl
@@ -552,11 +534,33 @@ func SortBy[A any](xs []A, compare F2[A, A, Ordering]) []A {
 // TODO
 // InsertBy is from https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:insertBy
 
-// TODO
 // MaximumBy is from https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:maximumBy
+func MaximumBy[A any](f F2[A, A, Ordering], xs []A) *pkg.Maybe[A] {
+	if len(xs) == 0 {
+		return pkg.Nothing[A]()
+	}
+	max := xs[0]
+	for _, x := range xs[1:] {
+		if f(x, max) == OrderingGreaterThan {
+			max = x
+		}
+	}
+	return pkg.Just(max)
+}
 
-// TODO
 // MinimumBy is from https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:minimumBy
+func MinimumBy[A any](f F2[A, A, Ordering], xs []A) *pkg.Maybe[A] {
+	if len(xs) == 0 {
+		return pkg.Nothing[A]()
+	}
+	min := xs[0]
+	for _, x := range xs[1:] {
+		if f(x, min) == OrderingLessThan {
+			min = x
+		}
+	}
+	return pkg.Just(min)
+}
 
 // The generic operations https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#g:26
 //   seem unnecessary

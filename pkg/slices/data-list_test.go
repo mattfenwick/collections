@@ -10,6 +10,15 @@ import (
 )
 
 func RunPreludeTests() {
+	Describe("Special folds", func() {
+		It("Maximum", func() {
+			gomega.Expect(Maximum[base.Int]([]base.Int{})).To(gomega.Equal(pkg.Nothing[base.Int]()))
+			gomega.Expect(Maximum[base.Int]([]base.Int{3})).To(gomega.Equal(pkg.Just[base.Int](3)))
+			gomega.Expect(Maximum[base.Int]([]base.Int{3, 2, -3})).To(gomega.Equal(pkg.Just[base.Int](3)))
+			gomega.Expect(Maximum[base.Int]([]base.Int{-2, 3, 2})).To(gomega.Equal(pkg.Just[base.Int](3)))
+		})
+	})
+
 	Describe("Scans", func() {
 		It("Scanl", func() {
 			gomega.Expect(
