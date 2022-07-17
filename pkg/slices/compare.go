@@ -1,7 +1,6 @@
 package slices
 
 import (
-	"fmt"
 	. "github.com/mattfenwick/collections/pkg/base"
 	"github.com/mattfenwick/collections/pkg/functions"
 )
@@ -56,18 +55,14 @@ func CompareSliceHelper[A any](compare Comparator[A], xs []A, ys []A) Ordering {
 	i := 0
 	for {
 		if i == len(xs) && i == len(ys) {
-			fmt.Println("at end of both slices: Equal")
 			return OrderingEqual
 		} else if i == len(xs) {
-			fmt.Println("at end of first slice: LT")
 			return OrderingLessThan
 		} else if i == len(ys) {
-			fmt.Println("at end of second slice: GT")
 			return OrderingGreaterThan
 		}
 		comp := compare(xs[i], ys[i])
 		if comp != OrderingEqual {
-			fmt.Printf("element %d is %s, %+v, %+v\n", i, comp, xs, ys)
 			return comp
 		}
 		i++
