@@ -1,13 +1,8 @@
-package slices
+package maps
 
-import (
-	. "github.com/mattfenwick/collections/pkg/base"
-	"github.com/mattfenwick/collections/pkg/builtins"
-	"github.com/mattfenwick/collections/pkg/functions"
-	"golang.org/x/exp/constraints"
-)
-
-func EqualSliceHelper[A any](compare Equaler[A], xs []A, ys []A) bool {
+/*
+TODO
+func EqualMapHelper[A any](compare F2[A, A, bool], xs []A, ys []A) bool {
 	// unfortunately, can't do:
 	//   return Equal(xs, ys)
 	//   because: A does not implement comparable
@@ -22,7 +17,7 @@ func EqualSliceHelper[A any](compare Equaler[A], xs []A, ys []A) bool {
 	return true
 }
 
-func EqualSlice[A any](compare Equaler[A]) Equaler[[]A] {
+func EqualMap[A any](compare F2[A, A, bool]) F2[[]A, []A, bool] {
 	return func(xs []A, ys []A) bool {
 		return EqualSliceHelper(compare, xs, ys)
 	}
@@ -70,33 +65,16 @@ func CompareSliceHelper[A any](compare Comparator[A], xs []A, ys []A) Ordering {
 		i++
 	}
 }
-
-// TODO CompareSlice looks at every single element -- which may not be the best approach
-//   for instance, look at ComparePair which *doesn't* force you to look at everything
 func CompareSlice[A any](compare Comparator[A]) Comparator[[]A] {
 	return func(xs []A, ys []A) Ordering {
 		return CompareSliceHelper(compare, xs, ys)
 	}
 }
 
-//func ComparePair[A Ord[A], B Ord[B]](p1 *Pair[A, B], p2 *Pair[A, B]) Ordering {
-
-func ComparePairOrd[A Ord[A], B Ord[B]]() Comparator[*Pair[A, B]] {
+func ComparePair[A Ord[A], B Ord[B]](p1 *Pair[A, B], p2 *Pair[A, B]) Ordering {
 	return CompareBy[*Pair[A, B]](
 		functions.On(Compare[A], First[A, B]),
-		functions.On(Compare[B], Second[A, B]))
-}
-
-func ComparePairOrdered[A constraints.Ordered, B constraints.Ordered]() Comparator[*Pair[A, B]] {
-	return CompareBy[*Pair[A, B]](
-		functions.On(builtins.CompareOrdered[A], First[A, B]),
-		functions.On(builtins.CompareOrdered[B], Second[A, B]))
-}
-
-func ComparePairBy[A, B any](fst Comparator[A], snd Comparator[B]) Comparator[*Pair[A, B]] {
-	return CompareBy[*Pair[A, B]](
-		functions.On(fst, First[A, B]),
-		functions.On(snd, Second[A, B]))
+		functions.On(Compare[B], Second[A, B]))(p1, p2)
 }
 
 func CompareBy[A any](comparisons ...Comparator[A]) Comparator[A] {
@@ -116,3 +94,4 @@ func CompareBys[A any](comparisons []Comparator[A]) Comparator[A] {
 		return OrderingEqual
 	}
 }
+*/

@@ -119,3 +119,7 @@ func RightShift[T constraints.Integer](bits T, numberOfBits uint) T {
 func Index[A any](i int, xs []A) A {
 	return xs[i]
 }
+
+func MapGet[A comparable, B any](a A, m map[A]B) B {
+	return m[a]
+}

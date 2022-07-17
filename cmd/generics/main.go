@@ -3,9 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/mattfenwick/collections/pkg/base"
-	"github.com/mattfenwick/collections/pkg/builtins"
-	"github.com/mattfenwick/collections/pkg/slices"
 	"github.com/sirupsen/logrus"
 	"reflect"
 	"strconv"
@@ -40,22 +37,6 @@ func main() {
 		doubled, reflect.TypeOf(doubled),
 		doubledChanges, reflect.TypeOf(doubledChanges),
 		reflect.TypeOf(xs))
-
-	SortExample()
-}
-
-func SortExample() {
-	fmt.Printf("sort a comparable: %+v\n", slices.SortBy(builtins.CompareOrdered[int], []int{4, 79, 13, -8, 22, 4, 8, 7}))
-	fmt.Printf("sort an Ord: %+v\n", slices.SortBy(base.Compare[base.Int], []base.Int{4, 79, 13, -8, 22, 4, 8, 7}))
-	fmt.Printf("sort by a custom compare: %+v\n", slices.SortOn(base.WrapInt, []int{4, 79, 13, -8, 22, 4, 8, 7}))
-
-	fmt.Printf("sort a bunch of slices: %+v\n",
-		slices.SortBy(slices.CompareSlice(builtins.CompareOrdered[int]), [][]int{
-			{3, 4, 5},
-			{3, 4},
-			{1, 2, 3},
-			{},
-		}))
 }
 
 type Stuff interface {
@@ -289,31 +270,3 @@ func DoOrDie(err error) {
 //func (c *Comparable[T]) Equal(other *Comparable[T]) bool {
 //	return c.T == other.T
 //}
-
-func EqExample() {
-	//auints := []uint{1,2,3,4,5}
-	a := []base.Uint{1, 2, 3, 4, 5}
-	b := []base.Uint{0, 2, 4, 6, 8}
-	for _, x := range b {
-		fmt.Printf("looking for %d: result %d\n", x, base.Index(a, x))
-	}
-
-	fmt.Printf("Eq? %+v, %+v, %+v, %+v\n",
-		slices.SliceEq[base.Uint](a).Equal(a),
-		slices.SliceEq[base.Uint](a).Equal(b),
-		slices.SliceEq[base.Uint](b).Equal(a),
-		slices.SliceEq[base.Uint](b).Equal(b))
-
-	ints := []base.Int{18, 27, 3, 39, -8, 37, 5, 12}
-	//sorted := MergeSortWithComparator(ints, func(a int, b int) Ordering {
-	//	if a < b {
-	//		return OrderingLessThan
-	//	} else if a == b {
-	//		return OrderingEqual
-	//	} else {
-	//		return OrderingGreaterThan
-	//	}
-	//})
-	sorted := slices.Sort(ints)
-	fmt.Printf("ints: %+v\nsorted: %+v\n", ints, sorted)
-}
