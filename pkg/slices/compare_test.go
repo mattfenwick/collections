@@ -8,10 +8,6 @@ import (
 	"github.com/onsi/gomega"
 )
 
-func makePair[A Eq[A], B Eq[B]](a A, b B) *Pair[A, B] {
-	return NewPair(a, b)
-}
-
 func absoluteValue(i int) int {
 	if i < 0 {
 		return i * -1
@@ -23,11 +19,11 @@ func isPositive[A builtins.Number](a A) bool {
 	return a > 0
 }
 
-var absoluteValueThenSignKey = OrderedComparatorSplat(
+var absoluteValueThenSignKey = CompareBy(
 	functions.On(builtins.CompareOrdered[int], absoluteValue),
 	functions.On(builtins.CompareBool, isPositive[int]))
 
-var signThenAbsoluteValueKey = OrderedComparatorSplat(
+var signThenAbsoluteValueKey = CompareBy(
 	functions.On(builtins.CompareBool, isPositive[int]),
 	functions.On(builtins.CompareOrdered[int], absoluteValue))
 
@@ -77,10 +73,11 @@ func RunCompareTests() {
 	})
 
 	Describe("Eq", func() {
-		It("Pair", func() {
-			p1 := makePair[Int, Bool](13, true)
-			p2 := makePair[Int, Bool](14, true)
-			p3 := makePair[Int, Bool](13, false)
+		p1 := NewPair[Int, Bool](13, true)
+		p2 := NewPair[Int, Bool](14, true)
+		p3 := NewPair[Int, Bool](13, false)
+
+		It("EqualPair", func() {
 			gomega.Expect(EqualPair(p1, p1)).To(gomega.Equal(true))
 			gomega.Expect(EqualPair(p1, p2)).To(gomega.Equal(false))
 			gomega.Expect(EqualPair(p1, p3)).To(gomega.Equal(false))
@@ -90,6 +87,12 @@ func RunCompareTests() {
 			gomega.Expect(EqualPair(p3, p1)).To(gomega.Equal(false))
 			gomega.Expect(EqualPair(p3, p2)).To(gomega.Equal(false))
 			gomega.Expect(EqualPair(p3, p3)).To(gomega.Equal(true))
+		})
+
+		It("EqualBy", func() {
+			gomega.Expect(EqualBy(functions.On(Equal[Int], First[Int, Bool]))(p1, p2)).To(gomega.BeFalse())
+			gomega.Expect(EqualBy(functions.On(Equal[Int], First[Int, Bool]))(p1, p3)).To(gomega.BeTrue())
+			gomega.Expect(EqualBy(functions.On(Equal[Bool], Second[Int, Bool]))(p1, p2)).To(gomega.BeTrue())
 		})
 
 		It("slice equality", func() {
