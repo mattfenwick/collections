@@ -3,7 +3,7 @@ package maps
 import (
 	. "github.com/mattfenwick/collections/pkg/base"
 	"github.com/mattfenwick/collections/pkg/builtins"
-	"github.com/mattfenwick/collections/pkg/slices"
+	"golang.org/x/exp/maps"
 )
 
 func EqualMapIndexEq[A comparable, B Eq[B]](key A) Equaler[map[A]B] {
@@ -42,9 +42,7 @@ func EqualMapPairwiseComparable[A comparable, B comparable]() Equaler[map[A]B] {
 // EqualMapPairwiseBy works by project a map to a list, therefore it's inefficient and probably
 //   best to avoid using unless absolutely necessary!
 func EqualMapPairwiseBy[A comparable, B any](equal Equaler[B]) Equaler[map[A]B] {
-	equalPair := slices.EqualPairBy(builtins.Equal[A], equal)
-	equalSlice := slices.EqualSlicePairwiseBy(equalPair)
 	return func(xs map[A]B, ys map[A]B) bool {
-		return equalSlice(ToSlice(xs), ToSlice(ys))
+		return maps.EqualFunc(xs, ys, equal)
 	}
 }

@@ -1,0 +1,62 @@
+package maps
+
+import (
+	. "github.com/mattfenwick/collections/pkg/base"
+	. "github.com/onsi/ginkgo/v2"
+	"github.com/onsi/gomega"
+)
+
+//
+//func absoluteValue(i int) int {
+//	if i < 0 {
+//		return i * -1
+//	}
+//	return i
+//}
+//
+//func isPositive[A builtins.Number](a A) bool {
+//	return a > 0
+//}
+//
+//var absoluteValueThenSignKey = CompareBy(
+//	functions.On(builtins.CompareOrdered[int], absoluteValue),
+//	functions.On(builtins.CompareBool, isPositive[int]))
+//
+//var signThenAbsoluteValueKey = CompareBy(
+//	functions.On(builtins.CompareBool, isPositive[int]),
+//	functions.On(builtins.CompareOrdered[int], absoluteValue))
+//
+func RunCompareTests() {
+	Describe("Compare", func() {
+		p1 := map[string]int{"a": 1, "b": 2}
+		p2 := map[string]int{"a": 2, "b": 2}
+		p3 := map[string]int{"a": 2, "b": 1}
+		p4 := map[string]int{"a": 2, "b": 4}
+		p5 := map[string]int{"a": 1}
+		//p6 := map[string]int{"b": 2}
+		p7 := map[string]int{"a": 1, "b": 2, "c": 3}
+
+		It("map index ordering", func() {
+			a := CompareMapIndexOrdered[string, int]("a")
+			gomega.Expect(a(p1, p1)).To(gomega.BeEquivalentTo(OrderingEqual))
+			gomega.Expect(a(p1, p2)).To(gomega.BeEquivalentTo(OrderingLessThan))
+			gomega.Expect(a(p1, p3)).To(gomega.BeEquivalentTo(OrderingLessThan))
+			gomega.Expect(a(p1, p5)).To(gomega.BeEquivalentTo(OrderingEqual))
+
+			b := CompareMapIndexOrdered[string, int]("b")
+			gomega.Expect(b(p2, p1)).To(gomega.BeEquivalentTo(OrderingEqual))
+			gomega.Expect(b(p2, p3)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
+			gomega.Expect(b(p2, p4)).To(gomega.BeEquivalentTo(OrderingLessThan))
+
+			c := CompareMapIndexOrdered[string, int]("c")
+			gomega.Expect(c(p7, p1)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
+			gomega.Expect(c(p7, p4)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
+		})
+
+		It("map pairwise ordering", func() {
+			compare := CompareMapPairwiseOrdered[string, int]()
+			gomega.Expect(compare(p1, p1)).To(gomega.BeEquivalentTo(OrderingEqual))
+		})
+	})
+
+}

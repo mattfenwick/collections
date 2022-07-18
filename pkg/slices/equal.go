@@ -4,6 +4,7 @@ import (
 	. "github.com/mattfenwick/collections/pkg/base"
 	"github.com/mattfenwick/collections/pkg/builtins"
 	"github.com/mattfenwick/collections/pkg/functions"
+	"golang.org/x/exp/slices"
 )
 
 func EqualSliceIndexEq[A Eq[A]](i int) Equaler[[]A] {
@@ -38,18 +39,7 @@ func EqualSlicePairwiseComparable[A comparable]() Equaler[[]A] {
 
 func EqualSlicePairwiseBy[A any](equal Equaler[A]) Equaler[[]A] {
 	return func(xs []A, ys []A) bool {
-		// unfortunately, can't do:
-		//   return Equal(xs, ys)
-		//   because: A does not implement comparable
-		if len(xs) != len(ys) {
-			return false
-		}
-		for i := range xs {
-			if !equal(xs[i], ys[i]) {
-				return false
-			}
-		}
-		return true
+		return slices.EqualFunc(xs, ys, equal)
 	}
 }
 

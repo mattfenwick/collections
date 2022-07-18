@@ -24,10 +24,10 @@ func CompareSliceIndexBy[A any](i int, compare Comparator[A]) Comparator[[]A] {
 			return OrderingEqual
 		} else if i >= len(xs) {
 			// ran off the end of xs
-			return OrderingGreaterThan
+			return OrderingLessThan
 		} else {
 			// ran off the end of ys
-			return OrderingLessThan
+			return OrderingGreaterThan
 		}
 	}
 }

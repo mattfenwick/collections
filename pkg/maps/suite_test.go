@@ -1,4 +1,4 @@
-package slices
+package maps
 
 import (
 	. "github.com/onsi/ginkgo/v2"
@@ -9,7 +9,6 @@ import (
 func TestMatcher(t *testing.T) {
 	gomega.RegisterFailHandler(Fail)
 
-	RunDataListTests()
 	RunSortTests()
 	RunCompareTests()
 	RunEqualTests()

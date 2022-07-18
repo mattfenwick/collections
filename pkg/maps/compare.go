@@ -26,10 +26,10 @@ func CompareMapIndexBy[A comparable, B any](key A, compare Comparator[B]) Compar
 			return OrderingEqual
 		} else if !xok {
 			// key not found in x
-			return OrderingGreaterThan
+			return OrderingLessThan
 		} else {
 			// key not found in y
-			return OrderingLessThan
+			return OrderingGreaterThan
 		}
 	}
 }
@@ -50,6 +50,7 @@ func CompareMapPairwiseBy[A constraints.Ordered, B any](compare Comparator[B]) C
 	comparePair := slices.ComparePairBy(builtins.CompareOrdered[A], compare)
 	compareSlice := slices.CompareSlicePairwiseBy(comparePair)
 	return func(xs map[A]B, ys map[A]B) Ordering {
+		// TODO probably needs sorts
 		return compareSlice(ToSlice(xs), ToSlice(ys))
 	}
 }
