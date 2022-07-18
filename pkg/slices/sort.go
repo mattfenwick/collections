@@ -2,24 +2,14 @@ package slices
 
 import (
 	. "github.com/mattfenwick/collections/pkg/base"
-	"github.com/mattfenwick/collections/pkg/builtins"
-	"golang.org/x/exp/constraints"
 )
 
 func SortOrd[A Ord[A]](xs []A) []A {
 	return SortBy(Compare[A], xs)
 }
 
-func SortOrdered[A constraints.Ordered](xs []A) []A {
-	return Sort(xs)
-}
-
 func SortOnOrd[A any, B Ord[B]](projection F1[A, B], xs []A) []A {
 	return SortOnBy(projection, Compare[B], xs)
-}
-
-func SortOnOrdered[A any, B constraints.Ordered](projection F1[A, B], xs []A) []A {
-	return SortOnBy(projection, builtins.CompareOrdered[B], xs)
 }
 
 // SortOnBy combines the functionality of `SortOn` and `SortBy`,

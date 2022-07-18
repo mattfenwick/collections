@@ -16,8 +16,8 @@ func RunEqualTests() {
 		//p6 := map[string]int{"b": 2}
 		p7 := map[string]int{"a": 1, "b": 2, "c": 3}
 
-		It("EqualMapPairwiseComparable", func() {
-			equal := EqualMapPairwiseComparable[string, int]()
+		It("EqualMapPairwise", func() {
+			equal := EqualMapPairwise[string, int]()
 			gomega.Expect(equal(p1, p1)).To(gomega.Equal(true))
 			gomega.Expect(equal(p1, p2)).To(gomega.Equal(false))
 			gomega.Expect(equal(p1, p3)).To(gomega.Equal(false))
@@ -33,10 +33,10 @@ func RunEqualTests() {
 			gomega.Expect(equal(p7, p7)).To(gomega.Equal(true))
 		})
 
-		It("EqualBy", func() {
-			equalA := EqualMapIndexComparable[string, int]("a")
-			//equalB := maps.EqualMapIndexComparable[string, int]("b")
-			//equalC := maps.EqualMapIndexComparable[string, int]("c")
+		It("EqualMapIndex", func() {
+			equalA := EqualMapIndex[string, int]("a")
+			//equalB := maps.EqualMapIndex[string, int]("b")
+			//equalC := maps.EqualMapIndex[string, int]("c")
 			tests := []struct {
 				E      Equaler[map[string]int]
 				M1     map[string]int

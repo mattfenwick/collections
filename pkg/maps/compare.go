@@ -11,7 +11,7 @@ func CompareMapIndexOrd[A comparable, B Ord[B]](key A) Comparator[map[A]B] {
 	return CompareMapIndexBy(key, Compare[B])
 }
 
-func CompareMapIndexOrdered[A comparable, B constraints.Ordered](key A) Comparator[map[A]B] {
+func CompareMapIndex[A comparable, B constraints.Ordered](key A) Comparator[map[A]B] {
 	return CompareMapIndexBy(key, builtins.CompareOrdered[B])
 }
 
@@ -38,7 +38,7 @@ func CompareMapPairwiseOrd[A constraints.Ordered, B Ord[B]]() Comparator[map[A]B
 	return CompareMapPairwiseBy[A, B](Compare[B])
 }
 
-func CompareMapPairwiseOrdered[A constraints.Ordered, B constraints.Ordered]() Comparator[map[A]B] {
+func CompareMapPairwise[A constraints.Ordered, B constraints.Ordered]() Comparator[map[A]B] {
 	return CompareMapPairwiseBy[A, B](builtins.CompareOrdered[B])
 }
 

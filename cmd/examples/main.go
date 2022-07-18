@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	. "github.com/mattfenwick/collections/pkg/base"
-	"github.com/mattfenwick/collections/pkg/builtins"
 	"github.com/mattfenwick/collections/pkg/maps"
 	"github.com/mattfenwick/collections/pkg/slices"
 )
@@ -18,12 +17,12 @@ func SortExample() {
 	someInts := []int{4, 79, 13, -8, 22, 4, 8, 7}
 	fmt.Printf("sort ints: %+v\n  %+v -- comparable\n  %+v -- Comparator\n  %+v -- Ord\n\n",
 		someInts,
-		slices.SortBy(builtins.CompareOrdered[int], someInts),
+		slices.Sort(someInts),
 		slices.SortOnBy(WrapInt, Compare[Int], someInts),
 		slices.SortOn(WrapInt, someInts))
 
 	fmt.Printf("sort a slice of slices: %+v\n\n",
-		slices.SortBy(slices.CompareSlicePairwiseBy(builtins.CompareOrdered[int]), [][]int{
+		slices.SortBy(slices.CompareSlicePairwise[int](), [][]int{
 			{3, 4, 5},
 			{3, 4},
 			{1, 2, 3},
@@ -31,7 +30,7 @@ func SortExample() {
 		}))
 
 	fmt.Printf("sort a slice of maps: %+v\n\n",
-		slices.SortBy(maps.CompareMapPairwiseBy[string, int](builtins.CompareOrdered[int]), []map[string]int{
+		slices.SortBy(maps.CompareMapPairwise[string, int](), []map[string]int{
 			{"a": 1, "b": 2},
 			{"a": 2, "b": 2},
 			{"a": 2, "b": 1},
@@ -60,9 +59,9 @@ func SortExample() {
 	}
 	fmt.Printf("sort pairs: %+v\n  %+v -- natural\n  %+v -- first element\n  %+v -- 2nd element\n\n",
 		DumpJson(pairs),
-		DumpJson(slices.SortBy(slices.ComparePairOrdered[int, string](), pairs)),
-		DumpJson(slices.SortOnBy(First[int, string], builtins.CompareOrdered[int], pairs)),
-		DumpJson(slices.SortOnBy(Second[int, string], builtins.CompareOrdered[string], pairs)))
+		DumpJson(slices.SortBy(slices.ComparePair[int, string](), pairs)),
+		DumpJson(slices.SortOn(First[int, string], pairs)),
+		DumpJson(slices.SortOn(Second[int, string], pairs)))
 }
 
 func DumpJson(obj interface{}) string {

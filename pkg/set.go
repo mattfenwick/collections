@@ -10,7 +10,7 @@ type Set[A any, K comparable] struct {
 	Projection func(A) K
 }
 
-func NewSetComparable[A comparable](elems []A) *Set[A, A] {
+func NewSet[A comparable](elems []A) *Set[A, A] {
 	return NewSetBy(functions.Id[A], elems)
 }
 

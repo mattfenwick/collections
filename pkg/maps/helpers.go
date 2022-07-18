@@ -3,6 +3,7 @@ package maps
 import (
 	. "github.com/mattfenwick/collections/pkg/base"
 	"github.com/mattfenwick/collections/pkg/slices"
+	"golang.org/x/exp/constraints"
 	"golang.org/x/exp/maps"
 )
 
@@ -32,7 +33,16 @@ func Map[A comparable, B, C any](f func(B) C, xs map[A]B) map[A]C {
 	return out
 }
 
-func Merge[A comparable, B Ord[B]](m1 map[A]B, m2 map[A]B) map[A]B {
+func Merge[A comparable, B constraints.Ordered](m1 map[A]B, m2 map[A]B) map[A]B {
+	return MergeBy(func(a A, b1 B, b2 B) B {
+		if b1 >= b2 {
+			return b1
+		}
+		return b2
+	}, m1, m2)
+}
+
+func MergeOrd[A comparable, B Ord[B]](m1 map[A]B, m2 map[A]B) map[A]B {
 	return MergeBy(func(a A, b1 B, b2 B) B {
 		if GreaterThanOrEqual(b1, b2) {
 			return b1

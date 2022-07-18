@@ -2,7 +2,7 @@ package slices
 
 import "github.com/mattfenwick/collections/pkg/functions"
 
-func GroupComparable[A comparable](xs []A) map[A][]A {
+func Group[A comparable](xs []A) map[A][]A {
 	return GroupOn(functions.Id[A], xs)
 }
 

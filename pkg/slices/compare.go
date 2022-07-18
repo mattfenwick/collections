@@ -11,7 +11,7 @@ func CompareSliceIndexOrd[A Ord[A]](i int) Comparator[[]A] {
 	return CompareSliceIndexBy(i, Compare[A])
 }
 
-func CompareSliceIndexOrdered[A constraints.Ordered](i int) Comparator[[]A] {
+func CompareSliceIndex[A constraints.Ordered](i int) Comparator[[]A] {
 	return CompareSliceIndexBy(i, builtins.CompareOrdered[A])
 }
 
@@ -36,7 +36,7 @@ func CompareSlicePairwiseOrd[A Ord[A]]() Comparator[[]A] {
 	return CompareSlicePairwiseBy(Compare[A])
 }
 
-func CompareSlicePairwiseOrdered[A constraints.Ordered]() Comparator[[]A] {
+func CompareSlicePairwise[A constraints.Ordered]() Comparator[[]A] {
 	return CompareSlicePairwiseBy(builtins.CompareOrdered[A])
 }
 
@@ -71,7 +71,7 @@ func ComparePairOrd[A Ord[A], B Ord[B]]() Comparator[*Pair[A, B]] {
 	return ComparePairBy(Compare[A], Compare[B])
 }
 
-func ComparePairOrdered[A constraints.Ordered, B constraints.Ordered]() Comparator[*Pair[A, B]] {
+func ComparePair[A constraints.Ordered, B constraints.Ordered]() Comparator[*Pair[A, B]] {
 	return ComparePairBy(builtins.CompareOrdered[A], builtins.CompareOrdered[B])
 }
 

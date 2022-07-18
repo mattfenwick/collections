@@ -10,7 +10,7 @@ func EqualMapIndexEq[A comparable, B Eq[B]](key A) Equaler[map[A]B] {
 	return EqualMapIndexBy(key, Equal[B])
 }
 
-func EqualMapIndexComparable[A comparable, B comparable](key A) Equaler[map[A]B] {
+func EqualMapIndex[A comparable, B comparable](key A) Equaler[map[A]B] {
 	return EqualMapIndexBy(key, builtins.Equal[B])
 }
 
@@ -35,7 +35,7 @@ func EqualMapPairwiseEq[A comparable, B Eq[B]]() Equaler[map[A]B] {
 	return EqualMapPairwiseBy[A, B](Equal[B])
 }
 
-func EqualMapPairwiseComparable[A comparable, B comparable]() Equaler[map[A]B] {
+func EqualMapPairwise[A comparable, B comparable]() Equaler[map[A]B] {
 	return EqualMapPairwiseBy[A, B](builtins.Equal[B])
 }
 

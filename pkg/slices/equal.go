@@ -11,7 +11,7 @@ func EqualSliceIndexEq[A Eq[A]](i int) Equaler[[]A] {
 	return EqualSliceIndexBy(i, Equal[A])
 }
 
-func EqualSliceIndexComparable[A comparable](i int) Equaler[[]A] {
+func EqualSliceIndex[A comparable](i int) Equaler[[]A] {
 	return EqualSliceIndexBy(i, builtins.Equal[A])
 }
 
@@ -33,7 +33,7 @@ func EqualSlicePairwiseEq[A Eq[A]]() Equaler[[]A] {
 	return EqualSlicePairwiseBy(Equal[A])
 }
 
-func EqualSlicePairwiseComparable[A comparable]() Equaler[[]A] {
+func EqualSlicePairwise[A comparable]() Equaler[[]A] {
 	return EqualSlicePairwiseBy(builtins.Equal[A])
 }
 
@@ -47,7 +47,7 @@ func EqualPairEq[A Eq[A], B Eq[B]]() Equaler[*Pair[A, B]] {
 	return EqualPairBy(Equal[A], Equal[B])
 }
 
-func EqualPairComparable[A comparable, B comparable]() Equaler[*Pair[A, B]] {
+func EqualPair[A comparable, B comparable]() Equaler[*Pair[A, B]] {
 	return EqualPairBy(builtins.Equal[A], builtins.Equal[B])
 }
 
