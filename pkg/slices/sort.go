@@ -6,14 +6,12 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
-// SortOnBy combines the functionality of `SortOn` and `SortBy`,
-//   thereby separating projection and comparison functions
-func SortOnBy[A any, B any](projection F1[A, B], compare Comparator[B], xs []A) []A {
-	pairs := Map(func(a A) *Pair[A, B] { return NewPair(a, projection(a)) }, xs)
-	sorted := MergeSortWithComparator(func(p1 *Pair[A, B], p2 *Pair[A, B]) Ordering {
-		return compare(p1.Snd, p2.Snd)
-	}, pairs)
-	return Map(First[A, B], sorted)
+func SortOrd[A Ord[A]](xs []A) []A {
+	return SortBy(Compare[A], xs)
+}
+
+func SortOrdered[A constraints.Ordered](xs []A) []A {
+	return Sort(xs)
 }
 
 func SortOnOrd[A any, B Ord[B]](projection F1[A, B], xs []A) []A {
@@ -22,6 +20,16 @@ func SortOnOrd[A any, B Ord[B]](projection F1[A, B], xs []A) []A {
 
 func SortOnOrdered[A any, B constraints.Ordered](projection F1[A, B], xs []A) []A {
 	return SortOnBy(projection, builtins.CompareOrdered[B], xs)
+}
+
+// SortOnBy combines the functionality of `SortOn` and `SortBy`,
+//   thereby separating projection and comparison functions
+func SortOnBy[A any, B any](projection F1[A, B], compare Comparator[B], xs []A) []A {
+	pairs := Map(func(a A) *Pair[A, B] { return NewPair(a, projection(a)) }, xs)
+	sorted := MergeSortWithComparator(func(p1 *Pair[A, B], p2 *Pair[A, B]) Ordering {
+		return compare(p1.Snd, p2.Snd)
+	}, pairs)
+	return Map(First[A, B], sorted)
 }
 
 // MergeSortWithComparator needs to be rewritten iteratively TODO

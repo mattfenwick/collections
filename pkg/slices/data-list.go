@@ -5,6 +5,7 @@ import (
 	. "github.com/mattfenwick/collections/pkg/base"
 	"github.com/mattfenwick/collections/pkg/builtins"
 	"github.com/mattfenwick/collections/pkg/functions"
+	"golang.org/x/exp/constraints"
 )
 
 // this code is based on Haskell's data.List:
@@ -474,16 +475,16 @@ func Unzip[A, B any](xs []*Pair[A, B]) *Pair[[]A, []B] {
 
 // Sort is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:sort
 //   It orders elements by their natural Ord instance.
-func Sort[A Ord[A]](xs []A) []A {
-	return MergeSortWithComparator(Compare[A], xs)
+func Sort[A constraints.Ordered](xs []A) []A {
+	return SortBy(builtins.CompareOrdered[A], xs)
 }
 
 // SortOn is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:sortOn
 //   It uses the decorate/sort/undecorate pattern.
 //   It allows a projection of each element to be used to determine the order.
-//   The projection must have an Ord instance.
-func SortOn[A any, B Ord[B]](projection F1[A, B], xs []A) []A {
-	return SortOnBy(projection, Compare[B], xs)
+//   The projection must be Ordered.
+func SortOn[A any, B constraints.Ordered](projection F1[A, B], xs []A) []A {
+	return SortOnBy(projection, builtins.CompareOrdered[B], xs)
 }
 
 // Insert is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:insert
@@ -527,7 +528,6 @@ func GroupConsecutiveBy[A any](g F2[A, A, bool], xs []A) [][]A {
 //   It allows sorting based on a custom comparison operator;
 //   therefore it does not require input elements to have an Ord instance.
 func SortBy[A any](compare Comparator[A], xs []A) []A {
-	//return SortOnBy(xs, Id[A], f)
 	return MergeSortWithComparator(compare, xs)
 }
 
