@@ -25,7 +25,24 @@ func (a Ordering) Compare(b Ordering) Ordering {
 	return OrderingGreaterThan
 }
 
+func (a Ordering) Flip() Ordering {
+	switch a {
+	case OrderingLessThan:
+		return OrderingGreaterThan
+	case OrderingEqual:
+		return OrderingEqual
+	case OrderingGreaterThan:
+		return OrderingLessThan
+	default:
+		panic(fmt.Sprintf("invalid Ordering value: %s", a))
+	}
+}
+
 type Comparator[A any] func(A, A) Ordering
+
+func ConstComparator[T any](a Ordering) Comparator[T] {
+	return func(_ T, _ T) Ordering { return a }
+}
 
 type Ord[T any] interface {
 	Eq[T]
@@ -37,16 +54,7 @@ func Compare[A Ord[A]](x A, y A) Ordering {
 }
 
 func FlipOrdering(a Ordering) Ordering {
-	switch a {
-	case OrderingLessThan:
-		return OrderingGreaterThan
-	case OrderingEqual:
-		return OrderingEqual
-	case OrderingGreaterThan:
-		return OrderingLessThan
-	default:
-		panic(fmt.Sprintf("invalid Ordering value: %s", a))
-	}
+	return a.Flip()
 }
 
 func LessThan[T Ord[T]](a T, b T) bool {

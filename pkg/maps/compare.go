@@ -50,7 +50,8 @@ func CompareMapPairwiseBy[A constraints.Ordered, B any](compare Comparator[B]) C
 	comparePair := slices.ComparePairBy(builtins.CompareOrdered[A], compare)
 	compareSlice := slices.CompareSlicePairwiseBy(comparePair)
 	return func(xs map[A]B, ys map[A]B) Ordering {
-		// TODO probably needs sorts
-		return compareSlice(ToSlice(xs), ToSlice(ys))
+		return compareSlice(
+			slices.SortBy(slices.ComparePairBy(builtins.CompareOrdered[A], ConstComparator[B](OrderingEqual)), ToSlice(xs)),
+			slices.SortBy(slices.ComparePairBy(builtins.CompareOrdered[A], ConstComparator[B](OrderingEqual)), ToSlice(ys)))
 	}
 }
