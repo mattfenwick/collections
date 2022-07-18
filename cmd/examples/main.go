@@ -5,6 +5,7 @@ import (
 	"fmt"
 	. "github.com/mattfenwick/collections/pkg/base"
 	"github.com/mattfenwick/collections/pkg/builtins"
+	"github.com/mattfenwick/collections/pkg/maps"
 	"github.com/mattfenwick/collections/pkg/slices"
 )
 
@@ -26,6 +27,19 @@ func SortExample() {
 			{3, 4, 5},
 			{3, 4},
 			{1, 2, 3},
+			{},
+		}))
+
+	fmt.Printf("sort a slice of maps: %+v\n\n",
+		slices.SortBy(maps.CompareMapPairwiseBy[string, int](builtins.CompareOrdered[int]), []map[string]int{
+			{"a": 1, "b": 2},
+			{"a": 2, "b": 2},
+			{"a": 2, "b": 1},
+			{"a": 2, "b": 4},
+			{"a": 1},
+			{"a": 2, "b": 2, "c": 1},
+			{"a": 1, "b": 2, "c": 3},
+			{"a": 1, "b": 3},
 			{},
 		}))
 
