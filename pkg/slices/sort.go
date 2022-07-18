@@ -2,6 +2,8 @@ package slices
 
 import (
 	. "github.com/mattfenwick/collections/pkg/base"
+	"github.com/mattfenwick/collections/pkg/builtins"
+	"golang.org/x/exp/constraints"
 )
 
 // SortOnBy combines the functionality of `SortOn` and `SortBy`,
@@ -12,6 +14,14 @@ func SortOnBy[A any, B any](projection F1[A, B], compare Comparator[B], xs []A) 
 		return compare(p1.Snd, p2.Snd)
 	}, pairs)
 	return Map(First[A, B], sorted)
+}
+
+func SortOnOrd[A any, B Ord[B]](projection F1[A, B], xs []A) []A {
+	return SortOnBy(projection, Compare[B], xs)
+}
+
+func SortOnOrdered[A any, B constraints.Ordered](projection F1[A, B], xs []A) []A {
+	return SortOnBy(projection, builtins.CompareOrdered[B], xs)
 }
 
 // MergeSortWithComparator needs to be rewritten iteratively TODO
@@ -28,7 +38,8 @@ func MergeSortWithComparator[A any](compare Comparator[A], xs []A) []A {
 	}
 }
 
-// Merge ...
+// Merge is used to combine two sorted slices into a third sorted slice,
+//   containing all of the input elements.
 func Merge[A any](xs []A, ys []A, compare Comparator[A]) []A {
 	x, y := 0, 0
 	out := make([]A, len(xs)+len(ys))
