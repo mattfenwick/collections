@@ -7,90 +7,72 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
-func EqualSliceHelper[A any](compare Equaler[A], xs []A, ys []A) bool {
-	// unfortunately, can't do:
-	//   return Equal(xs, ys)
-	//   because: A does not implement comparable
-	if len(xs) != len(ys) {
-		return false
-	}
-	for i := range xs {
-		if !compare(xs[i], ys[i]) {
-			return false
+func CompareSliceIndexOrd[A Ord[A]](i int) Comparator[[]A] {
+	return CompareSliceIndexBy(i, Compare[A])
+}
+
+func CompareSliceIndexOrdered[A constraints.Ordered](i int) Comparator[[]A] {
+	return CompareSliceIndexBy(i, builtins.CompareOrdered[A])
+}
+
+// CompareSliceIndexBy compares a single index
+func CompareSliceIndexBy[A any](i int, compare Comparator[A]) Comparator[[]A] {
+	return func(xs []A, ys []A) Ordering {
+		if i < len(xs) && i < len(ys) {
+			return compare(xs[i], ys[i])
+		} else if i >= len(xs) && i >= len(ys) {
+			return OrderingEqual
+		} else if i >= len(xs) {
+			// ran off the end of xs
+			return OrderingGreaterThan
+		} else {
+			// ran off the end of ys
+			return OrderingLessThan
 		}
 	}
-	return true
 }
 
-func EqualSlice[A any](compare Equaler[A]) Equaler[[]A] {
-	return func(xs []A, ys []A) bool {
-		return EqualSliceHelper(compare, xs, ys)
-	}
+func CompareSlicePairwiseOrd[A Ord[A]]() Comparator[[]A] {
+	return CompareSlicePairwiseBy(Compare[A])
 }
 
-func EqualPair[A Eq[A], B Eq[B]](p1 *Pair[A, B], p2 *Pair[A, B]) bool {
-	return EqualBy[*Pair[A, B]](
-		functions.On(Equal[A], First[A, B]),
-		functions.On(Equal[B], Second[A, B]))(p1, p2)
+func CompareSlicePairwiseOrdered[A constraints.Ordered]() Comparator[[]A] {
+	return CompareSlicePairwiseBy(builtins.CompareOrdered[A])
 }
 
-func EqualBy[A any](comparisons ...Equaler[A]) Equaler[A] {
-	return EqualBys(comparisons)
-}
-
-func EqualBys[A any](comparisons []Equaler[A]) Equaler[A] {
-	return func(x A, y A) bool {
-		return All(func(c Equaler[A]) bool {
-			return c(x, y)
-		}, comparisons)
-	}
-}
-
-// CompareSliceHelper should work as in Haskell.  Examples from Haskell:
+// CompareSlicePairwiseBy should work as in Haskell.  Examples from Haskell:
 //   Prelude> [1,2,3] < [3,4,5]
 //   True
 //   Prelude> [1,2,3] < [3,4]
 //   True
 //   Prelude> [1,2,3] < []
 //   False
-func CompareSliceHelper[A any](compare Comparator[A], xs []A, ys []A) Ordering {
-	i := 0
-	for {
-		if i == len(xs) && i == len(ys) {
-			return OrderingEqual
-		} else if i == len(xs) {
-			return OrderingLessThan
-		} else if i == len(ys) {
-			return OrderingGreaterThan
-		}
-		comp := compare(xs[i], ys[i])
-		if comp != OrderingEqual {
-			return comp
-		}
-		i++
-	}
-}
-
-// TODO CompareSlice looks at every single element -- which may not be the best approach
-//   for instance, look at ComparePair which *doesn't* force you to look at everything
-func CompareSlice[A any](compare Comparator[A]) Comparator[[]A] {
+func CompareSlicePairwiseBy[A any](compare Comparator[A]) Comparator[[]A] {
 	return func(xs []A, ys []A) Ordering {
-		return CompareSliceHelper(compare, xs, ys)
+		i := 0
+		for {
+			if i == len(xs) && i == len(ys) {
+				return OrderingEqual
+			} else if i == len(xs) {
+				return OrderingLessThan
+			} else if i == len(ys) {
+				return OrderingGreaterThan
+			}
+			comp := compare(xs[i], ys[i])
+			if comp != OrderingEqual {
+				return comp
+			}
+			i++
+		}
 	}
 }
-
-//func ComparePair[A Ord[A], B Ord[B]](p1 *Pair[A, B], p2 *Pair[A, B]) Ordering {
 
 func ComparePairOrd[A Ord[A], B Ord[B]]() Comparator[*Pair[A, B]] {
-	return CompareBy[*Pair[A, B]](
-		functions.On(Compare[A], First[A, B]),
-		functions.On(Compare[B], Second[A, B]))
+	return ComparePairBy(Compare[A], Compare[B])
 }
 
 func ComparePairOrdered[A constraints.Ordered, B constraints.Ordered]() Comparator[*Pair[A, B]] {
-	return CompareBy[*Pair[A, B]](
-		functions.On(builtins.CompareOrdered[A], First[A, B]),
-		functions.On(builtins.CompareOrdered[B], Second[A, B]))
+	return ComparePairBy(builtins.CompareOrdered[A], builtins.CompareOrdered[B])
 }
 
 func ComparePairBy[A, B any](fst Comparator[A], snd Comparator[B]) Comparator[*Pair[A, B]] {

@@ -22,7 +22,7 @@ func SortExample() {
 		slices.SortOn(WrapInt, someInts))
 
 	fmt.Printf("sort a slice of slices: %+v\n\n",
-		slices.SortBy(slices.CompareSlice(builtins.CompareOrdered[int]), [][]int{
+		slices.SortBy(slices.CompareSlicePairwiseBy(builtins.CompareOrdered[int]), [][]int{
 			{3, 4, 5},
 			{3, 4},
 			{1, 2, 3},
@@ -34,15 +34,15 @@ func SortExample() {
 	fmt.Printf("Ints: %+v\n  sorted: %+v\n\n", ints, sorted)
 
 	pairs := []*Pair[int, string]{
-		{18, "jkl"},
-		{14, "ghi"},
-		{14, "tuv"},
-		{14, "jkl"},
-		{11, "abc"},
-		{17, "xyz"},
-		{13, "qrs"},
-		{16, "def"},
-		{10, "jkl"},
+		{Fst: 18, Snd: "jkl"},
+		{Fst: 14, Snd: "ghi"},
+		{Fst: 14, Snd: "tuv"},
+		{Fst: 14, Snd: "jkl"},
+		{Fst: 11, Snd: "abc"},
+		{Fst: 17, Snd: "xyz"},
+		{Fst: 13, Snd: "qrs"},
+		{Fst: 16, Snd: "def"},
+		{Fst: 10, Snd: "jkl"},
 	}
 	fmt.Printf("sort pairs: %+v\n  %+v -- natural\n  %+v -- first element\n  %+v -- 2nd element\n\n",
 		DumpJson(pairs),

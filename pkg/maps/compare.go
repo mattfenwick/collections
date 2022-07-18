@@ -1,5 +1,11 @@
 package maps
 
+import (
+	. "github.com/mattfenwick/collections/pkg/base"
+	"github.com/mattfenwick/collections/pkg/builtins"
+	"golang.org/x/exp/constraints"
+)
+
 /*
 TODO
 func EqualMapHelper[A any](compare F2[A, A, bool], xs []A, ys []A) bool {
@@ -95,3 +101,30 @@ func CompareBys[A any](comparisons []Comparator[A]) Comparator[A] {
 	}
 }
 */
+
+func CompareMapIndexOrd[A comparable, B Ord[B]](key A) Comparator[map[A]B] {
+	return CompareMapIndexBy(key, Compare[B])
+}
+
+func CompareMapIndexOrdered[A comparable, B constraints.Ordered](key A) Comparator[map[A]B] {
+	return CompareMapIndexBy(key, builtins.CompareOrdered[B])
+}
+
+// CompareMapIndexBy compares a single index
+func CompareMapIndexBy[A comparable, B any](key A, compare Comparator[B]) Comparator[map[A]B] {
+	return func(xs map[A]B, ys map[A]B) Ordering {
+		x, xok := xs[key]
+		y, yok := ys[key]
+		if xok && yok {
+			return compare(x, y)
+		} else if !xok && !yok {
+			return OrderingEqual
+		} else if !xok {
+			// key not found in x
+			return OrderingGreaterThan
+		} else {
+			// key not found in y
+			return OrderingLessThan
+		}
+	}
+}
