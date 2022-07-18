@@ -12,8 +12,24 @@ func ToSlice[A comparable, B any](m map[A]B) []*Pair[A, B] {
 	}, maps.Keys(m))
 }
 
-func FromSlice[A comparable, B any](ps []*Pair[A, B]) map[A]B {
-	panic("TODO")
+func FromSliceBy[A comparable, B any](merge func(B, B) B, ps []*Pair[A, B]) map[A]B {
+	out := map[A]B{}
+	for _, p := range ps {
+		if val, ok := out[p.Fst]; ok {
+			out[p.Fst] = merge(val, p.Snd)
+		} else {
+			out[p.Fst] = p.Snd
+		}
+	}
+	return out
+}
+
+func Map[A comparable, B, C any](f func(B) C, xs map[A]B) map[A]C {
+	out := map[A]C{}
+	for k, v := range xs {
+		out[k] = f(v)
+	}
+	return out
 }
 
 func Merge[A comparable, B Ord[B]](m1 map[A]B, m2 map[A]B) map[A]B {
