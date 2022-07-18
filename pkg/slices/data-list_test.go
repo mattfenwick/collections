@@ -261,13 +261,13 @@ func RunDataListTests() {
 	})
 
 	Describe("the by operations", func() {
-		It("GroupBy", func() {
-			gomega.Expect(GroupBy(builtins.EQ[int], []int{})).To(gomega.BeNil())
-			gomega.Expect(GroupBy(builtins.EQ[int], []int{1})).To(gomega.Equal([][]int{{1}}))
-			gomega.Expect(GroupBy(builtins.EQ[int], []int{1, 1, 1})).To(gomega.Equal([][]int{{1, 1, 1}}))
-			gomega.Expect(GroupBy(builtins.EQ[int], []int{1, 2, 1})).To(gomega.Equal([][]int{{1}, {2}, {1}}))
-			gomega.Expect(GroupBy(builtins.EQ[int], []int{2, 1, 1})).To(gomega.Equal([][]int{{2}, {1, 1}}))
-			gomega.Expect(GroupBy(builtins.EQ[int], []int{7, 4, 2, 2, 4, 2, 2, 4, 9, 9, 4})).To(gomega.Equal([][]int{
+		It("GroupConsecutiveBy", func() {
+			gomega.Expect(GroupConsecutiveBy(builtins.EQ[int], []int{})).To(gomega.BeNil())
+			gomega.Expect(GroupConsecutiveBy(builtins.EQ[int], []int{1})).To(gomega.Equal([][]int{{1}}))
+			gomega.Expect(GroupConsecutiveBy(builtins.EQ[int], []int{1, 1, 1})).To(gomega.Equal([][]int{{1, 1, 1}}))
+			gomega.Expect(GroupConsecutiveBy(builtins.EQ[int], []int{1, 2, 1})).To(gomega.Equal([][]int{{1}, {2}, {1}}))
+			gomega.Expect(GroupConsecutiveBy(builtins.EQ[int], []int{2, 1, 1})).To(gomega.Equal([][]int{{2}, {1, 1}}))
+			gomega.Expect(GroupConsecutiveBy(builtins.EQ[int], []int{7, 4, 2, 2, 4, 2, 2, 4, 9, 9, 4})).To(gomega.Equal([][]int{
 				{7},
 				{4},
 				{2, 2},

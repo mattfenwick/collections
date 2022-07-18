@@ -77,7 +77,7 @@ func EqExample() {
 	a := []Uint{1, 2, 3, 4, 5}
 	b := []Uint{0, 2, 4, 6, 8}
 	for _, x := range b {
-		fmt.Printf("looking for %d: result %d\n", x, Index(a, x))
+		fmt.Printf("looking for %d: result %d\n", x, slices.IndexEq(a, x))
 	}
 
 	fmt.Printf("Eq? %+v, %+v\n%+v, %+v, %+v, %+v\n",

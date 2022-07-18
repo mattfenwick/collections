@@ -371,9 +371,9 @@ func Break[A any](pred F1[A, bool], xs []A) *Pair[[]A, []A] {
 // TODO
 // StripPrefix is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:stripPrefix
 
-// Group is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:group
-func Group[A Eq[A]](xs []A) [][]A {
-	return GroupBy(Equal[A], xs)
+// GroupConsecutive is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:group
+func GroupConsecutive[A Eq[A]](xs []A) [][]A {
+	return GroupConsecutiveBy(Equal[A], xs)
 }
 
 // TODO
@@ -508,8 +508,8 @@ func Insert[A Ord[A]](a A, xs []A) []A {
 // TODO
 // IntersectBy is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:intersectBy
 
-// GroupBy is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:groupBy
-func GroupBy[A any](g F2[A, A, bool], xs []A) [][]A {
+// GroupConsecutiveBy is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:groupBy
+func GroupConsecutiveBy[A any](g F2[A, A, bool], xs []A) [][]A {
 	rest := xs
 	var out [][]A
 	for {
