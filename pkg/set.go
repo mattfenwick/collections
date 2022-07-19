@@ -1,7 +1,7 @@
 package pkg
 
 import (
-	"github.com/mattfenwick/collections/pkg/functions"
+	"github.com/mattfenwick/collections/pkg/function"
 	"golang.org/x/exp/maps"
 )
 
@@ -11,7 +11,7 @@ type Set[A any, K comparable] struct {
 }
 
 func NewSet[A comparable](elems []A) *Set[A, A] {
-	return NewSetBy(functions.Id[A], elems)
+	return NewSetBy(function.Id[A], elems)
 }
 
 func NewSetBy[A any, K comparable](projection func(A) K, elems []A) *Set[A, K] {
