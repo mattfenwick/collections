@@ -9,6 +9,7 @@ import (
 func TestMatcher(t *testing.T) {
 	gomega.RegisterFailHandler(Fail)
 
+	RunWrapperTests()
 	RunSetTests()
 
 	RunSpecs(t, "builtins suite")

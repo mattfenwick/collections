@@ -53,11 +53,11 @@ func (s *Set[A]) Add(a A) bool {
 }
 
 func (s *Set[A]) Delete(a A) bool {
-	return s.closure(&request[A]{delete: &a}).add
+	return s.closure(&request[A]{delete: &a}).delete
 }
 
 func (s *Set[A]) Contains(a A) bool {
-	return s.closure(&request[A]{contains: &a}).add
+	return s.closure(&request[A]{contains: &a}).contains
 }
 
 func (s *Set[A]) Len() int {
@@ -84,7 +84,7 @@ func (s *Set[A]) Intersect(other *Set[A]) int {
 	for _, e := range s.ToSlice() {
 		if !other.Contains(e) {
 			if ok := s.Delete(e); !ok {
-				panic(errors.Errorf("unable to delete element %+v from set", e))
+				panic(errors.Errorf("unable to delete element %+v", e))
 			}
 			removed++
 		}
