@@ -1,4 +1,4 @@
-package pkg
+package list
 
 type List[A any] struct {
 	Head A
