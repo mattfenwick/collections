@@ -1,7 +1,6 @@
 package set
 
 import (
-	"fmt"
 	"github.com/mattfenwick/collections/pkg/function"
 	"golang.org/x/exp/maps"
 )
@@ -20,7 +19,6 @@ func NewWrapperBy[A any, K comparable](projection func(A) K, elems []A) *Wrapper
 	for _, e := range elems {
 		s.Add(e)
 	}
-	fmt.Printf("lengths? %d, %d\n", len(elems), len(s.Elems))
 	return s
 }
 
