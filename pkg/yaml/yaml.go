@@ -23,7 +23,7 @@ func ParseStrict[T any](bs []byte) (*T, error) {
 }
 
 func ParseFile[T any](path string) (*T, error) {
-	bytes, err := file.ReadFileBytes(path)
+	bytes, err := file.Read(path)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,7 @@ func ParseFile[T any](path string) (*T, error) {
 }
 
 func ParseFileStrict[T any](path string) (*T, error) {
-	bytes, err := file.ReadFileBytes(path)
+	bytes, err := file.Read(path)
 	if err != nil {
 		return nil, err
 	}
@@ -56,5 +56,5 @@ func MarshalFile(obj interface{}, path string) error {
 	if err != nil {
 		return err
 	}
-	return file.WriteFileBytes(path, bytes, 0644)
+	return file.Write(path, bytes, 0644)
 }

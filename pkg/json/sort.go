@@ -13,7 +13,7 @@ import (
 //   generic structure of maps, then marshaling back into completely sorted json.
 //   NOTE: this only works for a json object.
 func SortOptions(contents []byte, escapeHtml bool, indent bool) ([]byte, error) {
-	obj, err := ParseJson[map[string]interface{}](contents)
+	obj, err := Parse[map[string]interface{}](contents)
 	if err != nil {
 		return nil, err
 	}
@@ -21,7 +21,7 @@ func SortOptions(contents []byte, escapeHtml bool, indent bool) ([]byte, error) 
 }
 
 func SortFileOptions(path string, escapeHtml bool, indent bool) error {
-	bytes, err := file.ReadFileBytes(path)
+	bytes, err := file.Read(path)
 	if err != nil {
 		return err
 	}
@@ -29,7 +29,7 @@ func SortFileOptions(path string, escapeHtml bool, indent bool) error {
 	if err != nil {
 		return err
 	}
-	return file.WriteFileBytes(path, sortedBytes, 0644)
+	return file.Write(path, sortedBytes, 0644)
 }
 
 // Remarshal is of questionable utility.  It first marshals, then unmarshals

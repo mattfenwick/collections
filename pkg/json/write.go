@@ -52,7 +52,7 @@ func MarshalToFileOptions(obj interface{}, path string, options *MarshalOptions)
 	if err != nil {
 		return err
 	}
-	return file.WriteFileBytes(path, content, 0644)
+	return file.Write(path, content, 0644)
 }
 
 func MarshalToFile(obj interface{}, path string) error {

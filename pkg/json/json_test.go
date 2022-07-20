@@ -48,13 +48,13 @@ func RunJsonTests() {
 		}
 
 		It("Read into type", func() {
-			parsed, err := ParseJsonFromString[testType](jsonString)
+			parsed, err := ParseString[testType](jsonString)
 			gomega.Expect(err).To(gomega.BeNil())
 			gomega.Expect(parsed).To(gomega.Equal(expected))
 		})
 
 		It("Read into map", func() {
-			parsed, err := ParseJsonFromString[map[string]int](jsonString)
+			parsed, err := ParseString[map[string]int](jsonString)
 			gomega.Expect(err).To(gomega.BeNil())
 			gomega.Expect(*parsed).To(gomega.Equal(expectedMap))
 		})

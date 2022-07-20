@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func ParseJson[T any](bs []byte) (*T, error) {
+func Parse[T any](bs []byte) (*T, error) {
 	var t T
 	if err := json.Unmarshal(bs, &t); err != nil {
 		return nil, errors.Wrapf(err, "unable to unmarshal json")
@@ -14,14 +14,14 @@ func ParseJson[T any](bs []byte) (*T, error) {
 	return &t, nil
 }
 
-func ParseJsonFromFile[T any](path string) (*T, error) {
-	bytes, err := file.ReadFileBytes(path)
+func ParseFile[T any](path string) (*T, error) {
+	bytes, err := file.Read(path)
 	if err != nil {
 		return nil, err
 	}
-	return ParseJson[T](bytes)
+	return Parse[T](bytes)
 }
 
-func ParseJsonFromString[T any](contents string) (*T, error) {
-	return ParseJson[T]([]byte(contents))
+func ParseString[T any](contents string) (*T, error) {
+	return Parse[T]([]byte(contents))
 }

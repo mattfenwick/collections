@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func DoesFileExist(path string) bool {
+func Exists(path string) bool {
 	if _, err := os.Stat(path); err == nil {
 		return true
 	} else if errors.Is(err, os.ErrNotExist) {
@@ -17,24 +17,24 @@ func DoesFileExist(path string) bool {
 	}
 }
 
-// WriteFile wraps calls to ioutil.WriteFile, ensuring that errors are wrapped in a stack trace
-func WriteFile(filename string, contents string, perm fs.FileMode) error {
-	return errors.Wrapf(ioutil.WriteFile(filename, []byte(contents), perm), "unable to write file %s", filename)
+// WriteString wraps calls to ioutil.WriteFile, ensuring that errors are wrapped in a stack trace
+func WriteString(filename string, contents string, perm fs.FileMode) error {
+	return Write(filename, []byte(contents), perm)
 }
 
-// WriteFileBytes wraps calls to ioutil.WriteFile, ensuring that errors are wrapped in a stack trace
-func WriteFileBytes(filename string, bytes []byte, perm fs.FileMode) error {
+// Write wraps calls to ioutil.WriteFile, ensuring that errors are wrapped in a stack trace
+func Write(filename string, bytes []byte, perm fs.FileMode) error {
 	return errors.Wrapf(ioutil.WriteFile(filename, bytes, perm), "unable to write file %s", filename)
 }
 
-// ReadFile wraps calls to ioutil.ReadFile, ensuring that errors are wrapped in a stack trace
-func ReadFile(filename string) (string, error) {
-	bytes, err := ioutil.ReadFile(filename)
-	return string(bytes), errors.Wrapf(err, "unable to read file %s", filename)
+// ReadString wraps calls to ioutil.ReadFile, ensuring that errors are wrapped in a stack trace
+func ReadString(filename string) (string, error) {
+	bytes, err := Read(filename)
+	return string(bytes), err
 }
 
-// ReadFileBytes wraps calls to ioutil.ReadFile, ensuring that errors are wrapped in a stack trace
-func ReadFileBytes(filename string) ([]byte, error) {
+// Read wraps calls to ioutil.ReadFile, ensuring that errors are wrapped in a stack trace
+func Read(filename string) ([]byte, error) {
 	bytes, err := ioutil.ReadFile(filename)
 	return bytes, errors.Wrapf(err, "unable to read file %s", filename)
 }
