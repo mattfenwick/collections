@@ -12,3 +12,7 @@ func OnHelper[A, B, C any](combine func(B, B) C, project func(A) B, x A, y A) C 
 func CompareOn[A, B Ord[B]](p func(A) B, x A, y A) Ordering {
 	return On(Compare[B], p)(x, y)
 }
+
+func Cast[A any](val interface{}) A {
+	return val.(A)
+}
