@@ -77,5 +77,12 @@ func RunCompareTests() {
 		It("combines correctly", func() {
 			gomega.Expect(absoluteValueThenSignKey(-3, 1)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
 		})
+		It("reverses comparison", func() {
+			desc := CompareReverse(builtin.CompareOrdered[int])
+			gomega.Expect(desc(-3, 1)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
+			gomega.Expect(desc(4, 4)).To(gomega.BeEquivalentTo(OrderingEqual))
+			gomega.Expect(desc(3, 8)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
+			gomega.Expect(desc(8, 3)).To(gomega.BeEquivalentTo(OrderingLessThan))
+		})
 	})
 }
