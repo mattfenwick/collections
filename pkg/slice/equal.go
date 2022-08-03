@@ -53,8 +53,8 @@ func EqualPair[A comparable, B comparable]() Equaler[*Pair[A, B]] {
 
 func EqualPairBy[A, B any](fst Equaler[A], snd Equaler[B]) Equaler[*Pair[A, B]] {
 	return EqualBy[*Pair[A, B]](
-		function.On(fst, First[A, B]),
-		function.On(snd, Second[A, B]))
+		function.On(fst, Fst[A, B]),
+		function.On(snd, Snd[A, B]))
 }
 
 func EqualBy[A any](equals ...Equaler[A]) Equaler[A] {

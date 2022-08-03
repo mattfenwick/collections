@@ -54,9 +54,9 @@ func RunCompareTests() {
 		p2 := NewPair[Int, Bool](14, true)
 		p3 := NewPair[Int, Bool](13, false)
 		It("functions.On", func() {
-			gomega.Expect(function.On(Compare[Int], First[Int, Bool])(p1, p1)).To(gomega.BeEquivalentTo(OrderingEqual))
-			gomega.Expect(function.On(Compare[Int], First[Int, Bool])(p1, p2)).To(gomega.BeEquivalentTo(OrderingLessThan))
-			gomega.Expect(function.On(Compare[Int], First[Int, Bool])(p1, p3)).To(gomega.BeEquivalentTo(OrderingEqual))
+			gomega.Expect(function.On(Compare[Int], Fst[Int, Bool])(p1, p1)).To(gomega.BeEquivalentTo(OrderingEqual))
+			gomega.Expect(function.On(Compare[Int], Fst[Int, Bool])(p1, p2)).To(gomega.BeEquivalentTo(OrderingLessThan))
+			gomega.Expect(function.On(Compare[Int], Fst[Int, Bool])(p1, p3)).To(gomega.BeEquivalentTo(OrderingEqual))
 		})
 
 		It("Pair", func() {

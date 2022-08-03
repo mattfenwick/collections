@@ -77,8 +77,8 @@ func ComparePair[A constraints.Ordered, B constraints.Ordered]() Comparator[*Pai
 
 func ComparePairBy[A, B any](fst Comparator[A], snd Comparator[B]) Comparator[*Pair[A, B]] {
 	return CompareBy[*Pair[A, B]](
-		function.On(fst, First[A, B]),
-		function.On(snd, Second[A, B]))
+		function.On(fst, Fst[A, B]),
+		function.On(snd, Snd[A, B]))
 }
 
 func CompareBy[A any](comparisons ...Comparator[A]) Comparator[A] {

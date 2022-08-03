@@ -42,7 +42,7 @@ func CompareMapPairwise[A constraints.Ordered, B constraints.Ordered]() Comparat
 	return CompareMapPairwiseBy[A, B](builtin.CompareOrdered[B])
 }
 
-// CompareMapPairwiseBy works by project a map to a list, therefore it's inefficient and probably
+// CompareMapPairwiseBy works by projecting a map to a list, therefore it's inefficient and probably
 //   best to avoid using unless absolutely necessary!
 //   Note: while `map` requires `A` to be `comparable`, *comparing* maps requires `A` to be Ordered
 //   as well!

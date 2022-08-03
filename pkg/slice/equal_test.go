@@ -27,9 +27,9 @@ func RunEqualTests() {
 		})
 
 		It("EqualBy", func() {
-			gomega.Expect(EqualBy(function.On(Equal[Int], First[Int, Bool]))(p1, p2)).To(gomega.BeFalse())
-			gomega.Expect(EqualBy(function.On(Equal[Int], First[Int, Bool]))(p1, p3)).To(gomega.BeTrue())
-			gomega.Expect(EqualBy(function.On(Equal[Bool], Second[Int, Bool]))(p1, p2)).To(gomega.BeTrue())
+			gomega.Expect(EqualBy(function.On(Equal[Int], Fst[Int, Bool]))(p1, p2)).To(gomega.BeFalse())
+			gomega.Expect(EqualBy(function.On(Equal[Int], Fst[Int, Bool]))(p1, p3)).To(gomega.BeTrue())
+			gomega.Expect(EqualBy(function.On(Equal[Bool], Snd[Int, Bool]))(p1, p2)).To(gomega.BeTrue())
 		})
 
 		It("slice equality", func() {

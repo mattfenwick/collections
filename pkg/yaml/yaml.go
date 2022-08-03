@@ -3,7 +3,8 @@ package yaml
 import (
 	"github.com/mattfenwick/collections/pkg/file"
 	"github.com/pkg/errors"
-	"gopkg.in/yaml.v2"
+	yamlv2 "gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 func Parse[T any](bs []byte) (*T, error) {
@@ -16,7 +17,7 @@ func Parse[T any](bs []byte) (*T, error) {
 
 func ParseStrict[T any](bs []byte) (*T, error) {
 	var t T
-	if err := yaml.UnmarshalStrict(bs, &t); err != nil {
+	if err := yamlv2.UnmarshalStrict(bs, &t); err != nil {
 		return nil, errors.Wrapf(err, "unable to unmarshal yaml")
 	}
 	return &t, nil

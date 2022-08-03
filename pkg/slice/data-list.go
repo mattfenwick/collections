@@ -6,6 +6,7 @@ import (
 	"github.com/mattfenwick/collections/pkg/builtin"
 	"github.com/mattfenwick/collections/pkg/function"
 	"golang.org/x/exp/constraints"
+	"golang.org/x/exp/slices"
 )
 
 // this code is based on Haskell's data.List:
@@ -528,7 +529,9 @@ func GroupConsecutiveBy[A any](g F2[A, A, bool], xs []A) [][]A {
 //   It allows sorting based on a custom comparison operator;
 //   therefore it does not require input elements to have an Ord instance.
 func SortBy[A any](compare Comparator[A], xs []A) []A {
-	return MergeSortWithComparator(compare, xs)
+	out := Map(function.Id[A], xs)
+	slices.SortStableFunc(out, ComparatorToLess(compare))
+	return out
 }
 
 // TODO

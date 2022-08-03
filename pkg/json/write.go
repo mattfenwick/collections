@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/mattfenwick/collections/pkg/file"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 type MarshalOptions struct {
@@ -66,4 +67,12 @@ func MarshalToString(obj interface{}) (string, error) {
 
 func Marshal(obj interface{}) ([]byte, error) {
 	return MarshalWithOptions(obj, DefaultMarshalOptions)
+}
+
+func MustMarshalToString(obj interface{}) string {
+	str, err := MarshalToString(obj)
+	if err != nil {
+		logrus.Panicf("%+v", err)
+	}
+	return str
 }

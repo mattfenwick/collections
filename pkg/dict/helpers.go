@@ -26,9 +26,13 @@ func FromSliceBy[A comparable, B any](merge func(B, B) B, ps []*Pair[A, B]) map[
 }
 
 func Map[A comparable, B, C any](f func(B) C, xs map[A]B) map[A]C {
+	return MapWithKey(func(a A, b B) C { return f(b) }, xs)
+}
+
+func MapWithKey[A comparable, B, C any](f func(A, B) C, xs map[A]B) map[A]C {
 	out := map[A]C{}
 	for k, v := range xs {
-		out[k] = f(v)
+		out[k] = f(k, v)
 	}
 	return out
 }

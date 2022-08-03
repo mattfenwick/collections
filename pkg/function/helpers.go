@@ -16,3 +16,11 @@ func CompareOn[A, B Ord[B]](p func(A) B, x A, y A) Ordering {
 func Cast[A any](val interface{}) A {
 	return val.(A)
 }
+
+func First[A, B any](a A, b B) A {
+	return a
+}
+
+func Second[A, B any](a A, b B) B {
+	return b
+}
