@@ -48,5 +48,3 @@ type FunctionIterator[A any] struct {
 func (f *FunctionIterator[A]) Next() *A {
 	return f.F()
 }
-
-//func SetIterator

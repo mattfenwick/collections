@@ -1,10 +1,10 @@
 package slice
 
 import (
-	"github.com/mattfenwick/collections/pkg"
 	. "github.com/mattfenwick/collections/pkg/base"
 	"github.com/mattfenwick/collections/pkg/builtin"
 	"github.com/mattfenwick/collections/pkg/function"
+	"github.com/mattfenwick/collections/pkg/maybe"
 	"golang.org/x/exp/constraints"
 	"golang.org/x/exp/slices"
 )
@@ -38,11 +38,11 @@ func Append[A any](xs []A, ys []A) []A {
 //}
 
 // Uncons is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:uncons
-func Uncons[A any](xs []A) *pkg.Maybe[*Pair[A, []A]] {
+func Uncons[A any](xs []A) *maybe.Maybe[*Pair[A, []A]] {
 	if len(xs) == 0 {
-		return pkg.Nothing[*Pair[A, []A]]()
+		return maybe.Nothing[*Pair[A, []A]]()
 	}
-	return pkg.Just[*Pair[A, []A]](NewPair(xs[0], xs[1:]))
+	return maybe.Just[*Pair[A, []A]](NewPair(xs[0], xs[1:]))
 }
 
 // Singleton is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:singleton
@@ -182,14 +182,14 @@ func Product[A builtin.Number](xs []A) A {
 // Maximum is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:maximum
 //
 //	since Haskell's maximum blows up on empty lists, this has been modified for safety
-func Maximum[A Ord[A]](xs []A) *pkg.Maybe[A] {
+func Maximum[A Ord[A]](xs []A) *maybe.Maybe[A] {
 	return MaximumBy[A](Compare[A], xs)
 }
 
 // Minimum is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:minimum
 //
 //	since Haskell's minimum blows up on empty lists, this has been modified for safety
-func Minimum[A Ord[A]](xs []A) *pkg.Maybe[A] {
+func Minimum[A Ord[A]](xs []A) *maybe.Maybe[A] {
 	return MinimumBy[A](Compare[A], xs)
 }
 
@@ -304,7 +304,7 @@ func Replicate[A any](count int, a A) []A {
 //   (infinite list)
 
 // Unfoldr is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:unfoldr
-func Unfoldr[A, B any](f F1[B, *pkg.Maybe[*Pair[A, B]]], b B) []A {
+func Unfoldr[A, B any](f F1[B, *maybe.Maybe[*Pair[A, B]]], b B) []A {
 	var out []A
 	nextB := b
 	for {
@@ -397,13 +397,13 @@ func GroupConsecutive[A Eq[A]](xs []A) [][]A {
 // TODO searching by equality https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#g:14
 
 // Find is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:find
-func Find[A any](pred F1[A, bool], xs []A) *pkg.Maybe[A] {
+func Find[A any](pred F1[A, bool], xs []A) *maybe.Maybe[A] {
 	for _, x := range xs {
 		if pred(x) {
-			return pkg.Just(x)
+			return maybe.Just(x)
 		}
 	}
-	return pkg.Nothing[A]()
+	return maybe.Nothing[A]()
 }
 
 // Filter is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:filter
@@ -549,9 +549,9 @@ func SortBy[A any](compare Comparator[A], xs []A) []A {
 // InsertBy is from https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:insertBy
 
 // MaximumBy is from https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:maximumBy
-func MaximumBy[A any](f Comparator[A], xs []A) *pkg.Maybe[A] {
+func MaximumBy[A any](f Comparator[A], xs []A) *maybe.Maybe[A] {
 	if len(xs) == 0 {
-		return pkg.Nothing[A]()
+		return maybe.Nothing[A]()
 	}
 	max := xs[0]
 	for _, x := range xs[1:] {
@@ -559,13 +559,13 @@ func MaximumBy[A any](f Comparator[A], xs []A) *pkg.Maybe[A] {
 			max = x
 		}
 	}
-	return pkg.Just(max)
+	return maybe.Just(max)
 }
 
 // MinimumBy is from https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:minimumBy
-func MinimumBy[A any](f Comparator[A], xs []A) *pkg.Maybe[A] {
+func MinimumBy[A any](f Comparator[A], xs []A) *maybe.Maybe[A] {
 	if len(xs) == 0 {
-		return pkg.Nothing[A]()
+		return maybe.Nothing[A]()
 	}
 	min := xs[0]
 	for _, x := range xs[1:] {
@@ -573,7 +573,7 @@ func MinimumBy[A any](f Comparator[A], xs []A) *pkg.Maybe[A] {
 			min = x
 		}
 	}
-	return pkg.Just(min)
+	return maybe.Just(min)
 }
 
 // The generic operations https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#g:26

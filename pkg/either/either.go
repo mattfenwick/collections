@@ -1,15 +1,15 @@
-package pkg
+package either
 
 type Either[E any, A any] struct {
 	Success *A
 	Error   *E
 }
 
-func NewSuccess[E any, A any](value A) *Either[E, A] {
+func Success[E any, A any](value A) *Either[E, A] {
 	return &Either[E, A]{Success: &value}
 }
 
-func NewError[E any, A any](error E) *Either[E, A] {
+func Error[E any, A any](error E) *Either[E, A] {
 	return &Either[E, A]{Error: &error}
 }
 
@@ -24,17 +24,17 @@ func (e *Either[E, A]) IsValid() bool {
 	return present == 1
 }
 
-func Fmap[E, A, B any](m *Either[E, A], f func(a A) B) *Either[E, B] {
+func Map[E, A, B any](m *Either[E, A], f func(a A) B) *Either[E, B] {
 	if m.Success != nil {
-		return NewSuccess[E, B](f(*m.Success))
+		return Success[E, B](f(*m.Success))
 	}
-	return NewError[E, B](*m.Error)
+	return Error[E, B](*m.Error)
 }
 
 func App2[E, A, B, C any](f func(A, B) C, m1 *Either[E, A], m2 *Either[E, B]) *Either[E, C] {
 	return Bind[E, A, C](m1, func(a A) *Either[E, C] {
 		return Bind[E, B, C](m2, func(b B) *Either[E, C] {
-			return NewSuccess[E, C](f(a, b))
+			return Success[E, C](f(a, b))
 		})
 	})
 }
@@ -43,14 +43,14 @@ func Bind[E, A, B any](m *Either[E, A], f func(A) *Either[E, B]) *Either[E, B] {
 	if m.Success != nil {
 		return f(*m.Success)
 	}
-	return NewError[E, B](*m.Error)
+	return Error[E, B](*m.Error)
 }
 
 func MapError[E1, E2, A any](m *Either[E1, A], f func(E1) E2) *Either[E2, A] {
 	if m.Success != nil {
-		return NewSuccess[E2, A](*m.Success)
+		return Success[E2, A](*m.Success)
 	}
-	return NewError[E2, A](f(*m.Error))
+	return Error[E2, A](f(*m.Error))
 }
 
 func (e *Either[E, A]) Plus(other *Either[E, A]) *Either[E, A] {

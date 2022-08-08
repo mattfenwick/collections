@@ -1,10 +1,10 @@
 package slice
 
 import (
-	"github.com/mattfenwick/collections/pkg"
 	"github.com/mattfenwick/collections/pkg/base"
 	"github.com/mattfenwick/collections/pkg/builtin"
 	"github.com/mattfenwick/collections/pkg/function"
+	"github.com/mattfenwick/collections/pkg/maybe"
 	. "github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
 )
@@ -12,10 +12,10 @@ import (
 func RunDataListTests() {
 	Describe("Special folds", func() {
 		It("Maximum", func() {
-			gomega.Expect(Maximum[base.Int]([]base.Int{})).To(gomega.Equal(pkg.Nothing[base.Int]()))
-			gomega.Expect(Maximum[base.Int]([]base.Int{3})).To(gomega.Equal(pkg.Just[base.Int](3)))
-			gomega.Expect(Maximum[base.Int]([]base.Int{3, 2, -3})).To(gomega.Equal(pkg.Just[base.Int](3)))
-			gomega.Expect(Maximum[base.Int]([]base.Int{-2, 3, 2})).To(gomega.Equal(pkg.Just[base.Int](3)))
+			gomega.Expect(Maximum[base.Int]([]base.Int{})).To(gomega.Equal(maybe.Nothing[base.Int]()))
+			gomega.Expect(Maximum[base.Int]([]base.Int{3})).To(gomega.Equal(maybe.Just[base.Int](3)))
+			gomega.Expect(Maximum[base.Int]([]base.Int{3, 2, -3})).To(gomega.Equal(maybe.Just[base.Int](3)))
+			gomega.Expect(Maximum[base.Int]([]base.Int{-2, 3, 2})).To(gomega.Equal(maybe.Just[base.Int](3)))
 		})
 	})
 
@@ -223,11 +223,11 @@ func RunDataListTests() {
 	Describe("Unfolding", func() {
 		It("Unfoldr", func() {
 			gomega.Expect(
-				Unfoldr(func(next int) *pkg.Maybe[*base.Pair[int, int]] {
+				Unfoldr(func(next int) *maybe.Maybe[*base.Pair[int, int]] {
 					if next == 0 {
-						return pkg.Nothing[*base.Pair[int, int]]()
+						return maybe.Nothing[*base.Pair[int, int]]()
 					}
-					return pkg.Just(base.NewPair(next, next-1))
+					return maybe.Just(base.NewPair(next, next-1))
 				}, 10)).
 				To(gomega.Equal([]int{10, 9, 8, 7, 6, 5, 4, 3, 2, 1}))
 		})
