@@ -1,7 +1,10 @@
 package set
 
 import (
+	"github.com/mattfenwick/collections/pkg/dict"
 	"github.com/mattfenwick/collections/pkg/function"
+	"github.com/mattfenwick/collections/pkg/iterable"
+	"github.com/mattfenwick/collections/pkg/slice"
 	"golang.org/x/exp/maps"
 )
 
@@ -14,13 +17,22 @@ type Set[A any] struct {
 	Union      func(*Set[A]) *Set[A]
 	Intersect  func(*Set[A]) *Set[A]
 	Difference func(*Set[A]) *Set[A]
+	Iterator   func() iterable.Iterator[A]
 }
 
-func NewSet[A comparable](elems []A) *Set[A] {
+func FromSlice[A comparable](elems []A) *Set[A] {
+	return NewSetBy[A](function.Id[A], slice.Slice[A](elems))
+}
+
+func FromSliceBy[A any, K comparable](projection func(A) K, elems []A) *Set[A] {
+	return NewSetBy[A, K](projection, slice.Slice[A](elems))
+}
+
+func NewSet[A comparable](elems iterable.Iterable[A]) *Set[A] {
 	return NewSetBy(function.Id[A], elems)
 }
 
-func NewSetBy[A any, K comparable](projection func(A) K, initialElements []A) *Set[A] {
+func NewSetBy[A any, K comparable](projection func(A) K, initialElements iterable.Iterable[A]) *Set[A] {
 	elems := map[K]A{}
 	var s *Set[A]
 	s = &Set[A]{
@@ -47,7 +59,7 @@ func NewSetBy[A any, K comparable](projection func(A) K, initialElements []A) *S
 			return maps.Values(elems)
 		},
 		Union: func(other *Set[A]) *Set[A] {
-			return NewSetBy(projection, append(s.ToSlice(), other.ToSlice()...))
+			return NewSetBy[A, K](projection, slice.Slice[A](append(s.ToSlice(), other.ToSlice()...)))
 		},
 		Intersect: func(other *Set[A]) *Set[A] {
 			var out []A
@@ -56,7 +68,7 @@ func NewSetBy[A any, K comparable](projection func(A) K, initialElements []A) *S
 					out = append(out, val)
 				}
 			}
-			return NewSetBy(projection, out)
+			return NewSetBy[A, K](projection, slice.Slice[A](out))
 		},
 		Difference: func(other *Set[A]) *Set[A] {
 			var out []A
@@ -65,11 +77,19 @@ func NewSetBy[A any, K comparable](projection func(A) K, initialElements []A) *S
 					out = append(out, val)
 				}
 			}
-			return NewSetBy(projection, out)
+			return NewSetBy[A, K](projection, slice.Slice[A](out))
+		},
+		Iterator: func() iterable.Iterator[A] {
+			return dict.ValuesIterator(elems)
 		},
 	}
-	for _, x := range initialElements {
-		s.Add(x)
+	iterator := initialElements.Iterator()
+	for {
+		x := iterator.Next()
+		if x == nil {
+			break
+		}
+		s.Add(*x)
 	}
 	return s
 }
