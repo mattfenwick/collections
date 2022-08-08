@@ -3,69 +3,72 @@ package set
 import (
 	"github.com/mattfenwick/collections/pkg/function"
 	"github.com/pkg/errors"
+	"golang.org/x/exp/maps"
 )
 
-type request[A any] struct {
-	add      *A
-	delete   *A
-	contains *A
-	len      bool
-	toSlice  bool
-}
-
-type response[A any] struct {
-	add      bool
-	delete   bool
-	contains bool
-	len      int
-	toSlice  []A
-}
-
 type Set[A any] struct {
-	closure func(*request[A]) *response[A]
+	add      func(A) bool
+	delete   func(A) bool
+	contains func(A) bool
+	length   func() int
+	toSlice  func() []A
 }
 
 func NewSet[A comparable](elems []A) *Set[A] {
 	return NewSetBy(function.Id[A], elems)
 }
 
-func NewSetBy[A any, K comparable](projection func(A) K, elems []A) *Set[A] {
-	w := NewWrapperBy(projection, elems)
-	s := &Set[A]{closure: func(r *request[A]) *response[A] {
-		if r.add != nil {
-			return &response[A]{add: w.Add(*r.add)}
-		} else if r.delete != nil {
-			return &response[A]{delete: w.Delete(*r.delete)}
-		} else if r.contains != nil {
-			return &response[A]{contains: w.Contains(*r.contains)}
-		} else if r.len {
-			return &response[A]{len: w.Len()}
-		} else if r.toSlice {
-			return &response[A]{toSlice: w.ToSlice()}
-		}
-		panic(errors.Errorf("invalid request: %+v", r))
-	}}
+func NewSetBy[A any, K comparable](projection func(A) K, initialElements []A) *Set[A] {
+	elems := map[K]A{}
+	var s *Set[A]
+	s = &Set[A]{
+		add: func(a A) bool {
+			if !s.Contains(a) {
+				elems[projection(a)] = a
+				return true
+			}
+			return false
+		},
+		delete: func(a A) bool {
+			_, ok := elems[projection(a)]
+			delete(elems, projection(a))
+			return ok
+		},
+		contains: func(a A) bool {
+			_, ok := elems[projection(a)]
+			return ok
+		},
+		length: func() int {
+			return len(elems)
+		},
+		toSlice: func() []A {
+			return maps.Values(elems)
+		},
+	}
+	for _, x := range initialElements {
+		s.Add(x)
+	}
 	return s
 }
 
 func (s *Set[A]) Add(a A) bool {
-	return s.closure(&request[A]{add: &a}).add
+	return s.add(a)
 }
 
 func (s *Set[A]) Delete(a A) bool {
-	return s.closure(&request[A]{delete: &a}).delete
+	return s.delete(a)
 }
 
 func (s *Set[A]) Contains(a A) bool {
-	return s.closure(&request[A]{contains: &a}).contains
+	return s.contains(a)
 }
 
 func (s *Set[A]) Len() int {
-	return s.closure(&request[A]{len: true}).len
+	return s.length()
 }
 
 func (s *Set[A]) ToSlice() []A {
-	return s.closure(&request[A]{toSlice: true}).toSlice
+	return s.toSlice()
 }
 
 func (s *Set[A]) Union(other *Set[A]) int {
