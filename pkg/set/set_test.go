@@ -47,23 +47,23 @@ func RunSetTests() {
 
 		It("Union", func() {
 			set := NewSet([]int{4, 3, 2, 1})
-			gomega.Expect(set.Union(s4)).To(gomega.Equal(3))
-			gomega.Expect(set.Len()).To(gomega.Equal(7))
-			gomega.Expect(slice.Sort(set.ToSlice())).To(gomega.Equal([]int{-12, 1, 2, 3, 4, 12, 21}))
+			union := set.Union(s4)
+			gomega.Expect(union.Len()).To(gomega.Equal(7))
+			gomega.Expect(slice.Sort(union.ToSlice())).To(gomega.Equal([]int{-12, 1, 2, 3, 4, 12, 21}))
 		})
 
 		It("Intersection", func() {
 			set := NewSet([]int{4, 3, 2, 1})
-			gomega.Expect(set.Intersect(s4)).To(gomega.Equal(2))
-			gomega.Expect(set.Len()).To(gomega.Equal(2))
-			gomega.Expect(slice.Sort(set.ToSlice())).To(gomega.Equal([]int{2, 3}))
+			intersection := set.Intersect(s4)
+			gomega.Expect(intersection.Len()).To(gomega.Equal(2))
+			gomega.Expect(slice.Sort(intersection.ToSlice())).To(gomega.Equal([]int{2, 3}))
 		})
 
 		It("Difference", func() {
 			set := NewSet([]int{4, 3, 2, 1})
-			gomega.Expect(set.Difference(s4)).To(gomega.Equal(2))
-			gomega.Expect(set.Len()).To(gomega.Equal(2))
-			gomega.Expect(slice.Sort(set.ToSlice())).To(gomega.Equal([]int{1, 4}))
+			diff := set.Difference(s4)
+			gomega.Expect(diff.Len()).To(gomega.Equal(2))
+			gomega.Expect(slice.Sort(diff.ToSlice())).To(gomega.Equal([]int{1, 4}))
 		})
 	})
 }
