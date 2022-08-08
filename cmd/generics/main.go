@@ -72,9 +72,10 @@ func Example[A any](a A, b A) string {
 }
 
 // StringAlias is a "type definition", NOT a type alias
-//   a type definition can be used with an interface type constraint
-//   i.e. "~string" , whereas without the "~",
-//   this couldn't be used where a string is needed
+//
+//	a type definition can be used with an interface type constraint
+//	i.e. "~string" , whereas without the "~",
+//	this couldn't be used where a string is needed
 type StringAlias string
 
 type IntOrString interface {
@@ -104,21 +105,28 @@ func WrapperExample() {
 }
 
 // Note: these functions cannot be written; compiler error:
-//   interface contains type constraints
-//func ReturnIntOrString() IntOrString {
-//	return 3
-//}
-//func ConsumeIntOrString(iors IntOrString) {
 //
-//}
+//	interface contains type constraints
+//
+//	func ReturnIntOrString() IntOrString {
+//		return 3
+//	}
+//
+// func ConsumeIntOrString(iors IntOrString) {
+//
+// }
 // this is illegal because of the T: "cannot embed a type parameter"
-//type IllegalInterface[T any] interface {
-//	int | uint | T
-//}
+//
+//	type IllegalInterface[T any] interface {
+//		int | uint | T
+//	}
+//
 // this is illegal because: "cannot use error in union (error contains methods)"
-//type ErrorOrInt interface {
-//	error | int
-//}
+//
+//	type ErrorOrInt interface {
+//		error | int
+//	}
+//
 // ErrorAndInt however, *is* legal:
 type ErrorAndInt interface {
 	int
@@ -168,8 +176,9 @@ type Integer interface {
 }
 
 // Double is kinda weird, this is how you get typedefs to get carried through to return values
-//   see https://go.googlesource.com/proposal/+/refs/heads/master/design/43651-type-parameters.md#element-constraint-example
-//   compare to: Double[A Integer](xs []A) []A , where the return type is different
+//
+//	see https://go.googlesource.com/proposal/+/refs/heads/master/design/43651-type-parameters.md#element-constraint-example
+//	compare to: Double[A Integer](xs []A) []A , where the return type is different
 func Double[S ~[]A, A Integer](xs S) S {
 	r := make([]A, len(xs))
 	for i, v := range xs {

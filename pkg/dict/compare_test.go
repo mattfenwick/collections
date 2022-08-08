@@ -6,26 +6,26 @@ import (
 	"github.com/onsi/gomega"
 )
 
-//
-//func absoluteValue(i int) int {
-//	if i < 0 {
-//		return i * -1
+//	func absoluteValue(i int) int {
+//		if i < 0 {
+//			return i * -1
+//		}
+//		return i
 //	}
-//	return i
-//}
 //
-//func isPositive[A builtin.Number](a A) bool {
-//	return a > 0
-//}
+//	func isPositive[A builtin.Number](a A) bool {
+//		return a > 0
+//	}
 //
-//var absoluteValueThenSignKey = CompareBy(
+// var absoluteValueThenSignKey = CompareBy(
+//
 //	function.On(builtin.CompareOrdered[int], absoluteValue),
 //	function.On(builtin.CompareBool, isPositive[int]))
 //
-//var signThenAbsoluteValueKey = CompareBy(
+// var signThenAbsoluteValueKey = CompareBy(
+//
 //	function.On(builtin.CompareBool, isPositive[int]),
 //	function.On(builtin.CompareOrdered[int], absoluteValue))
-//
 func RunCompareTests() {
 	Describe("Compare", func() {
 		p1 := map[string]int{"a": 1, "b": 2}

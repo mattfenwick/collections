@@ -21,7 +21,8 @@ func Merge[A any](ctx context.Context, xs []<-chan A) <-chan A {
 }
 
 // Split copies events from a single in channel to multiple out channels.
-//   So, a broadcast.
+//
+//	So, a broadcast.
 func Split[A any](ctx context.Context, in <-chan A, outs []chan<- A) {
 	go func() {
 		select {

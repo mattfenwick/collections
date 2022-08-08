@@ -13,7 +13,8 @@ import (
 //   see https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html
 
 // Append is from (++):
-//   https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:-43--43-
+//
+//	https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:-43--43-
 func Append[A any](xs []A, ys []A) []A {
 	out := append([]A{}, xs...)
 	return append(out, ys...)
@@ -105,7 +106,8 @@ func Intercalate[A any](sep []A, xss [][]A) []A {
 // Permutations is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:permutations
 
 // Foldl is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:foldl
-//   foldl f z [x1, x2, ..., xn] == (...((z `f` x1) `f` x2) `f`...) `f` xn
+//
+//	foldl f z [x1, x2, ..., xn] == (...((z `f` x1) `f` x2) `f`...) `f` xn
 func Foldl[A, B any](combine F2[B, A, B], base B, xs []A) B {
 	out := base
 	for _, x := range xs {
@@ -121,7 +123,8 @@ func Foldl[A, B any](combine F2[B, A, B], base B, xs []A) B {
 // TODO foldl1' https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:foldl1-39-
 
 // Foldr is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:foldr
-//   foldr f z [x1, x2, ..., xn] == x1 `f` (x2 `f` ... (xn `f` z)...)
+//
+//	foldr f z [x1, x2, ..., xn] == x1 `f` (x2 `f` ... (xn `f` z)...)
 func Foldr[A, B any](combine F2[A, B, B], base B, xs []A) B {
 	out := base
 	for i := len(xs) - 1; i >= 0; i-- {
@@ -177,13 +180,15 @@ func Product[A builtin.Number](xs []A) A {
 }
 
 // Maximum is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:maximum
-//   since Haskell's maximum blows up on empty lists, this has been modified for safety
+//
+//	since Haskell's maximum blows up on empty lists, this has been modified for safety
 func Maximum[A Ord[A]](xs []A) *pkg.Maybe[A] {
 	return MaximumBy[A](Compare[A], xs)
 }
 
 // Minimum is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:minimum
-//   since Haskell's minimum blows up on empty lists, this has been modified for safety
+//
+//	since Haskell's minimum blows up on empty lists, this has been modified for safety
 func Minimum[A Ord[A]](xs []A) *pkg.Maybe[A] {
 	return MinimumBy[A](Compare[A], xs)
 }
@@ -243,7 +248,8 @@ func Scanr1[A any](combine F2[A, A, A], xs []A) []A {
 }
 
 // MapAccumL is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:mapAccumL
-//   forall t s a b. Traversable t => (s -> a -> (s, b)) -> s -> t a -> (s, t b)
+//
+//	forall t s a b. Traversable t => (s -> a -> (s, b)) -> s -> t a -> (s, t b)
 func MapAccumL[A, B, S any](accum F2[S, A, *Pair[S, B]], s S, xs []A) *Pair[S, []B] {
 	return Foldl(
 		func(p *Pair[S, []B], a A) *Pair[S, []B] {
@@ -255,7 +261,8 @@ func MapAccumL[A, B, S any](accum F2[S, A, *Pair[S, B]], s S, xs []A) *Pair[S, [
 }
 
 // MapAccumR is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:mapAccumR
-//   forall t s a b. Traversable t => (s -> a -> (s, b)) -> s -> t a -> (s, t b)
+//
+//	forall t s a b. Traversable t => (s -> a -> (s, b)) -> s -> t a -> (s, t b)
 func MapAccumR[A, B, S any](accum F2[S, A, *Pair[S, B]], s S, xs []A) *Pair[S, []B] {
 	return Foldr(
 		func(a A, p *Pair[S, []B]) *Pair[S, []B] {
@@ -267,7 +274,8 @@ func MapAccumR[A, B, S any](accum F2[S, A, *Pair[S, B]], s S, xs []A) *Pair[S, [
 }
 
 // Iterate is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:iterate
-//   it uses a count to avoid an infinite slice
+//
+//	it uses a count to avoid an infinite slice
 func Iterate[A any](count int, f F1[A, A], start A) []A {
 	if count == 0 {
 		return nil
@@ -475,15 +483,17 @@ func Unzip[A, B any](xs []*Pair[A, B]) *Pair[[]A, []B] {
 // TODO set operations: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#g:20
 
 // Sort is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:sort
-//   It orders elements by their natural Ord instance.
+//
+//	It orders elements by their natural Ord instance.
 func Sort[A constraints.Ordered](xs []A) []A {
 	return SortBy(builtin.CompareOrdered[A], xs)
 }
 
 // SortOn is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:sortOn
-//   It uses the decorate/sort/undecorate pattern.
-//   It allows a projection of each element to be used to determine the order.
-//   The projection must be Ordered.
+//
+//	It uses the decorate/sort/undecorate pattern.
+//	It allows a projection of each element to be used to determine the order.
+//	The projection must be Ordered.
 func SortOn[A any, B constraints.Ordered](projection F1[A, B], xs []A) []A {
 	return SortOnBy(projection, builtin.CompareOrdered[B], xs)
 }
@@ -526,8 +536,9 @@ func GroupConsecutiveBy[A any](g F2[A, A, bool], xs []A) [][]A {
 }
 
 // SortBy is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:sortBy
-//   It allows sorting based on a custom comparison operator;
-//   therefore it does not require input elements to have an Ord instance.
+//
+//	It allows sorting based on a custom comparison operator;
+//	therefore it does not require input elements to have an Ord instance.
 func SortBy[A any](compare Comparator[A], xs []A) []A {
 	out := Map(function.Id[A], xs)
 	slices.SortStableFunc(out, ComparatorToLess(compare))

@@ -40,7 +40,8 @@ func EqualMapPairwise[A comparable, B comparable]() Equaler[map[A]B] {
 }
 
 // EqualMapPairwiseBy works by project a map to a list, therefore it's inefficient and probably
-//   best to avoid using unless absolutely necessary!
+//
+//	best to avoid using unless absolutely necessary!
 func EqualMapPairwiseBy[A comparable, B any](equal Equaler[B]) Equaler[map[A]B] {
 	return func(xs map[A]B, ys map[A]B) bool {
 		return maps.EqualFunc(xs, ys, equal)

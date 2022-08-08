@@ -43,9 +43,10 @@ func CompareMapPairwise[A constraints.Ordered, B constraints.Ordered]() Comparat
 }
 
 // CompareMapPairwiseBy works by projecting a map to a list, therefore it's inefficient and probably
-//   best to avoid using unless absolutely necessary!
-//   Note: while `map` requires `A` to be `comparable`, *comparing* maps requires `A` to be Ordered
-//   as well!
+//
+//	best to avoid using unless absolutely necessary!
+//	Note: while `map` requires `A` to be `comparable`, *comparing* maps requires `A` to be Ordered
+//	as well!
 func CompareMapPairwiseBy[A constraints.Ordered, B any](compare Comparator[B]) Comparator[map[A]B] {
 	comparePair := slice.ComparePairBy(builtin.CompareOrdered[A], compare)
 	compareSlice := slice.CompareSlicePairwiseBy(comparePair)

@@ -44,8 +44,9 @@ func FlipApply[A, B any](x A, f F1[A, B]) B {
 //   It doesn't seem to be possible in Golang so we'll leave it out.
 
 // On is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-Function.html#v:on
-//   It's partially applied because the expected use case is to specify the combine/project
-//   args separately from the x/y args.
+//
+//	It's partially applied because the expected use case is to specify the combine/project
+//	args separately from the x/y args.
 func On[A, B, C any](combine func(B, B) C, project func(A) B) func(A, A) C {
 	return func(x A, y A) C {
 		return OnHelper(combine, project, x, y)

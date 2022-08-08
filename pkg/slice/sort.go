@@ -20,7 +20,8 @@ func ComparatorToLess[A any](comparator Comparator[A]) func(A, A) bool {
 }
 
 // SortOnBy combines the functionality of `SortOn` and `SortBy`,
-//   thereby separating projection and comparison functions
+//
+//	thereby separating projection and comparison functions
 func SortOnBy[A any, B any](projection F1[A, B], compare Comparator[B], xs []A) []A {
 	pairs := Map(func(a A) *Pair[A, B] { return NewPair(a, projection(a)) }, xs)
 	slices.SortStableFunc(pairs, func(p1, p2 *Pair[A, B]) bool {
