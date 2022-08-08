@@ -1,5 +1,7 @@
 package iterable
 
+import "context"
+
 type Iterator[A any] interface {
 	Next() *A // TODO should this be (A, bool) ?
 }
@@ -20,11 +22,15 @@ func ToSlice[A any](i Iterator[A]) []A {
 	return out
 }
 
-// ToChannel TODO does this need a context?
-func ToChannel[A any](i Iterator[A]) <-chan A {
+func ToChannel[A any](ctx context.Context, i Iterator[A]) <-chan A {
 	channel := make(chan A)
 	go func() {
 		for {
+			select {
+			case <-ctx.Done():
+				return
+			default:
+			}
 			next := i.Next()
 			if next == nil {
 				break
