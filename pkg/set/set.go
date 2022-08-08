@@ -32,6 +32,15 @@ func NewSet[A comparable](elems iterable.Iterable[A]) *Set[A] {
 	return NewSetBy(function.Id[A], elems)
 }
 
+// NewSetBy allows creation of a set from an element type which isn't comparable.
+//
+//	Why is 'comparable' required?  Because this set implementation uses a map.
+//	Unfortunately, it's not possible to add implementations of user-defined types for comparable.
+//	This uses a projection function to create a `comparable` key.
+//	VERY VERY VERY IMPORTANT NOTES about the projection function:
+//	- it should be a pure function (no side effects)
+//	- it should make intuitive sense
+//	- don't mix sets which use different projections -- the results will be unpredictable and won't make sense
 func NewSetBy[A any, K comparable](projection func(A) K, initialElements iterable.Iterable[A]) *Set[A] {
 	elems := map[K]A{}
 	var s *Set[A]
@@ -59,7 +68,7 @@ func NewSetBy[A any, K comparable](projection func(A) K, initialElements iterabl
 			return maps.Values(elems)
 		},
 		Union: func(other *Set[A]) *Set[A] {
-			return NewSetBy[A, K](projection, slice.Slice[A](append(s.ToSlice(), other.ToSlice()...)))
+			return FromSliceBy[A, K](projection, append(s.ToSlice(), other.ToSlice()...))
 		},
 		Intersect: func(other *Set[A]) *Set[A] {
 			var out []A
@@ -68,7 +77,7 @@ func NewSetBy[A any, K comparable](projection func(A) K, initialElements iterabl
 					out = append(out, val)
 				}
 			}
-			return NewSetBy[A, K](projection, slice.Slice[A](out))
+			return FromSliceBy[A, K](projection, out)
 		},
 		Difference: func(other *Set[A]) *Set[A] {
 			var out []A
@@ -77,7 +86,7 @@ func NewSetBy[A any, K comparable](projection func(A) K, initialElements iterabl
 					out = append(out, val)
 				}
 			}
-			return NewSetBy[A, K](projection, slice.Slice[A](out))
+			return FromSliceBy[A, K](projection, out)
 		},
 		Iterator: func() iterable.Iterator[A] {
 			return dict.ValuesIterator(elems)
