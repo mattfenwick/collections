@@ -61,3 +61,18 @@ func Map[A, B any](f func(A) B, iterator Iterator[A]) Iterator[B] {
 		},
 	}
 }
+
+func Filter[A any](predicate func(A) bool, iterator Iterator[A]) Iterator[A] {
+	return &FunctionIterator[A]{
+		F: func() *A {
+			next := iterator.Next()
+			if next == nil {
+				return nil
+			}
+			if predicate(*next) {
+				return next
+			}
+			return nil
+		},
+	}
+}
