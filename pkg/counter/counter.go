@@ -11,15 +11,17 @@ import (
 )
 
 type Counter[A any] struct {
-	AddN       func(A, int) int
-	RemoveN    func(A, int) int
-	Get        func(A) int
-	Len        func() int
-	ToSlice    func() []*base.Pair[A, int]
-	Union      func(*Counter[A]) *Counter[A]
-	Intersect  func(*Counter[A]) *Counter[A]
-	Difference func(*Counter[A]) *Counter[A]
-	Iterator   func() iterable.Iterator[*base.Pair[A, int]]
+	AddN           func(A, int) int
+	RemoveN        func(A, int) int
+	Get            func(A) int
+	Len            func() int
+	ToSlice        func() []*base.Pair[A, int]
+	Union          func(*Counter[A]) *Counter[A]
+	Intersect      func(*Counter[A]) *Counter[A]
+	Difference     func(*Counter[A]) *Counter[A]
+	Iterator       func() iterable.Iterator[*base.Pair[A, int]]
+	KeysIterator   func() iterable.Iterator[A]
+	CountsIterator func() iterable.Iterator[int]
 }
 
 func FromSlice[A comparable](elems []*base.Pair[A, int]) *Counter[A] {
@@ -100,6 +102,12 @@ func NewCounterBy[A any, K comparable](projection func(A) K, initialElements ite
 		},
 		Iterator: func() iterable.Iterator[*base.Pair[A, int]] {
 			return dict.ValuesIterator(counts)
+		},
+		KeysIterator: func() iterable.Iterator[A] {
+			return iterable.Map(base.Fst[A, int], c.Iterator())
+		},
+		CountsIterator: func() iterable.Iterator[int] {
+			return iterable.Map(base.Snd[A, int], c.Iterator())
 		},
 	}
 	iterator := initialElements.Iterator()

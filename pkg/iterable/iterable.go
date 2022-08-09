@@ -48,3 +48,16 @@ type FunctionIterator[A any] struct {
 func (f *FunctionIterator[A]) Next() *A {
 	return f.F()
 }
+
+func Map[A, B any](f func(A) B, iterator Iterator[A]) Iterator[B] {
+	return &FunctionIterator[B]{
+		F: func() *B {
+			next := iterator.Next()
+			if next == nil {
+				return nil
+			}
+			newValue := f(*next)
+			return &newValue
+		},
+	}
+}
