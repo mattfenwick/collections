@@ -15,8 +15,3 @@ func Equal[T Eq[T]](a T, b T) bool {
 func NotEqual[T Eq[T]](a T, b T) bool {
 	return !a.Equal(b)
 }
-
-// TODO any way to use this?
-//func EqualComparable[T comparable](a T, b T) bool {
-//	return a == b
-//}
