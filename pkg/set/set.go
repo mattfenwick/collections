@@ -20,6 +20,10 @@ type Set[A any] struct {
 	Iterator   func() iterable.Iterator[A]
 }
 
+func Empty[A comparable]() *Set[A] {
+	return NewSetBy[A](function.Id[A], slice.Slice[A](nil))
+}
+
 func FromSlice[A comparable](elems []A) *Set[A] {
 	return NewSetBy[A](function.Id[A], slice.Slice[A](elems))
 }
