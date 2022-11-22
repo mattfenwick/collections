@@ -96,13 +96,15 @@ func NewSetBy[A any, K comparable](projection func(A) K, initialElements iterabl
 			return dict.ValuesIterator(elems)
 		},
 	}
-	iterator := initialElements.Iterator()
-	for {
-		x := iterator.Next()
-		if x == nil {
-			break
+	if initialElements != nil {
+		iterator := initialElements.Iterator()
+		for {
+			x := iterator.Next()
+			if x == nil {
+				break
+			}
+			s.Add(*x)
 		}
-		s.Add(*x)
 	}
 	return s
 }

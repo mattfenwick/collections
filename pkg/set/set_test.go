@@ -13,6 +13,12 @@ func RunSetTests() {
 		s2 := FromSlice([]int{24, 3})
 		s3 := FromSlice([]int{8, 7, 8, 9})
 		s4 := FromSlice([]int{12, -12, 21, 3, 2})
+		empty := NewSet[int](nil)
+
+		It("handles nils", func() {
+			gomega.Expect(empty.Len()).To(gomega.Equal(0))
+			gomega.Expect(empty.ToSlice()).To(gomega.Equal([]int{}))
+		})
 
 		It("basic methods", func() {
 			ints := []int{13, 4, 12}
