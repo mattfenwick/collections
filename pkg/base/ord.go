@@ -97,6 +97,18 @@ func (a Bool) Compare(b Bool) Ordering {
 	return OrderingGreaterThan
 }
 
+func CompareReverse[A any](compare Comparator[A]) Comparator[A] {
+	return func(x A, y A) Ordering {
+		return FlipOrdering(compare(x, y))
+	}
+}
+
+func CompareOnOrd[A any, B Ord[B]](on func(A) B) Comparator[A] {
+	return func(l A, r A) Ordering {
+		return Compare(on(l), on(r))
+	}
+}
+
 // TODO how to sort complex numbers?  Python doesn't seem to support this?
 //   maybe it's not a good idea?
 //func (a Complex64) Compare(b Complex64) Ordering {

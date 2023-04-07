@@ -99,9 +99,3 @@ func CompareBys[A any](comparisons []Comparator[A]) Comparator[A] {
 		return OrderingEqual
 	}
 }
-
-func CompareReverse[A any](compare Comparator[A]) Comparator[A] {
-	return func(x A, y A) Ordering {
-		return FlipOrdering(compare(x, y))
-	}
-}
