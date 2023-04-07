@@ -27,3 +27,9 @@ func CompareBool(a bool, b bool) base.Ordering {
 	}
 	return base.OrderingGreaterThan
 }
+
+func CompareOn[A any, B constraints.Ordered](on func(A) B) base.Comparator[A] {
+	return func(l A, r A) base.Ordering {
+		return CompareOrdered(on(l), on(r))
+	}
+}
