@@ -6,7 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
-	"io/ioutil"
+	"os"
 	"path"
 	"strings"
 )
@@ -144,5 +144,5 @@ func ModelToText(dir string, packageName string) error {
 }
 
 func WriteFile(filename string, contents string) error {
-	return errors.Wrapf(ioutil.WriteFile(filename, []byte(contents), 0644), "unable to write file %s", filename)
+	return errors.Wrapf(os.WriteFile(filename, []byte(contents), 0644), "unable to write file %s", filename)
 }
