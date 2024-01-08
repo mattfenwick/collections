@@ -137,6 +137,24 @@ func (a Bool) Compare(b Bool) Ordering {
 	return OrderingGreaterThan
 }
 
+// ComparatorToCmp converts a Comparator to a `cmp` function needed for using
+//
+//	golang's package `golang.org/x/exp/slices` sort functionality
+//	 cmp(a, b) should return a negative number when a < b, a positive number when
+//	 a > b and zero when a == b.
+func ComparatorToCmp[A any](comparator Comparator[A]) func(A, A) int {
+	return func(a A, b A) int {
+		switch comparator(a, b) {
+		case OrderingLessThan:
+			return -1
+		case OrderingEqual:
+			return 0
+		default:
+			return 1
+		}
+	}
+}
+
 // OrdBox allows any constraints.Ordered to be used as an Ord
 type OrdBox[A constraints.Ordered] struct {
 	Value A

@@ -14,27 +14,13 @@ func SortOnOrd[A any, B Ord[B]](projection F1[A, B], xs []A) []A {
 	return SortOnBy(projection, Compare[B], xs)
 }
 
+// ComparatorToLess was useful for working with older versions of the golang.org/x/exp/slices
+//
+//	package, whose sort functions used a different function type for comparison than they
+//	currently do.  This function probably isn't useful anymore.
 func ComparatorToLess[A any](comparator Comparator[A]) func(A, A) bool {
 	return func(a A, b A) bool {
 		return comparator(a, b) == OrderingLessThan
-	}
-}
-
-// ComparatorToCmp converts a Comparator to a `cmp` function needed for using
-//
-//	golang's package `golang.org/x/exp/slices` sort functionality
-//	 cmp(a, b) should return a negative number when a < b, a positive number when
-//	 a > b and zero when a == b.
-func ComparatorToCmp[A any](comparator Comparator[A]) func(A, A) int {
-	return func(a A, b A) int {
-		switch comparator(a, b) {
-		case OrderingLessThan:
-			return -1
-		case OrderingEqual:
-			return 0
-		default:
-			return 1
-		}
 	}
 }
 
