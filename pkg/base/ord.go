@@ -181,6 +181,33 @@ func UnboxOrd[A constraints.Ordered](v *OrdBox[A]) A {
 	return v.Value
 }
 
+// OrdBoxBy allows any type to be used as an Ord.
+//
+//	Note that since each value carries its own Equaler and Comparator,
+//	you'll get weird results if you mix OrdBoxBys which have different
+//	Equalers or Comparators.  So don't do this.
+type OrdBoxBy[A any] struct {
+	Value A
+	Eq    Equaler[A]
+	Ord   Comparator[A]
+}
+
+func (o *OrdBoxBy[A]) Equal(other *OrdBoxBy[A]) bool {
+	return o.Eq(o.Value, other.Value)
+}
+
+func (o *OrdBoxBy[A]) Compare(other *OrdBoxBy[A]) Ordering {
+	return o.Ord(o.Value, other.Value)
+}
+
+func BoxOrdBy[A any](a A, eq Equaler[A], ord Comparator[A]) *OrdBoxBy[A] {
+	return &OrdBoxBy[A]{Value: a, Eq: eq, Ord: ord}
+}
+
+func UnboxOrdBy[A any](v *OrdBoxBy[A]) A {
+	return v.Value
+}
+
 // TODO how to sort complex numbers?  Python doesn't seem to support this?
 //   maybe it's not a good idea?
 //func (a Complex64) Compare(b Complex64) Ordering {

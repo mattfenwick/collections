@@ -40,3 +40,21 @@ func BoxEq[A comparable](a A) *EqBox[A] {
 func UnboxEq[A comparable](v *EqBox[A]) A {
 	return v.Value
 }
+
+// EqBoxBy allows any type to be used as an Eq
+type EqBoxBy[A any] struct {
+	Value A
+	Eq    Equaler[A]
+}
+
+func (e *EqBoxBy[A]) Equal(other *EqBoxBy[A]) bool {
+	return e.Eq(e.Value, other.Value)
+}
+
+func BoxEqBy[A any](a A, eq Equaler[A]) *EqBoxBy[A] {
+	return &EqBoxBy[A]{Value: a, Eq: eq}
+}
+
+func UnboxEqBy[A any](v *EqBoxBy[A]) A {
+	return v.Value
+}
