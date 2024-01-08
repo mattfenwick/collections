@@ -1,4 +1,4 @@
-package set
+package unstable
 
 import (
 	. "github.com/onsi/ginkgo/v2"
@@ -6,10 +6,10 @@ import (
 	"testing"
 )
 
-func TestSet(t *testing.T) {
+func TestSuite(t *testing.T) {
 	gomega.RegisterFailHandler(Fail)
 
-	RunSetTests()
+	RunTableTests()
 
-	RunSpecs(t, "set suite")
+	RunSpecs(t, "unstable suite")
 }
