@@ -60,8 +60,13 @@ Practical implications -- be careful when:
  - checking `comparable` types for equality
  - using `comparable` types in sets
 
+### Cases where you'd like to use methods, but instead have to use free functions
 
-### Method can't have type parameters
+Practical implications: some functionality has to be implemented as free functions instead of
+methods, which is a bit annoying in terms of autocomplete and findability of functionality.
+
+
+#### Method can't have type parameters
 
 Example: you have a type `type Table[A any, V any] struct`
 
@@ -73,5 +78,47 @@ func (t *Table[A, V])MapValues[A any, V any, W any](f func(V) W) *Table[A, W] {
 
 However, this won't compile -- `method can't have type parameters`
 
-Practical implications: some functionality has to be implemented as free functions instead of
-methods, which is a bit annoying in terms of autocomplete and findability of functionality.
+
+#### Method can't have additional type constraints
+
+It's not possible to equip Pair with an `Eq` instance:
+
+```golang
+//func (p *Pair[A, B]) Equal[A Eq[A], B Eq[B]](p2 *Pair[A, B]) bool {
+//	return p.Fst.Equal(p2.Fst)
+//}
+```
+
+Note that we only want to have this instance available when *both* of the
+type parameters are also `Eq` -- otherwise, this instance shouldn't be available.
+
+Instead, we have to use a free function to bring in the type constraints:
+
+```golang
+func EqualPairEq[A Eq[A], B Eq[B]]() Equaler[*Pair[A, B]] {
+	return EqualPairBy(Equal[A], Equal[B])
+}}
+```
+
+
+## Open questions
+
+### Interface embedding vs curiously-recurring type constraint
+
+Related: [some background on CRTP](https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern).
+
+How, precisely, are these two examples different from each other and when should one or the
+other be used?
+
+```golang
+type Ord[T any] interface {
+  Eq[T]
+  Compare(T) Ordering
+}
+```
+
+```golang
+type Ord2[T Eq[T]] interface {
+    Compare(T) Ordering
+}
+```
