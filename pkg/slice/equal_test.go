@@ -27,7 +27,8 @@ func RunEqualTests() {
 			gomega.Expect(equal([]int{14, 32, 65, 8}, []int{14, 32, 65, 8})).To(gomega.Equal(true))
 		})
 		It("slice equality -- SliceOrd", func() {
-			gomega.Expect(Equal[SliceOrd[Int]]([]Int{}, []Int{})).To(gomega.Equal(true))
+			box := SliceEq([]Int{})
+			gomega.Expect(Equal[*EqBoxBy[[]Int]](box, box)).To(gomega.Equal(true))
 		})
 	})
 }

@@ -71,11 +71,13 @@ func EqExample() {
 		fmt.Printf("looking for %d: result %d\n", x, slice.IndexEq(a, x))
 	}
 
+	boxA := slice.SliceEq(a)
+	boxB := slice.SliceEq(b)
 	fmt.Printf("Eq? %+v, %+v\n%+v, %+v, %+v, %+v\n",
 		a, b,
-		slice.SliceEq[Uint](a).Equal(a),
-		slice.SliceEq[Uint](a).Equal(b),
-		slice.SliceEq[Uint](b).Equal(a),
-		slice.SliceEq[Uint](b).Equal(b))
+		boxA.Equal(boxA),
+		boxA.Equal(boxB),
+		boxB.Equal(boxA),
+		boxB.Equal(boxB))
 	fmt.Println()
 }
