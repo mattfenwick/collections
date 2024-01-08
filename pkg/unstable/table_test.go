@@ -8,12 +8,16 @@ import (
 	"github.com/onsi/gomega"
 )
 
+func pair[A any, B any](a A, b B) *base.Pair[A, B] {
+	return base.NewPair(a, b)
+}
+
 func RunTableTests() {
 	Describe("Table", func() {
 		t1 := FromSlice([]*base.Pair[int, int]{})
-		t2 := FromSlice([]*base.Pair[int, int]{{24, 12}, {3, 5}})
-		t3 := FromSlice([]*base.Pair[int, int]{{8, 1}, {7, 2}, {8, 3}, {9, 4}})
-		t4 := FromSlice([]*base.Pair[int, int]{{12, 1}, {-12, 2}, {21, 3}, {3, 4}, {2, 5}})
+		t2 := FromSlice([]*base.Pair[int, int]{pair(24, 12), pair(3, 5)})
+		t3 := FromSlice([]*base.Pair[int, int]{pair(8, 1), pair(7, 2), pair(8, 3), pair(9, 4)})
+		t4 := FromSlice([]*base.Pair[int, int]{pair(12, 1), pair(-12, 2), pair(21, 3), pair(3, 4), pair(2, 5)})
 		empty := NewTable[int, int](nil)
 
 		It("handles nils", func() {
@@ -22,7 +26,7 @@ func RunTableTests() {
 		})
 
 		It("basic methods", func() {
-			ints := []*base.Pair[int, int]{{13, 1}, {4, 2}, {12, 3}}
+			ints := []*base.Pair[int, int]{pair(13, 1), pair(4, 2), pair(12, 3)}
 			t := FromSlice(ints)
 			gomega.Expect(t.Len()).To(gomega.Equal(3))
 			for _, x := range ints {
@@ -35,7 +39,7 @@ func RunTableTests() {
 				gomega.Expect(t.Get(x)).To(gomega.BeNil())
 			}
 			gomega.Expect(slice.SortOn(base.Fst[int, int], t.ToSlice())).To(
-				gomega.Equal([]*base.Pair[int, int]{{4, 2}, {12, 3}, {13, 1}}))
+				gomega.Equal([]*base.Pair[int, int]{pair(4, 2), pair(12, 3), pair(13, 1)}))
 
 			gomega.Expect(t.Delete(5)).To(gomega.BeNil())
 			gomega.Expect(t.Len()).To(gomega.Equal(3))
@@ -43,13 +47,13 @@ func RunTableTests() {
 			gomega.Expect(*t.Delete(12)).To(gomega.Equal(3))
 			gomega.Expect(t.Len()).To(gomega.Equal(2))
 			gomega.Expect(slice.SortOn(base.Fst[int, int], t.ToSlice())).To(
-				gomega.Equal([]*base.Pair[int, int]{{4, 2}, {13, 1}}))
+				gomega.Equal([]*base.Pair[int, int]{pair(4, 2), pair(13, 1)}))
 
 			gomega.Expect(t.Set(45, 4)).To(gomega.BeTrue())
 			gomega.Expect(t.Set(45, 4)).To(gomega.BeFalse())
 			gomega.Expect(t.Len()).To(gomega.Equal(3))
 			gomega.Expect(slice.SortOn(base.Fst[int, int], t.ToSlice())).To(
-				gomega.Equal([]*base.Pair[int, int]{{4, 2}, {13, 1}, {45, 4}}))
+				gomega.Equal([]*base.Pair[int, int]{pair(4, 2), pair(13, 1), pair(45, 4)}))
 		})
 
 		It("Len", func() {
@@ -69,19 +73,19 @@ func RunTableTests() {
 				{empty, t2, Entries(t2)},
 				{t2, t2, Entries(t2)},
 				{t2, t4, []*base.Pair[int, int]{
-					{-12, 2},
-					{2, 5},
-					{3, 4},
-					{12, 1},
-					{21, 3},
-					{24, 12}}},
+					pair(-12, 2),
+					pair(2, 5),
+					pair(3, 4),
+					pair(12, 1),
+					pair(21, 3),
+					pair(24, 12)}},
 				{t4, t2, []*base.Pair[int, int]{
-					{-12, 2},
-					{2, 5},
-					{3, 5},
-					{12, 1},
-					{21, 3},
-					{24, 12}}},
+					pair(-12, 2),
+					pair(2, 5),
+					pair(3, 5),
+					pair(12, 1),
+					pair(21, 3),
+					pair(24, 12)}},
 			}
 			for _, c := range cases {
 				actual := Entries(c.Left.Merge(c.Right))
@@ -113,7 +117,7 @@ func RunTableTests() {
 		It("Iterator", func() {
 			ints := slice.SortOn(base.Fst[int, int], iterable.ToSlice(t4.Iterator()))
 			gomega.Expect(ints).To(
-				gomega.Equal([]*base.Pair[int, int]{{-12, 2}, {2, 5}, {3, 4}, {12, 1}, {21, 3}}))
+				gomega.Equal([]*base.Pair[int, int]{pair(-12, 2), pair(2, 5), pair(3, 4), pair(12, 1), pair(21, 3)}))
 		})
 
 		It("When using a pointer type as a key: difference between using golang's builtin comparable vs. user-defined equality", func() {
