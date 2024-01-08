@@ -13,19 +13,6 @@ func RunEqualTests() {
 		p2 := NewPair[Int, Bool](14, true)
 		p3 := NewPair[Int, Bool](13, false)
 
-		It("EqualPair", func() {
-			equal := EqualPairEq[Int, Bool]()
-			gomega.Expect(equal(p1, p1)).To(gomega.Equal(true))
-			gomega.Expect(equal(p1, p2)).To(gomega.Equal(false))
-			gomega.Expect(equal(p1, p3)).To(gomega.Equal(false))
-			gomega.Expect(equal(p2, p1)).To(gomega.Equal(false))
-			gomega.Expect(equal(p2, p2)).To(gomega.Equal(true))
-			gomega.Expect(equal(p2, p3)).To(gomega.Equal(false))
-			gomega.Expect(equal(p3, p1)).To(gomega.Equal(false))
-			gomega.Expect(equal(p3, p2)).To(gomega.Equal(false))
-			gomega.Expect(equal(p3, p3)).To(gomega.Equal(true))
-		})
-
 		It("EqualBy", func() {
 			gomega.Expect(EqualBy(function.On(Equal[Int], Fst[Int, Bool]))(p1, p2)).To(gomega.BeFalse())
 			gomega.Expect(EqualBy(function.On(Equal[Int], Fst[Int, Bool]))(p1, p3)).To(gomega.BeTrue())

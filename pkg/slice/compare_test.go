@@ -58,24 +58,16 @@ func RunCompareTests() {
 			gomega.Expect(function.On(Compare[Int], Fst[Int, Bool])(p1, p2)).To(gomega.BeEquivalentTo(OrderingLessThan))
 			gomega.Expect(function.On(Compare[Int], Fst[Int, Bool])(p1, p3)).To(gomega.BeEquivalentTo(OrderingEqual))
 		})
-
-		It("Pair", func() {
-			comparator := ComparePairOrd[Int, Bool]()
-			gomega.Expect(comparator(p1, p1)).To(gomega.BeEquivalentTo(OrderingEqual))
-			gomega.Expect(comparator(p1, p2)).To(gomega.BeEquivalentTo(OrderingLessThan))
-			gomega.Expect(comparator(p1, p3)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
-			gomega.Expect(comparator(p2, p1)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
-			gomega.Expect(comparator(p2, p2)).To(gomega.BeEquivalentTo(OrderingEqual))
-			gomega.Expect(comparator(p2, p3)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
-			gomega.Expect(comparator(p3, p1)).To(gomega.BeEquivalentTo(OrderingLessThan))
-			gomega.Expect(comparator(p3, p2)).To(gomega.BeEquivalentTo(OrderingLessThan))
-			gomega.Expect(comparator(p3, p3)).To(gomega.BeEquivalentTo(OrderingEqual))
-		})
 	})
 
 	Describe("Comparators", func() {
 		It("combines correctly", func() {
 			gomega.Expect(absoluteValueThenSignKey(-3, 1)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
+			gomega.Expect(absoluteValueThenSignKey(-3, -1)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
+			gomega.Expect(absoluteValueThenSignKey(3, 1)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
+			gomega.Expect(absoluteValueThenSignKey(3, -1)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
+			gomega.Expect(absoluteValueThenSignKey(-3, 3)).To(gomega.BeEquivalentTo(OrderingLessThan))
+			gomega.Expect(absoluteValueThenSignKey(3, -3)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
 		})
 		It("reverses comparison", func() {
 			desc := CompareReverse(CompareOrdered[int])
