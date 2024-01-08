@@ -541,7 +541,7 @@ func GroupConsecutiveBy[A any](g F2[A, A, bool], xs []A) [][]A {
 //	therefore it does not require input elements to have an Ord instance.
 func SortBy[A any](compare Comparator[A], xs []A) []A {
 	out := Map(function.Id[A], xs)
-	slices.SortStableFunc(out, ComparatorToLess(compare))
+	slices.SortStableFunc(out, ComparatorToCmp(compare))
 	return out
 }
 
