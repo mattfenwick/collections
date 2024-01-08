@@ -1,10 +1,10 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	. "github.com/mattfenwick/collections/pkg/base"
 	"github.com/mattfenwick/collections/pkg/dict"
+	"github.com/mattfenwick/collections/pkg/json"
 	"github.com/mattfenwick/collections/pkg/slice"
 )
 
@@ -58,18 +58,10 @@ func SortExample() {
 		{Fst: 10, Snd: "jkl"},
 	}
 	fmt.Printf("sort pairs: %+v\n  %+v -- natural\n  %+v -- first element\n  %+v -- 2nd element\n\n",
-		DumpJson(pairs),
-		DumpJson(slice.SortBy(slice.ComparePair[int, string](), pairs)),
-		DumpJson(slice.SortOn(Fst[int, string], pairs)),
-		DumpJson(slice.SortOn(Snd[int, string], pairs)))
-}
-
-func DumpJson(obj interface{}) string {
-	bytes, err := json.Marshal(obj)
-	if err != nil {
-		panic(err)
-	}
-	return string(bytes)
+		json.MustMarshalToString(pairs),
+		json.MustMarshalToString(slice.SortBy(ComparePair[int, string](), pairs)),
+		json.MustMarshalToString(slice.SortOn(Fst[int, string], pairs)),
+		json.MustMarshalToString(slice.SortOn(Snd[int, string], pairs)))
 }
 
 func EqExample() {

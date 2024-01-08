@@ -21,11 +21,11 @@ type Set[A any] struct {
 }
 
 func Empty[A comparable]() *Set[A] {
-	return NewSetBy[A](function.Id[A], slice.Slice[A](nil))
+	return NewSetBy[A, A](function.Id[A], slice.Slice[A](nil))
 }
 
 func FromSlice[A comparable](elems []A) *Set[A] {
-	return NewSetBy[A](function.Id[A], slice.Slice[A](elems))
+	return NewSetBy[A, A](function.Id[A], slice.Slice[A](elems))
 }
 
 func FromSliceBy[A any, K comparable](projection func(A) K, elems []A) *Set[A] {

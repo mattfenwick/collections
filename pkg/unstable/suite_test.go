@@ -1,4 +1,4 @@
-package builtin
+package unstable
 
 import (
 	. "github.com/onsi/ginkgo/v2"
@@ -6,8 +6,10 @@ import (
 	"testing"
 )
 
-func TestMatcher(t *testing.T) {
+func TestSuite(t *testing.T) {
 	gomega.RegisterFailHandler(Fail)
-	RunCompareTests()
-	RunSpecs(t, "builtins suite")
+
+	RunTableTests()
+
+	RunSpecs(t, "unstable suite")
 }

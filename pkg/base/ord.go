@@ -1,6 +1,9 @@
 package base
 
-import "fmt"
+import (
+	"fmt"
+	"golang.org/x/exp/constraints"
+)
 
 // see https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-Ord.html#v:comparing for ideas
 
@@ -87,16 +90,6 @@ func Min[T Ord[T]](a T, b T) T {
 	return b
 }
 
-func (a Bool) Compare(b Bool) Ordering {
-	if a == b {
-		return OrderingEqual
-	}
-	if !a {
-		return OrderingLessThan
-	}
-	return OrderingGreaterThan
-}
-
 func CompareReverse[A any](compare Comparator[A]) Comparator[A] {
 	return func(x A, y A) Ordering {
 		return FlipOrdering(compare(x, y))
@@ -107,6 +100,67 @@ func CompareOnOrd[A any, B Ord[B]](on func(A) B) Comparator[A] {
 	return func(l A, r A) Ordering {
 		return Compare(on(l), on(r))
 	}
+}
+
+func CompareOrdered[A constraints.Ordered](a A, b A) Ordering {
+	if a < b {
+		return OrderingLessThan
+	} else if a == b {
+		return OrderingEqual
+	} else {
+		return OrderingGreaterThan
+	}
+}
+
+func CompareOn[A any, B constraints.Ordered](on func(A) B) Comparator[A] {
+	return func(l A, r A) Ordering {
+		return CompareOrdered(on(l), on(r))
+	}
+}
+
+func CompareBool(a bool, b bool) Ordering {
+	if a == b {
+		return OrderingEqual
+	} else if !a {
+		return OrderingLessThan
+	}
+	return OrderingGreaterThan
+}
+
+func (a Bool) Compare(b Bool) Ordering {
+	if a == b {
+		return OrderingEqual
+	}
+	if !a {
+		return OrderingLessThan
+	}
+	return OrderingGreaterThan
+}
+
+// OrdBox allows any constraints.Ordered to be used as an Ord
+type OrdBox[A constraints.Ordered] struct {
+	Value A
+}
+
+func (o *OrdBox[A]) Equal(other *OrdBox[A]) bool {
+	return o.Value == other.Value
+}
+
+func (o *OrdBox[A]) Compare(other *OrdBox[A]) Ordering {
+	if o.Value < other.Value {
+		return OrderingLessThan
+	} else if o.Value == other.Value {
+		return OrderingEqual
+	}
+	return OrderingGreaterThan
+}
+
+func BoxOrd[A constraints.Ordered](a A) *OrdBox[A] {
+	return &OrdBox[A]{Value: a}
+}
+
+func UnboxOrd[A constraints.Ordered](v *OrdBox[A]) A {
+	return v.Value
 }
 
 // TODO how to sort complex numbers?  Python doesn't seem to support this?

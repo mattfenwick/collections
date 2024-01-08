@@ -28,7 +28,7 @@ func IndexEq[T Eq[T]](s []T, e T) int {
 }
 
 func Index[T comparable](s []T, e T) int {
-	return IndexBy(builtin.Equal[T], s, e)
+	return IndexBy(builtin.EQ[T], s, e)
 }
 
 func IndexBy[T any](equal Equaler[T], s []T, e T) int {
@@ -45,7 +45,7 @@ func IsPrefixOfEq[A Eq[A]](xs []A, ys []A) bool {
 }
 
 func IsPrefixOf[A comparable](xs []A, ys []A) bool {
-	return IsPrefixOfBy(builtin.Equal[A], xs, ys)
+	return IsPrefixOfBy(builtin.EQ[A], xs, ys)
 }
 
 func IsPrefixOfBy[A any](equal Equaler[A], xs []A, ys []A) bool {

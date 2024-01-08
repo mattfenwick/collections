@@ -11,7 +11,7 @@ func EqualMapIndexEq[A comparable, B Eq[B]](key A) Equaler[map[A]B] {
 }
 
 func EqualMapIndex[A comparable, B comparable](key A) Equaler[map[A]B] {
-	return EqualMapIndexBy(key, builtin.Equal[B])
+	return EqualMapIndexBy(key, builtin.EQ[B])
 }
 
 // EqualMapIndexBy equals a single index
@@ -36,7 +36,7 @@ func EqualMapPairwiseEq[A comparable, B Eq[B]]() Equaler[map[A]B] {
 }
 
 func EqualMapPairwise[A comparable, B comparable]() Equaler[map[A]B] {
-	return EqualMapPairwiseBy[A, B](builtin.Equal[B])
+	return EqualMapPairwiseBy[A, B](builtin.EQ[B])
 }
 
 // EqualMapPairwiseBy works by project a map to a list, therefore it's inefficient and probably

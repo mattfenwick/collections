@@ -6,10 +6,10 @@ import (
 	"testing"
 )
 
-func TestMatcher(t *testing.T) {
+func TestSet(t *testing.T) {
 	gomega.RegisterFailHandler(Fail)
 
 	RunSetTests()
 
-	RunSpecs(t, "builtins suite")
+	RunSpecs(t, "set suite")
 }
