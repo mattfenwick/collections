@@ -486,7 +486,7 @@ func Unzip[A, B any](xs []*Pair[A, B]) *Pair[[]A, []B] {
 //
 //	It orders elements by their natural Ord instance.
 func Sort[A constraints.Ordered](xs []A) []A {
-	return SortBy(builtin.CompareOrdered[A], xs)
+	return SortBy(CompareOrdered[A], xs)
 }
 
 // SortOn is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:sortOn
@@ -495,7 +495,7 @@ func Sort[A constraints.Ordered](xs []A) []A {
 //	It allows a projection of each element to be used to determine the order.
 //	The projection must be Ordered.
 func SortOn[A any, B constraints.Ordered](projection F1[A, B], xs []A) []A {
-	return SortOnBy(projection, builtin.CompareOrdered[B], xs)
+	return SortOnBy(projection, CompareOrdered[B], xs)
 }
 
 // Insert is from: https://hackage.haskell.org/package/base-4.16.2.0/docs/Data-List.html#v:insert

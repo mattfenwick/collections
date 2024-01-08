@@ -59,7 +59,7 @@ func SortExample() {
 	}
 	fmt.Printf("sort pairs: %+v\n  %+v -- natural\n  %+v -- first element\n  %+v -- 2nd element\n\n",
 		DumpJson(pairs),
-		DumpJson(slice.SortBy(slice.ComparePair[int, string](), pairs)),
+		DumpJson(slice.SortBy(ComparePair[int, string](), pairs)),
 		DumpJson(slice.SortOn(Fst[int, string], pairs)),
 		DumpJson(slice.SortOn(Snd[int, string], pairs)))
 }

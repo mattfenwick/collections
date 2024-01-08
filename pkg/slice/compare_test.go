@@ -20,17 +20,17 @@ func isPositive[A builtin.Number](a A) bool {
 }
 
 var absoluteValueThenSignKey = CompareBy(
-	function.On(builtin.CompareOrdered[int], absoluteValue),
-	function.On(builtin.CompareBool, isPositive[int]))
+	function.On(CompareOrdered[int], absoluteValue),
+	function.On(CompareBool, isPositive[int]))
 
 var signThenAbsoluteValueKey = CompareBy(
-	function.On(builtin.CompareBool, isPositive[int]),
-	function.On(builtin.CompareOrdered[int], absoluteValue))
+	function.On(CompareBool, isPositive[int]),
+	function.On(CompareOrdered[int], absoluteValue))
 
 func RunCompareTests() {
 	Describe("Compare", func() {
 		It("slice ordering", func() {
-			compare := CompareSlicePairwiseBy(builtin.CompareOrdered[int])
+			compare := CompareSlicePairwiseBy(CompareOrdered[int])
 			gomega.Expect(compare([]int{}, []int{})).To(gomega.BeEquivalentTo(OrderingEqual))
 
 			gomega.Expect(compare([]int{4}, []int{})).To(gomega.BeEquivalentTo(OrderingGreaterThan))
@@ -78,7 +78,7 @@ func RunCompareTests() {
 			gomega.Expect(absoluteValueThenSignKey(-3, 1)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
 		})
 		It("reverses comparison", func() {
-			desc := CompareReverse(builtin.CompareOrdered[int])
+			desc := CompareReverse(CompareOrdered[int])
 			gomega.Expect(desc(-3, 1)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
 			gomega.Expect(desc(4, 4)).To(gomega.BeEquivalentTo(OrderingEqual))
 			gomega.Expect(desc(3, 8)).To(gomega.BeEquivalentTo(OrderingGreaterThan))

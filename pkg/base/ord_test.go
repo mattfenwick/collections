@@ -20,4 +20,12 @@ func RunOrdTests() {
 			gomega.Expect(Compare[Bool](true, true)).To(gomega.BeEquivalentTo(OrderingEqual))
 		})
 	})
+
+	Describe("constraints.Ordered", func() {
+		It("Compares strings", func() {
+			gomega.Expect(CompareOrdered[string]("abc", "def")).To(gomega.BeEquivalentTo(OrderingLessThan))
+			gomega.Expect(CompareOrdered[string]("abc", "abc")).To(gomega.BeEquivalentTo(OrderingEqual))
+			gomega.Expect(CompareOrdered[string]("def", "abc")).To(gomega.BeEquivalentTo(OrderingGreaterThan))
+		})
+	})
 }

@@ -2,8 +2,6 @@ package slice
 
 import (
 	. "github.com/mattfenwick/collections/pkg/base"
-	"github.com/mattfenwick/collections/pkg/builtin"
-	"github.com/mattfenwick/collections/pkg/function"
 	"golang.org/x/exp/constraints"
 )
 
@@ -12,7 +10,7 @@ func CompareSliceIndexOrd[A Ord[A]](i int) Comparator[[]A] {
 }
 
 func CompareSliceIndex[A constraints.Ordered](i int) Comparator[[]A] {
-	return CompareSliceIndexBy(i, builtin.CompareOrdered[A])
+	return CompareSliceIndexBy(i, CompareOrdered[A])
 }
 
 // CompareSliceIndexBy compares a single index
@@ -37,7 +35,7 @@ func CompareSlicePairwiseOrd[A Ord[A]]() Comparator[[]A] {
 }
 
 func CompareSlicePairwise[A constraints.Ordered]() Comparator[[]A] {
-	return CompareSlicePairwiseBy(builtin.CompareOrdered[A])
+	return CompareSlicePairwiseBy(CompareOrdered[A])
 }
 
 // CompareSlicePairwiseBy should work as in Haskell.  Examples from Haskell:
@@ -66,20 +64,6 @@ func CompareSlicePairwiseBy[A any](compare Comparator[A]) Comparator[[]A] {
 			i++
 		}
 	}
-}
-
-func ComparePairOrd[A Ord[A], B Ord[B]]() Comparator[*Pair[A, B]] {
-	return ComparePairBy(Compare[A], Compare[B])
-}
-
-func ComparePair[A constraints.Ordered, B constraints.Ordered]() Comparator[*Pair[A, B]] {
-	return ComparePairBy(builtin.CompareOrdered[A], builtin.CompareOrdered[B])
-}
-
-func ComparePairBy[A, B any](fst Comparator[A], snd Comparator[B]) Comparator[*Pair[A, B]] {
-	return CompareBy[*Pair[A, B]](
-		function.On(fst, Fst[A, B]),
-		function.On(snd, Snd[A, B]))
 }
 
 func CompareBy[A any](comparisons ...Comparator[A]) Comparator[A] {
