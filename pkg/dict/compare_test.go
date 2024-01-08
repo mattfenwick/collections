@@ -38,24 +38,24 @@ func RunCompareTests() {
 		p8 := map[string]int{"a": 1, "b": 3}
 
 		It("map index ordering", func() {
-			a := CompareMapIndex[string, int]("a")
+			a := CompareIndex[string, int]("a")
 			gomega.Expect(a(p1, p1)).To(gomega.BeEquivalentTo(OrderingEqual))
 			gomega.Expect(a(p1, p2)).To(gomega.BeEquivalentTo(OrderingLessThan))
 			gomega.Expect(a(p1, p3)).To(gomega.BeEquivalentTo(OrderingLessThan))
 			gomega.Expect(a(p1, p5)).To(gomega.BeEquivalentTo(OrderingEqual))
 
-			b := CompareMapIndex[string, int]("b")
+			b := CompareIndex[string, int]("b")
 			gomega.Expect(b(p2, p1)).To(gomega.BeEquivalentTo(OrderingEqual))
 			gomega.Expect(b(p2, p3)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
 			gomega.Expect(b(p2, p4)).To(gomega.BeEquivalentTo(OrderingLessThan))
 
-			c := CompareMapIndex[string, int]("c")
+			c := CompareIndex[string, int]("c")
 			gomega.Expect(c(p7, p1)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
 			gomega.Expect(c(p7, p4)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
 		})
 
 		It("map pairwise ordering", func() {
-			compare := CompareMapPairwise[string, int]()
+			compare := ComparePairwise[string, int]()
 			gomega.Expect(compare(p2, p2)).To(gomega.BeEquivalentTo(OrderingEqual))
 			gomega.Expect(compare(p2, p1)).To(gomega.BeEquivalentTo(OrderingGreaterThan))
 			gomega.Expect(compare(p2, p3)).To(gomega.BeEquivalentTo(OrderingGreaterThan))

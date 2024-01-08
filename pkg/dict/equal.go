@@ -6,16 +6,16 @@ import (
 	"golang.org/x/exp/maps"
 )
 
-func EqualMapIndexEq[A comparable, B Eq[B]](key A) Equaler[map[A]B] {
-	return EqualMapIndexBy(key, Equal[B])
+func EqualIndexEq[A comparable, B Eq[B]](key A) Equaler[map[A]B] {
+	return EqualIndexBy(key, Equal[B])
 }
 
-func EqualMapIndex[A comparable, B comparable](key A) Equaler[map[A]B] {
-	return EqualMapIndexBy(key, builtin.EQ[B])
+func EqualIndex[A comparable, B comparable](key A) Equaler[map[A]B] {
+	return EqualIndexBy(key, builtin.EQ[B])
 }
 
-// EqualMapIndexBy equals a single index
-func EqualMapIndexBy[A comparable, B any](key A, equal Equaler[B]) Equaler[map[A]B] {
+// EqualIndexBy equals a single index
+func EqualIndexBy[A comparable, B any](key A, equal Equaler[B]) Equaler[map[A]B] {
 	return func(xs map[A]B, ys map[A]B) bool {
 		x, xok := xs[key]
 		y, yok := ys[key]
@@ -31,18 +31,18 @@ func EqualMapIndexBy[A comparable, B any](key A, equal Equaler[B]) Equaler[map[A
 	}
 }
 
-func EqualMapPairwiseEq[A comparable, B Eq[B]]() Equaler[map[A]B] {
-	return EqualMapPairwiseBy[A, B](Equal[B])
+func EqualPairwiseEq[A comparable, B Eq[B]]() Equaler[map[A]B] {
+	return EqualPairwiseBy[A, B](Equal[B])
 }
 
-func EqualMapPairwise[A comparable, B comparable]() Equaler[map[A]B] {
-	return EqualMapPairwiseBy[A, B](builtin.EQ[B])
+func EqualPairwise[A comparable, B comparable]() Equaler[map[A]B] {
+	return EqualPairwiseBy[A, B](builtin.EQ[B])
 }
 
-// EqualMapPairwiseBy works by project a map to a list, therefore it's inefficient and probably
+// EqualPairwiseBy works by project a map to a list, therefore it's inefficient and probably
 //
 //	best to avoid using unless absolutely necessary!
-func EqualMapPairwiseBy[A comparable, B any](equal Equaler[B]) Equaler[map[A]B] {
+func EqualPairwiseBy[A comparable, B any](equal Equaler[B]) Equaler[map[A]B] {
 	return func(xs map[A]B, ys map[A]B) bool {
 		return maps.EqualFunc(xs, ys, equal)
 	}

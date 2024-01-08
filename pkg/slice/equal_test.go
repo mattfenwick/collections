@@ -20,7 +20,7 @@ func RunEqualTests() {
 		})
 
 		It("slice equality", func() {
-			equal := EqualSlicePairwise[int]()
+			equal := EqualPairwise[int]()
 			gomega.Expect(equal([]int{}, []int{})).To(gomega.Equal(true))
 			gomega.Expect(equal([]int{}, []int{18, 37})).To(gomega.Equal(false))
 			gomega.Expect(equal([]int{25, 39}, []int{})).To(gomega.Equal(false))

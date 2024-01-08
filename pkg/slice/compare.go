@@ -5,16 +5,16 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
-func CompareSliceIndexOrd[A Ord[A]](i int) Comparator[[]A] {
-	return CompareSliceIndexBy(i, Compare[A])
+func CompareIndexOrd[A Ord[A]](i int) Comparator[[]A] {
+	return CompareIndexBy(i, Compare[A])
 }
 
-func CompareSliceIndex[A constraints.Ordered](i int) Comparator[[]A] {
-	return CompareSliceIndexBy(i, CompareOrdered[A])
+func CompareIndex[A constraints.Ordered](i int) Comparator[[]A] {
+	return CompareIndexBy(i, CompareOrdered[A])
 }
 
-// CompareSliceIndexBy compares a single index
-func CompareSliceIndexBy[A any](i int, compare Comparator[A]) Comparator[[]A] {
+// CompareIndexBy compares a single index
+func CompareIndexBy[A any](i int, compare Comparator[A]) Comparator[[]A] {
 	return func(xs []A, ys []A) Ordering {
 		if i < len(xs) && i < len(ys) {
 			return compare(xs[i], ys[i])
@@ -30,15 +30,15 @@ func CompareSliceIndexBy[A any](i int, compare Comparator[A]) Comparator[[]A] {
 	}
 }
 
-func CompareSlicePairwiseOrd[A Ord[A]]() Comparator[[]A] {
-	return CompareSlicePairwiseBy(Compare[A])
+func ComparePairwiseOrd[A Ord[A]]() Comparator[[]A] {
+	return ComparePairwiseBy(Compare[A])
 }
 
-func CompareSlicePairwise[A constraints.Ordered]() Comparator[[]A] {
-	return CompareSlicePairwiseBy(CompareOrdered[A])
+func ComparePairwise[A constraints.Ordered]() Comparator[[]A] {
+	return ComparePairwiseBy(CompareOrdered[A])
 }
 
-// CompareSlicePairwiseBy should work as in Haskell.  Examples from Haskell:
+// ComparePairwiseBy should work as in Haskell.  Examples from Haskell:
 //
 //	Prelude> [1,2,3] < [3,4,5]
 //	True
@@ -46,7 +46,7 @@ func CompareSlicePairwise[A constraints.Ordered]() Comparator[[]A] {
 //	True
 //	Prelude> [1,2,3] < []
 //	False
-func CompareSlicePairwiseBy[A any](compare Comparator[A]) Comparator[[]A] {
+func ComparePairwiseBy[A any](compare Comparator[A]) Comparator[[]A] {
 	return func(xs []A, ys []A) Ordering {
 		i := 0
 		for {

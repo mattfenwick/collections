@@ -22,7 +22,7 @@ func SortExample() {
 		slice.SortOn(WrapInt, someInts))
 
 	fmt.Printf("sort a slice of slices: %+v\n\n",
-		slice.SortBy(slice.CompareSlicePairwise[int](), [][]int{
+		slice.SortBy(slice.ComparePairwise[int](), [][]int{
 			{3, 4, 5},
 			{3, 4},
 			{1, 2, 3},
@@ -30,7 +30,7 @@ func SortExample() {
 		}))
 
 	fmt.Printf("sort a slice of maps: %+v\n\n",
-		slice.SortBy(dict.CompareMapPairwise[string, int](), []map[string]int{
+		slice.SortBy(dict.ComparePairwise[string, int](), []map[string]int{
 			{"a": 1, "b": 2},
 			{"a": 2, "b": 2},
 			{"a": 2, "b": 1},

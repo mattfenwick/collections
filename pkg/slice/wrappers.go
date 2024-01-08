@@ -5,11 +5,11 @@ import (
 )
 
 func SliceEq[A Eq[A]](a []A) *EqBoxBy[[]A] {
-	return BoxEqBy[[]A](a, EqualSlicePairwiseEq[A]())
+	return BoxEqBy[[]A](a, EqualPairwiseEq[A]())
 }
 
 func SliceOrd[A Ord[A]](a []A) *OrdBoxBy[[]A] {
-	return BoxOrdBy[[]A](a, EqualSlicePairwiseEq[A](), CompareSlicePairwiseBy(Compare[A]))
+	return BoxOrdBy[[]A](a, EqualPairwiseEq[A](), ComparePairwiseBy(Compare[A]))
 }
 
 //type SliceEq[A Eq[A]] []A
@@ -21,7 +21,7 @@ func SliceOrd[A Ord[A]](a []A) *OrdBoxBy[[]A] {
 //type SliceOrd[A Ord[A]] []A
 //
 //func (xs SliceOrd[A]) Compare(ys SliceOrd[A]) Ordering {
-//	return CompareSlicePairwiseBy(Compare[A])(xs, ys)
+//	return ComparePairwiseBy(Compare[A])(xs, ys)
 //}
 //
 //func (xs SliceOrd[A]) Equal(ys SliceOrd[A]) bool {

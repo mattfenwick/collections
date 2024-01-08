@@ -18,7 +18,7 @@ func RunSortTests() {
 	}
 	Describe("Sort", func() {
 		It("CompareMapPairwise", func() {
-			sorted := slice.SortBy(CompareMapPairwise[string, int](), ds)
+			sorted := slice.SortBy(ComparePairwise[string, int](), ds)
 			gomega.Expect(sorted).To(gomega.Equal([]map[string]int{
 				{},
 				{"a": 2},

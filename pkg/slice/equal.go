@@ -6,16 +6,16 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-func EqualSliceIndexEq[A Eq[A]](i int) Equaler[[]A] {
-	return EqualSliceIndexBy(i, Equal[A])
+func EqualIndexEq[A Eq[A]](i int) Equaler[[]A] {
+	return EqualIndexBy(i, Equal[A])
 }
 
-func EqualSliceIndex[A comparable](i int) Equaler[[]A] {
-	return EqualSliceIndexBy(i, builtin.EQ[A])
+func EqualIndex[A comparable](i int) Equaler[[]A] {
+	return EqualIndexBy(i, builtin.EQ[A])
 }
 
-// EqualSliceIndexBy looks at a single index
-func EqualSliceIndexBy[A any](i int, equal Equaler[A]) Equaler[[]A] {
+// EqualIndexBy looks at a single index
+func EqualIndexBy[A any](i int, equal Equaler[A]) Equaler[[]A] {
 	return func(xs []A, ys []A) bool {
 		if i < len(xs) && i < len(ys) {
 			return equal(xs[i], ys[i])
@@ -28,15 +28,15 @@ func EqualSliceIndexBy[A any](i int, equal Equaler[A]) Equaler[[]A] {
 	}
 }
 
-func EqualSlicePairwiseEq[A Eq[A]]() Equaler[[]A] {
-	return EqualSlicePairwiseBy(Equal[A])
+func EqualPairwiseEq[A Eq[A]]() Equaler[[]A] {
+	return EqualPairwiseBy(Equal[A])
 }
 
-func EqualSlicePairwise[A comparable]() Equaler[[]A] {
-	return EqualSlicePairwiseBy(builtin.EQ[A])
+func EqualPairwise[A comparable]() Equaler[[]A] {
+	return EqualPairwiseBy(builtin.EQ[A])
 }
 
-func EqualSlicePairwiseBy[A any](equal Equaler[A]) Equaler[[]A] {
+func EqualPairwiseBy[A any](equal Equaler[A]) Equaler[[]A] {
 	return func(xs []A, ys []A) bool {
 		return slices.EqualFunc(xs, ys, equal)
 	}

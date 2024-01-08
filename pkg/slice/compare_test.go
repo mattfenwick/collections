@@ -30,7 +30,7 @@ var signThenAbsoluteValueKey = CompareBy(
 func RunCompareTests() {
 	Describe("Compare", func() {
 		It("slice ordering", func() {
-			compare := CompareSlicePairwiseBy(CompareOrdered[int])
+			compare := ComparePairwiseBy(CompareOrdered[int])
 			gomega.Expect(compare([]int{}, []int{})).To(gomega.BeEquivalentTo(OrderingEqual))
 
 			gomega.Expect(compare([]int{4}, []int{})).To(gomega.BeEquivalentTo(OrderingGreaterThan))
