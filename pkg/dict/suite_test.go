@@ -9,6 +9,7 @@ import (
 func TestMatcher(t *testing.T) {
 	gomega.RegisterFailHandler(Fail)
 
+	RunDictTests()
 	RunSortTests()
 	RunCompareTests()
 	RunEqualTests()

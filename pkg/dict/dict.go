@@ -67,3 +67,19 @@ func KeysIterator[K comparable, V any](xs map[K]V) iterable.Iterator[K] {
 		},
 	}
 }
+
+func Keys[K comparable, V any](xs map[K]V) []K {
+	var ks []K
+	for k := range xs {
+		ks = append(ks, k)
+	}
+	return ks
+}
+
+func Values[K comparable, V any](xs map[K]V) []V {
+	var vs []V
+	for _, v := range xs {
+		vs = append(vs, v)
+	}
+	return vs
+}
