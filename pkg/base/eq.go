@@ -58,3 +58,15 @@ func BoxEqBy[A any](a A, eq Equaler[A]) *EqBoxBy[A] {
 func UnboxEqBy[A any](v *EqBoxBy[A]) A {
 	return v.Value
 }
+
+func EqualOnEq[A any, B Eq[B]](on func(A) B) Equaler[A] {
+	return func(l A, r A) bool {
+		return Equal(on(l), on(r))
+	}
+}
+
+func EqualOn[A any, B comparable](on func(A) B) Equaler[A] {
+	return func(l A, r A) bool {
+		return EqualComparable(on(l), on(r))
+	}
+}
