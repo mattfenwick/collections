@@ -97,9 +97,7 @@ func CompareReverse[A any](compare Comparator[A]) Comparator[A] {
 }
 
 func CompareOnOrd[A any, B Ord[B]](on func(A) B) Comparator[A] {
-	return func(l A, r A) Ordering {
-		return Compare(on(l), on(r))
-	}
+	return CompareOnBy(on, Compare[B])
 }
 
 func CompareOrdered[A constraints.Ordered](a A, b A) Ordering {
@@ -113,8 +111,12 @@ func CompareOrdered[A constraints.Ordered](a A, b A) Ordering {
 }
 
 func CompareOn[A any, B constraints.Ordered](on func(A) B) Comparator[A] {
+	return CompareOnBy(on, CompareOrdered[B])
+}
+
+func CompareOnBy[A any, B any](on func(A) B, by Comparator[B]) Comparator[A] {
 	return func(l A, r A) Ordering {
-		return CompareOrdered(on(l), on(r))
+		return by(on(l), on(r))
 	}
 }
 
@@ -138,10 +140,9 @@ func (a Bool) Compare(b Bool) Ordering {
 }
 
 // ComparatorToCmp converts a Comparator to a `cmp` function needed for using
-//
-//	golang's package `golang.org/x/exp/slices` sort functionality
-//	 cmp(a, b) should return a negative number when a < b, a positive number when
-//	 a > b and zero when a == b.
+// golang's package `golang.org/x/exp/slices` sort functionality
+// cmp(a, b) should return a negative number when a < b, a positive number when
+// a > b and zero when a == b.
 func ComparatorToCmp[A any](comparator Comparator[A]) func(A, A) int {
 	return func(a A, b A) int {
 		switch comparator(a, b) {
@@ -182,10 +183,9 @@ func UnboxOrd[A constraints.Ordered](v *OrdBox[A]) A {
 }
 
 // OrdBoxBy allows any type to be used as an Ord.
-//
-//	Note that since each value carries its own Equaler and Comparator,
-//	you'll get weird results if you mix OrdBoxBys which have different
-//	Equalers or Comparators.  So don't do this.
+// Note that since each value carries its own Equaler and Comparator,
+// you'll get weird results if you mix OrdBoxBys which have different
+// Equalers or Comparators.  So don't do this.
 type OrdBoxBy[A any] struct {
 	Value A
 	Eq    Equaler[A]

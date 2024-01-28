@@ -39,13 +39,12 @@ func ComparePairwise[A constraints.Ordered]() Comparator[[]A] {
 }
 
 // ComparePairwiseBy should work as in Haskell.  Examples from Haskell:
-//
-//	Prelude> [1,2,3] < [3,4,5]
-//	True
-//	Prelude> [1,2,3] < [3,4]
-//	True
-//	Prelude> [1,2,3] < []
-//	False
+// Prelude> [1,2,3] < [3,4,5]
+// True
+// Prelude> [1,2,3] < [3,4]
+// True
+// Prelude> [1,2,3] < []
+// False
 func ComparePairwiseBy[A any](compare Comparator[A]) Comparator[[]A] {
 	return func(xs []A, ys []A) Ordering {
 		i := 0
