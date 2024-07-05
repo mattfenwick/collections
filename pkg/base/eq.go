@@ -1,5 +1,7 @@
 package base
 
+import "reflect"
+
 // this example is from: https://go.googlesource.com/proposal/+/refs/heads/master/design/43651-type-parameters.md#using-types-that-refer-to-themselves-in-constraints
 
 type Equaler[A any] func(A, A) bool
@@ -71,4 +73,8 @@ func EqualOnBy[A any, B any](on func(A) B, by Equaler[B]) Equaler[A] {
 	return func(l A, r A) bool {
 		return by(on(l), on(r))
 	}
+}
+
+func ReflectDeepEqualer[A any](a A, b A) bool {
+	return reflect.DeepEqual(a, b)
 }
