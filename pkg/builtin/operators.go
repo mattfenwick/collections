@@ -85,20 +85,20 @@ func Dereference[A any](a *A) A {
 }
 
 func BitwiseAnd[T constraints.Integer](a T, b T) T {
-	return a & a
+	return a & b
 }
 
 func BitwiseOr[T constraints.Integer](a T, b T) T {
-	return a | a
+	return a | b
 }
 
 func BitwiseXor[T constraints.Integer](a T, b T) T {
-	return a ^ a
+	return a ^ b
 }
 
 // BitwiseAndNot wraps the `&^` operator
 func BitwiseAndNot[T constraints.Integer](a T, b T) T {
-	return a &^ a
+	return a &^ b
 }
 
 func LeftShift[T constraints.Integer](bits T, numberOfBits uint) T {
