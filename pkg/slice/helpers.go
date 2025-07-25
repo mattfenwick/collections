@@ -70,3 +70,14 @@ func CartesianProductWith[A, B, C any](f func(A, B) C, xs []A, ys []B) []C {
 	}
 	return out
 }
+
+func FilterMap[A, B any](f func(A) *B, xs []A) []B {
+	var out []B
+	for _, x := range xs {
+		y := f(x)
+		if y != nil {
+			out = append(out, *y)
+		}
+	}
+	return out
+}

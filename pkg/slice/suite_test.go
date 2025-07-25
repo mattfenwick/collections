@@ -13,6 +13,7 @@ func TestMatcher(t *testing.T) {
 	RunSortTests()
 	RunCompareTests()
 	RunEqualTests()
+	RunHelpersTests()
 
-	RunSpecs(t, "builtins suite")
+	RunSpecs(t, "slice suite")
 }
